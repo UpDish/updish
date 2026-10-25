@@ -32,16 +32,28 @@ $started=@()
 if(Test-Path -LiteralPath "$runtime/processes.json") {
     foreach($saved in @(Get-Content -Raw -LiteralPath "$runtime/processes.json"|ConvertFrom-Json)) {
         $existing=Get-Process -Id $saved.pid -ErrorAction SilentlyContinue
-        if($existing -and $existing.StartTime.ToUniversalTime().ToString('o') -eq $saved.startedAt) {$started+=$saved}
+        if($existing -and $existing.StartTime.ToUniversalTime() -eq ([DateTimeOffset]$saved.startedAt).UtcDateTime) {$started+=$saved}
     }
 }
 function Launch([int]$Port,[string]$Name,[string]$File,[string[]]$Arguments,[string]$Directory) {
     if(Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue) {Write-Output "$Name 포트 $Port 사용 중: 기존 프로세스를 유지합니다.";return}
+    $launchedAt=[DateTime]::UtcNow
     $p=Start-Process -FilePath $File -ArgumentList $Arguments -WorkingDirectory $Directory -WindowStyle Hidden -PassThru -RedirectStandardOutput "$runtime/$Name.stdout.log" -RedirectStandardError "$runtime/$Name.stderr.log"
-    $script:started += @{name=$Name;pid=$p.Id;startedAt=$p.StartTime.ToUniversalTime().ToString('o')}
+    # Windows venv launchers can delegate to a different Python PID. Track the listener we started.
+    $listener=$null
+    for($attempt=0;$attempt -lt 90;$attempt++) {
+        $listener=Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue|Select-Object -First 1
+        if($listener){break}
+        Start-Sleep -Milliseconds 500
+    }
+    if(-not $listener){throw "$Name 시작을 확인하지 못했습니다. .runtime 로그를 확인해 주세요."}
+    $actual=Get-Process -Id $listener.OwningProcess
+    $info=Get-CimInstance Win32_Process -Filter "ProcessId = $($actual.Id)"
+    if($actual.StartTime.ToUniversalTime() -lt $launchedAt -or -not $info.CommandLine.Contains($project)){throw "$Name 실행 주체를 확인하지 못했습니다."}
+    $script:started += @{name=$Name;pid=$actual.Id;startedAt=$actual.StartTime.ToUniversalTime().ToString('o')}
 }
 Launch 8080 'core' (Get-Command java.exe).Source @('-jar',('"'+$project+'/services/core-api/build/libs/core-api-0.0.1-SNAPSHOT.jar"')) "$project/services/core-api"
-Launch 8000 'agent' "$project/services/agent-api/.venv/Scripts/python.exe" @('-m','uvicorn','app.main:app','--host','127.0.0.1','--port','8000') "$project/services/agent-api"
+Launch 8000 'agent' "$project/services/agent-api/.venv/Scripts/python.exe" @('-m','uvicorn','app.main:app','--app-dir',('"'+$project+'/services/agent-api"'),'--host','127.0.0.1','--port','8000') "$project/services/agent-api"
 $next=(Resolve-Path -LiteralPath "$project/apps/web/node_modules/next/dist/bin/next").Path
 $mode=if($WebMode -eq 'production') {'start'} else {'dev'}
 Launch 3000 'web' (Get-Command node.exe).Source @(('"'+$next+'"'),$mode,'--hostname','127.0.0.1') "$project/apps/web"

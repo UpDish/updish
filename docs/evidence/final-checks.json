@@ -47,5 +47,11 @@
   },
   "userGiwaTransactions": 0,
   "modelLiveCall": false,
-  "bojagi": "NOT_CONNECTED"
+  "bojagi": "NOT_CONNECTED",
+  "windowsLocalLifecycle": {
+    "restartThreeApps": "PASS",
+    "pidAndStartTimeTracking": "PASS",
+    "databasePreserved": true,
+    "stopThreeApps": "PASS"
+  }
 }

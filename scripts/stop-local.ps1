@@ -4,7 +4,7 @@ $file=Join-Path $project '.runtime/processes.json'
 if(Test-Path -LiteralPath $file) {
     foreach($saved in @(Get-Content -Raw -LiteralPath $file|ConvertFrom-Json)) {
         $p=Get-Process -Id $saved.pid -ErrorAction SilentlyContinue
-        if($p -and $p.StartTime.ToUniversalTime().ToString('o') -eq $saved.startedAt) {
+        if($p -and $p.StartTime.ToUniversalTime() -eq ([DateTimeOffset]$saved.startedAt).UtcDateTime) {
             $info=Get-CimInstance Win32_Process -Filter "ProcessId = $($p.Id)"
             if($info.CommandLine.Contains($project)) {Stop-Process -Id $p.Id}
         }
