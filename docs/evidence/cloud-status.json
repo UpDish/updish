@@ -1,0 +1,60 @@
+{
+  "checkedAt": "2026-10-25T09:50:14.475Z",
+  "region": "ap-northeast-2",
+  "stack": "updish-hackathon-20261025",
+  "instance": {
+    "id": "i-09bd2c718ace1bedc",
+    "state": "running",
+    "type": "t4g.medium",
+    "ip": "3.35.194.163",
+    "computeUsdPerHour": "0.0416",
+    "additionalCosts": [
+      "EBS",
+      "IPv4",
+      "S3",
+      "transfer",
+      "Vercel",
+      "model"
+    ]
+  },
+  "api": {
+    "url": "https://3.35.194.163.sslip.io",
+    "status": 200,
+    "health": "UP",
+    "coreImage": "sha256:692d170d377f1e912fb62d5fd5c992d5bb996547108b9659cbacd9b9e0455bb3",
+    "flywayVersion": 5,
+    "httpsSiwe": "PASS_DIRECT_CORE_ONLY",
+    "userWalletTransactions": 0
+  },
+  "web": {
+    "url": "https://updish-hackathon-20261025-betaplayers-projects.vercel.app",
+    "status": 200,
+    "offeringStatus": 200,
+    "title": "UpDish | 지갑 로그인 · Dojang",
+    "loginStatus": 403,
+    "loginCode": "ORIGIN_REJECTED",
+    "latestSourceDeployed": false,
+    "requiredAction": "User Vercel team grant, correct allowed Origin and deploy final source"
+  },
+  "storage": {
+    "bucket": "updish-hackathon-20261025-bucket-wclu49yzzqxx",
+    "publicReadStatus": 403,
+    "corsStatus": 200,
+    "allowedOrigin": "https://updish-hackathon-20261025-betaplayers-projects.vercel.app",
+    "instanceRolePutSignedGet": "PASS",
+    "applicationUploadWithOperatorWallet": "PENDING_USER_LOGIN"
+  },
+  "database": {
+    "backupRestoreCheck": "PASS_SEPARATE_TEMP_DATABASE",
+    "commandId": "6a604784-10e4-4860-a110-210b9927e2e9",
+    "backupSha256": "aa469f3d46211c13f6fca191df25993461db1a51e87b93ebe8f317df219a5c7b",
+    "ec2Reboot": "PASS_SAME_IP_AND_HEALTH",
+    "stopStartIpChangeRehearsal": "NOT_RUN"
+  },
+  "agent": {
+    "model": "gpt-5-mini",
+    "modelCalls": "NOT_CONFIGURED",
+    "liveCall": false
+  },
+  "bojagi": "NOT_CONNECTED"
+}

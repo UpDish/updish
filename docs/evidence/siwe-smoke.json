@@ -1,6 +1,7 @@
 {
-  "checkedAt": "2026-10-25T09:14:42.894Z",
+  "checkedAt": "2026-10-25T09:48:32.521Z",
   "scope": "Local full-stack SIWE with ephemeral unfunded EOA; live GIWA read. No user-wallet transaction.",
+  "origin": "http://127.0.0.1:3000",
   "checks": [
     "protected Dojang requires session",
     "CSRF required",
@@ -14,11 +15,11 @@
     "logout invalidates session"
   ],
   "dojang": {
-    "address": "0xd26b18d69644359ad7543373794e7d564081f17a",
+    "address": "0x273ec0565c84ebd2babacce573d832fea488cd8b",
     "verified": false,
-    "blockNumber": "39574235",
+    "blockNumber": "39576186",
     "blockTag": "safe"
   },
-  "userWalletIssueRevoke": "PENDING_USER_SIGNATURE_AND_TEST_ETH",
+  "userWalletIssueRevoke": "PENDING_USER_SIGNATURE",
   "transactionsSent": 0
 }

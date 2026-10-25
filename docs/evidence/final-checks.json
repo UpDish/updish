@@ -1,0 +1,51 @@
+{
+  "checkedAt": "2026-10-25T09:50:39.473Z",
+  "java": {
+    "tests": 36,
+    "failures": 0,
+    "postgresql": true
+  },
+  "foundry": {
+    "tests": 9,
+    "failures": 0,
+    "scope": "LOCAL_MOCK_DOJANG"
+  },
+  "python": {
+    "tests": 4,
+    "failures": 0,
+    "scope": "FAKE_OPENAI_SDK_NO_LIVE_MODEL"
+  },
+  "chainCodec": {
+    "tests": 1,
+    "failures": 0
+  },
+  "typescript": {
+    "web": "PASS",
+    "chainScripts": "PASS"
+  },
+  "nextProductionBuild": "PASS",
+  "businessE2e": {
+    "checks": 10,
+    "scope": "LOCAL_ANVIL_ONLY",
+    "partialAllocation": "120 -> 100 allocated + 20 simulated refund",
+    "mint": "SAFE_LOCAL",
+    "registry": "SAFE_LOCAL"
+  },
+  "siwe": {
+    "localBffCoreDbGiwa": "PASS_10_CHECKS",
+    "cloudCoreDbGiwa": "PASS_10_CHECKS",
+    "cloudBff": "BLOCKED_ORIGIN_CONFIGURATION"
+  },
+  "browser": {
+    "url": "http://127.0.0.1:3000",
+    "mode": "production",
+    "anonymousProduct": "PASS",
+    "consoleErrors": 0,
+    "consoleWarnings": 0,
+    "userMetaMaskIssueRevoke": "NOT_RUN",
+    "mobile390pxOverflow": false
+  },
+  "userGiwaTransactions": 0,
+  "modelLiveCall": false,
+  "bojagi": "NOT_CONNECTED"
+}

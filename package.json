@@ -8,6 +8,8 @@
     "node": ">=24 <25"
   },
   "scripts": {
+    "generate:api": "node scripts/api-contract.mjs",
+    "smoke:business": "tsx scripts/smoke-business.ts",
     "smoke:auth": "tsx scripts/smoke-auth.ts",
     "dev:web": "pnpm --filter @updish/web dev",
     "build:web": "pnpm --filter @updish/web build",
@@ -19,6 +21,7 @@
   "devDependencies": {
     "@openzeppelin/contracts": "5.6.1",
     "@types/node": "^24.0.0",
+    "openapi-typescript": "7.13.0",
     "tsx": "4.21.0",
     "typescript": "5.9.3",
     "viem": "2.57.11"

@@ -3,8 +3,8 @@ import './globals.css';
 import { Providers } from './providers';
 
 export const metadata: Metadata = {
-  title: 'UpDish | 지갑 로그인 · Dojang',
-  description: 'GIWA와 Dojang의 실제 테스트넷 연결을 확인합니다.',
+  title: 'UpDish | 음식점 매출과 모의 정산',
+  description: '매출 근거부터 모의 청약·보유·정산까지, GIWA와 Dojang으로 확인하는 해커톤 데모.',
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

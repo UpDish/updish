@@ -37,7 +37,7 @@ public class WorkbenchService implements ApplicationRunner {
     public UUID runId() { return db.queryForObject("SELECT run_id FROM demo_state WHERE singleton=true FOR SHARE",UUID.class); }
     public Map<String,Object> offering() {
         var o=one("SELECT * FROM offering WHERE run_id=? ORDER BY created_at DESC LIMIT 1",runId());
-        o.put("accepted_units",db.queryForObject("SELECT coalesce(sum(units),0) FROM subscription WHERE offering_id=? AND status IN ('ACCEPTED','ALLOCATED')",Long.class,uuid(o,"id")));
+        o.put("accepted_units",db.queryForObject("SELECT coalesce(sum(units-refunded_units),0) FROM subscription WHERE offering_id=? AND status IN ('ACCEPTED','ALLOCATED')",Long.class,uuid(o,"id")));
         o.put("mode","SIMULATION");o.put("principal_redemption","만기 원금 별도 상환 의무 없음");
         o.put("risk","매출 감소·현금 부족·지급 실패 시 손실이 생길 수 있습니다. 실제 자금은 받지 않습니다.");
         o.put("bojagi",Map.of("status","NOT_CONNECTED"));return o;
@@ -111,7 +111,7 @@ public class WorkbenchService implements ApplicationRunner {
         if(!old.isEmpty()) {if(number(old.getFirst(),"units")!=units) throw BusinessFailure.conflict("같은 요청 키의 수량이 다릅니다.");return old.getFirst();}
         if(!o.get("status").equals("OPEN")) throw BusinessFailure.conflict("모집 중인 상품만 청약할 수 있습니다.");
         long accepted=db.queryForObject("SELECT coalesce(sum(units),0) FROM subscription WHERE offering_id=? AND status='ACCEPTED'",Long.class,offering);
-        if(accepted+units>number(o,"target_units")) throw BusinessFailure.conflict("남은 모집 수량을 초과합니다.");
+        if(accepted>=number(o,"target_units")) throw BusinessFailure.conflict("모집 수량 접수가 끝났습니다.");
         var v=eligibility(actor,actor.address(),"SUBSCRIBE");var id=UUID.randomUUID();
         db.update("INSERT INTO subscription(id,offering_id,address,units,status,request_key,dojang_uid,dojang_block) VALUES (?,?,?,?,'ACCEPTED',?,?,?)",id,offering,actor.address(),units,requestKey,v.attestationUid(),Long.parseLong(v.blockNumber()));
         audit(actor,"SUBSCRIBE",id,"모의 자금 확인, 보유 반영 전");return one("SELECT * FROM subscription WHERE id=?",id);
@@ -129,28 +129,31 @@ public class WorkbenchService implements ApplicationRunner {
         var sub=one("SELECT * FROM subscription WHERE id=?",id);lockedOffering(uuid(sub,"offering_id"));
         if(!actor.address().equals(sub.get("address"))) throw BusinessFailure.forbidden();
         if(!sub.get("status").equals("ACCEPTED")) throw BusinessFailure.conflict("배정 전 접수 상태에서만 취소할 수 있습니다.");
-        db.update("UPDATE subscription SET status='CANCELLED' WHERE id=?",id);audit(actor,"CANCEL",id,"모의 청약 취소");
+        db.update("UPDATE subscription SET status='CANCELLED',refunded_units=units WHERE id=?",id);audit(actor,"CANCEL",id,"모의 청약 취소 · 전량 모의 환불");
     }
     @Transactional public Map<String,Object> allocate(WalletPrincipal actor,UUID offering) {
         requireOperator(actor);var o=lockedOffering(offering);
         if(!o.get("status").equals("OPEN")) throw BusinessFailure.conflict("모집 중인 상품만 배정할 수 있습니다.");
         var subs=rows("SELECT * FROM subscription WHERE offering_id=? AND status='ACCEPTED' ORDER BY created_at,id",offering);
-        if(subs.stream().mapToLong(s->number(s,"units")).sum()!=number(o,"target_units")) throw BusinessFailure.conflict("전체 모집 수량이 접수돼야 배정할 수 있습니다.");
+        if(subs.stream().mapToLong(s->number(s,"units")).sum()<number(o,"target_units")) throw BusinessFailure.conflict("전체 모집 수량이 접수돼야 배정할 수 있습니다.");
+        long remaining=number(o,"target_units");
         for(var sub:subs) {
+            long allotted=Math.min(number(sub,"units"),remaining);remaining-=allotted;
+            if(allotted==0) {db.update("UPDATE subscription SET status='REFUNDED',refunded_units=units WHERE id=?",uuid(sub,"id"));continue;}
             boolean synthetic=(Boolean)sub.get("synthetic");if(!synthetic) eligibility(actor,(String)sub.get("address"),"ALLOCATE");
-            var holding=UUID.randomUUID();db.update("INSERT INTO holding(id,offering_id,address,units,synthetic) VALUES (?,?,?,?,?) ON CONFLICT(offering_id,address) DO UPDATE SET units=holding.units+excluded.units",holding,offering,sub.get("address"),number(sub,"units"),synthetic);
+            var holding=UUID.randomUUID();db.update("INSERT INTO holding(id,offering_id,address,units,synthetic) VALUES (?,?,?,?,?) ON CONFLICT(offering_id,address) DO UPDATE SET units=holding.units+excluded.units",holding,offering,sub.get("address"),allotted,synthetic);
             holding=db.queryForObject("SELECT id FROM holding WHERE offering_id=? AND address=?",UUID.class,offering,sub.get("address"));
-            var allocation=UUID.randomUUID();db.update("INSERT INTO allocation(id,subscription_id,holding_id,units) VALUES (?,?,?,?)",allocation,uuid(sub,"id"),holding,number(sub,"units"));
-            db.update("UPDATE subscription SET status='ALLOCATED' WHERE id=?",uuid(sub,"id"));
+            var allocation=UUID.randomUUID();db.update("INSERT INTO allocation(id,subscription_id,holding_id,units) VALUES (?,?,?,?)",allocation,uuid(sub,"id"),holding,allotted);
+            db.update("UPDATE subscription SET status='ALLOCATED',refunded_units=units-? WHERE id=?",allotted,uuid(sub,"id"));
             if(!synthetic) createJob("MINT",allocation);
         }
-        db.update("UPDATE offering SET status='FUNDED' WHERE id=?",offering);audit(actor,"ALLOCATE",offering,"모의 배정 확정. 실제 체인 발행은 별도 작업");return offering();
+        db.update("UPDATE offering SET status='FUNDED' WHERE id=?",offering);audit(actor,"ALLOCATE",offering,"접수 시각·고정 ID 순 배정. 초과분 모의 환불. 실제 체인 발행은 별도 작업");return offering();
     }
     @Transactional public void underfunded(WalletPrincipal actor,UUID offering) {
         requireOperator(actor);var o=lockedOffering(offering);
         long used=db.queryForObject("SELECT coalesce(sum(units),0) FROM subscription WHERE offering_id=? AND status='ACCEPTED'",Long.class,offering);
         if(!o.get("status").equals("OPEN")||used>=number(o,"target_units")) throw BusinessFailure.conflict("모집 중인 미달 상품만 모의 환불할 수 있습니다.");
-        db.update("UPDATE subscription SET status='REFUNDED' WHERE offering_id=? AND status='ACCEPTED'",offering);
+        db.update("UPDATE subscription SET status='REFUNDED',refunded_units=units WHERE offering_id=? AND status='ACCEPTED'",offering);
         db.update("UPDATE offering SET status='REFUNDED' WHERE id=?",offering);audit(actor,"REFUND_UNDERFUNDED",offering,"모집 미달 모의 환불. 보유 생성 없음");
     }
     @Transactional public Map<String,Object> calculate(WalletPrincipal actor,UUID evidenceId,String requestedReason) {

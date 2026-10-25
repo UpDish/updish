@@ -64,6 +64,20 @@ class WorkbenchTests {
         var bg=work.one("SELECT * FROM settlement_line WHERE settlement_id=? AND address=?",uuid(s,"id"),BACKGROUND);
         assertThrows(BusinessFailure.class,()->work.pay(operator,uuid(bg,"id"),number(bg,"amount_won"),"SUCCESS",UUID.randomUUID()));
     }
+    @Test void finalOversubscribedRequestIsPartiallyAllocatedAndExcessRefunded() {
+        work.background(operator);
+        var key=UUID.randomUUID();var sub=work.subscribe(investor,offering,120,key,true);
+        // Explicit times make ordering independent of transaction-stable PostgreSQL now().
+        db.update("UPDATE subscription SET created_at=now()-interval '1 minute' WHERE offering_id=? AND synthetic",offering);
+        assertThrows(BusinessFailure.class,()->work.subscribe(other,offering,1,UUID.randomUUID(),true));
+        work.allocate(operator,offering);
+        var result=work.one("SELECT * FROM subscription WHERE id=?",uuid(sub,"id"));
+        assertEquals(120,number(result,"units"));assertEquals(20,number(result,"refunded_units"));
+        assertEquals(100,db.queryForObject("SELECT units FROM holding WHERE offering_id=? AND address=?",Integer.class,offering,investor.address()));
+        assertEquals(3600,db.queryForObject("SELECT sum(a.units) FROM allocation a JOIN subscription s ON s.id=a.subscription_id WHERE s.offering_id=?",Integer.class,offering));
+        assertEquals(sub.get("id"),work.subscribe(investor,offering,120,key,true).get("id"));
+        assertEquals(3600,number(work.offering(),"accepted_units"));
+    }
     @Test void correctionKeepsPaymentsAndMaturityKeepsClaims() throws Exception {
         funded();var first=settlement("normal","2026-10");var line=work.one("SELECT * FROM settlement_line WHERE settlement_id=? AND address=?",uuid(first,"id"),investor.address());work.pay(operator,uuid(line,"id"),25000,"SUCCESS",UUID.randomUUID());
         var correction=settlement("correction","2026-10");var revised=work.one("SELECT * FROM settlement_line WHERE settlement_id=? AND address=?",uuid(correction,"id"),investor.address());

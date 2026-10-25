@@ -29,6 +29,12 @@ if(-not $SkipBuild) {
 }
 $runtime=Join-Path $project '.runtime';New-Item -ItemType Directory -Force -Path $runtime | Out-Null
 $started=@()
+if(Test-Path -LiteralPath "$runtime/processes.json") {
+    foreach($saved in @(Get-Content -Raw -LiteralPath "$runtime/processes.json"|ConvertFrom-Json)) {
+        $existing=Get-Process -Id $saved.pid -ErrorAction SilentlyContinue
+        if($existing -and $existing.StartTime.ToUniversalTime().ToString('o') -eq $saved.startedAt) {$started+=$saved}
+    }
+}
 function Launch([int]$Port,[string]$Name,[string]$File,[string[]]$Arguments,[string]$Directory) {
     if(Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue) {Write-Output "$Name 포트 $Port 사용 중: 기존 프로세스를 유지합니다.";return}
     $p=Start-Process -FilePath $File -ArgumentList $Arguments -WorkingDirectory $Directory -WindowStyle Hidden -PassThru -RedirectStandardOutput "$runtime/$Name.stdout.log" -RedirectStandardError "$runtime/$Name.stderr.log"

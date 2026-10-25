@@ -1,126 +1,70 @@
 # UpDish
 
-음식점 매출 근거와 모의 투자·정산을 연결하는 해커톤 프로젝트입니다. 지갑 연결·SIWE 로그인과 GIWA·Dojang 실제 조회를 구현했습니다. 사용자가 공식 Playground에서 발급·철회한 결과를 로그인한 지갑으로 확인할 수 있습니다.
+음식점 매출 증빙 → 모의 청약·배정 → 보유 → 정산·모의 지급을 연결하는 해커톤 데모입니다. Spring이 업무 원장을 계산하고 지갑은 SIWE 로그인과 GIWA 테스트 거래를 서명합니다. 실제 금전 수취·지급은 수행하지 않습니다.
 
-실제 지갑을 준비하는 순서는 [지갑·Dojang 시연 안내](docs/wallet-guide.md), 구현·검증 범위는 [로그인 개발 상태](docs/wallet-status.md)에 있습니다.
+현재 상태는 [개발 결과](docs/development-status.md), 실제 지갑 사용 순서는 [시연 안내](docs/demo-guide.md), 클라우드 자원·중지 방법은 [배포 안내](docs/deploy-runbook.md)를 기준으로 합니다. bootstrap/wallet 상태 문서는 과거 이력입니다.
 
-## 실행 환경
+## 버전
 
 | 영역 | 고정 기준 |
 | --- | --- |
-| Core API | Spring Boot 4.1.2 · Java 25 · Gradle Wrapper 9.8.2 |
-| Agent API | FastAPI 0.162.0 · Python 3.13 · uv.lock |
-| Web | Next.js 16.4.3 · React 19.3.1 · TypeScript 5.9.3 · Node 24 |
-| DB | PostgreSQL 18.6 |
-| Chain | GIWA Sepolia 91342 · viem 2.57.11 · Solidity 0.8.38 |
+| Core | Spring Boot 4.1.2 · Java 25 · Gradle 9.8.2 |
+| Agent | FastAPI 0.162.0 · Python 3.13 · openai 3.37.0 · uv.lock |
+| Web | Next.js 16.4.3 · React 19.3.1 · TypeScript 5.9.3 · Tailwind 4.3.3 |
+| Node | Node 24 · pnpm 10.23.0 · pnpm-lock.yaml |
+| DB | PostgreSQL 18.6 · Flyway V1–V5 |
+| Chain | GIWA Sepolia 91342 · Solidity 0.8.38 · Cancun · OpenZeppelin 5.6.1 |
+| Wallet | wagmi 3.7.9 · viem 2.57.11 |
+| Cloud | Vercel + 서울 EC2 t4g.medium ARM64 · Ubuntu 24.04 · private S3 |
 
-Node 패키지는 pnpm 10.23.0과 lockfile을 사용합니다. 이 저장소는 상위 사용자 홈 Git 저장소와 구분되는 독립 저장소입니다.
+사용자가 승인한 v0.2 버전을 유지합니다. 모든 패키지가 언제나 최신이라는 의미는 아닙니다.
 
-## 폴더
+## 로컬 실행
 
-```text
-apps/web/                 실제 API 응답을 확인하는 Next.js 화면
-services/core-api/        Spring Boot·DB migration·GIWA RPC·Dojang adapter
-services/agent-api/       FastAPI 기동 기반과 health endpoint
-packages/chain-config/    공식 네트워크·계약 주소·최소 ABI
-contracts/               Dojang 자격 reader와 로컬 검증
-scripts/                 재실행 가능한 읽기 전용 체인 probe
-infra/                   PostgreSQL 및 앱 Docker Compose
-docs/                    구현 상태·연동 결과·Bojagi 조사
-fixtures/                후속 업무 시연용 샘플 위치
-```
-
-## 로컬 시작
-
-필요 도구는 Java 25, Node 24, pnpm, Python 3.13과 uv, Docker, Foundry입니다. 아래 명령은 저장소 루트를 기준으로 합니다. `.env.example`의 DB 비밀번호는 로컬 전용입니다.
+Java 25, Node 24, pnpm, Python 3.13·uv, Docker Desktop이 필요합니다. 기존 env 파일이 있다면 복사를 생략합니다.
 
 ```powershell
 Copy-Item .env.example .env
 Copy-Item apps/web/.env.example apps/web/.env.local
-pnpm install --frozen-lockfile
-uv sync --directory services/agent-api --frozen
-docker compose --env-file .env -f infra/compose.yaml up -d --wait
+./scripts/start-local.ps1
 ```
 
-터미널을 나눠 실행합니다.
+이미 설치·빌드했다면 `./scripts/start-local.ps1 -SkipBuild`로 시작합니다. 내부 Agent 토큰은 ignored `.env.local`에 생성하고 앱을 숨김 실행합니다. OpenAI 키 생성 동작은 없습니다. 준비된 뒤 `http://127.0.0.1:3000`을 엽니다. 로그는 `.runtime/`에 있습니다.
 
 ```powershell
-Set-Location services/core-api
-.\gradlew.bat bootRun
+./scripts/stop-local.ps1 -StopDatabase
 ```
 
-```powershell
-uv run --directory services/agent-api uvicorn app.main:app --host 127.0.0.1 --port 8000
-```
+DB 데이터는 보존합니다. 직접 실행한 프로세스는 해당 터미널에서 종료합니다. 개발 서버와 production build가 같은 .next 폴더를 사용하므로 빌드 중에는 개발 서버를 중지하세요.
+
+## 구현
+
+- DB 역할·자료 소유권·개인 명세 접근을 검사합니다. 설정된 운영 지갑만 OPERATOR이며 일반 로그인은 INVESTOR입니다. 제출자/마감자와 산정자/승인자는 다른 지갑이어야 합니다.
+- 청약과 보유를 분리합니다. 접수 시각·고정 ID 순서로 최대 3,600단위를 배정하고 마지막 초과 청약은 부분 배정·모의 환불합니다. 가상 배경 3,500단위는 체인에 발행하지 않습니다.
+- 고정 CSV의 외부 ID로 중복·할인·부분 환불·누락을 대조합니다. PDF·PNG·XLSX는 비공개 첨부만 지원합니다.
+- 매출 3,000만원의 3%는 90만원, 100/3,600단위는 세전 25,000원입니다. 원 단위 잔여액 배분·현금 부족·부분 지급·실패·정정·만기 후 청구를 보존합니다.
+- 사용자 지갑이 계약 배포·mint·정산 기록을 서명합니다. 서버는 runtime·소유자·설정·거래·receipt·safe 블록·잔고/기록을 대조합니다. 서버에는 지갑 키를 저장하지 않습니다.
+- Dojang 철회는 신규 참여를 막지만 기존 보유·명세를 지우지 않습니다. TESTNET FAUCET을 UPBIT KOREA 인증으로 표시하지 않습니다. RPC 실패는 503/확인 대기입니다.
+- Agent는 승인된 정산과 요청자 개인 명세만 읽습니다. 기본 모델 gpt-5-mini, 키 미설정/모델 실패 시 설명만 사용할 수 없습니다. Bojagi는 **NOT_CONNECTED**입니다.
+
+## 구조와 검증
+
+apps/web은 화면/BFF, services/core-api는 인증/업무/체인/S3, services/agent-api는 설명, contracts는 ERC-1155/registry, fixtures는 CSV, infra는 Compose/CloudFormation입니다.
+
+업무 [OpenAPI](docs/openapi.json) 원본은 scripts/api-contract.mjs이며 Web은 생성 타입을 사용합니다. Core /api/v1 기준이고 브라우저는 /api/workbench/*로 중계합니다. 쓰기에는 세션·CSRF·정확한 Origin이 필요합니다. 생성기는 [공식 openapi-typescript API](https://openapi-ts.dev/node)를 사용합니다.
 
 ```powershell
-pnpm dev:web
-```
-
-웹은 `http://127.0.0.1:3000`, Core health는 `http://127.0.0.1:8080/actuator/health`, Agent health는 `http://127.0.0.1:8000/health`입니다. 웹은 Next.js의 같은 출처 API를 통해 Core를 호출합니다. 다른 Core 주소는 웹 환경의 `CORE_API_URL`로 설정합니다.
-
-## 체인 확인
-
-```powershell
-pnpm probe:chain --output docs/evidence/giwa-probe.json
-pnpm probe:chain --address 0x여기에실제42자주소
-```
-
-주소를 생략하면 0 주소를 음성 대조군으로 조회합니다. 이 결과는 실제 사용자의 발급 성공을 증명하지 않습니다. probe는 체인 ID·공식 주소의 bytecode·동일 safe 블록의 Dojang 조회·safe/finalized 지원을 확인하며 트랜잭션을 보내지 않습니다. 방금 발급·철회한 결과는 safe 블록에 포함된 뒤 반영됩니다. RPC 주소는 `GIWA_RPC_URL` 환경 변수로 바꿀 수 있고 API 키가 포함된 URL은 출력하지 않습니다.
-
-공개 조회는 `GET /api/v1/chain/status`, `GET /api/v1/dojang/{address}`, `GET /api/v1/integrations`입니다. 인증 경로는 `/api/v1/auth/{csrf,challenge,verify,session,logout}`이며 `GET /api/v1/me/dojang`은 세션에서 지갑 주소를 가져옵니다. 웹에서는 같은 출처의 `/api/auth/*`, `/api/me/dojang` 중계 경로를 사용합니다.
-
-로그인 challenge는 5분 유효·일회용이며 브라우저 세션·Origin·Chain 91342에 묶입니다. 서버는 EIP-191 서명과 정형 EIP-4361 메시지를 검증합니다. 세션은 PostgreSQL에 저장하고, 브라우저에는 HttpOnly·SameSite=Lax 쿠키만 전달합니다. 30분 미사용 시 만료됩니다. 역할은 서버가 INVESTOR로 부여하며 지갑·네트워크 변경 시 화면 접근을 즉시 해제하고 서버 로그아웃을 요청합니다. 계약 지갑의 EIP-1271 검증은 구현하지 않았습니다.
-
-로컬 HTTP에서는 `SESSION_COOKIE_SECURE=false`를 사용합니다. HTTPS 배포 시 Core의 `SESSION_COOKIE_SECURE=true`, Core와 Web 양쪽의 `UPDISH_ALLOWED_ORIGINS`에 **동일한 실제 웹 Origin**을 명시해야 합니다. Next.js는 `apps/web/.env.local` 또는 Web 프로세스 환경을 읽고, Spring은 Core 프로세스 환경을 읽습니다. 루트 `.env`는 Compose용입니다. wildcard Origin과 브라우저에서 전달한 임의 중계 헤더를 신뢰하지 않습니다.
-
-허용 발급자는 TESTNET FAUCET으로 고정되어 있습니다. 다른 발급자의 attestation이나 브라우저에서 바꾼 attester ID로 자격을 통과시킬 수 없습니다. RPC 실패는 503으로, 잘못된 주소는 400으로 구분합니다. UID getter는 공식 소스상 유효하지 않은 attestation에서 revert하므로 유효 판정 후에만 호출합니다.
-
-## 검증
-
-```powershell
-pnpm test:chain
-pnpm check:chain
+pnpm generate:api
 pnpm check:web
+pnpm check:chain
+pnpm test:chain
 pnpm build:web
+./services/core-api/gradlew.bat -p services/core-api test bootJar
+uv run --directory services/agent-api python -m unittest discover -s tests
+forge test --root contracts
 pnpm smoke:auth docs/evidence/siwe-smoke.json
 ```
 
-```powershell
-Set-Location services/core-api
-.\gradlew.bat test bootJar
-```
+Java에는 PostgreSQL이 필요합니다. smoke:auth는 자금 없는 임시 서명자로 로그인→실제 GIWA 음성 조회→logout을 검사하고 거래를 보내지 않습니다. smoke:business는 **별도 Anvil 91342 + 별도 DB/Core 8081** 전용입니다. 공식 GIWA에 실행하지 마세요. [로컬 업무 결과](docs/evidence/business-local-e2e.json)는 mock Dojang을 사용하며 사용자 GIWA 성공을 증명하지 않습니다.
 
-```powershell
-Set-Location contracts
-forge test
-```
-
-Spring 검증에는 로컬 PostgreSQL이 필요합니다. `smoke:auth`는 Web·Core·PostgreSQL이 실행된 상태에서 새 임시 지갑을 메모리에서 만들고 서명 로그인·실제 GIWA 음성 조회·로그아웃을 검사합니다. 사용자 키를 읽거나 트랜잭션을 보내지 않습니다. 실행마다 임시 테스트 주소의 사용자 행이 하나 생깁니다. Foundry 검증의 Dojang 발급·철회는 로컬 mock 계약을 사용합니다.
-
-## 컨테이너 실행 기반
-
-먼저 Core의 `bootJar`를 만든 뒤 다음 명령으로 앱 컨테이너까지 실행할 수 있습니다.
-
-```powershell
-docker compose --env-file .env -f infra/compose.yaml --profile app up -d --build
-```
-
-현재 Compose는 로컬 개발 기반입니다. EC2 인스턴스 생성·공개 TLS 진입점·Vercel 배포는 아직 구성하지 않았습니다. 서비스 포트를 그대로 인터넷에 공개하는 배포 방식으로 사용하지 않습니다.
-
-DB를 유지하며 중지하려면 아래 명령을 사용합니다. 데이터 volume을 지우는 옵션은 붙이지 않습니다.
-
-```powershell
-docker compose --env-file .env -f infra/compose.yaml stop
-```
-
-## 다음 구현
-
-1. 준비한 실제 시연 지갑으로 Playground Dojang 발급·철회 확인.
-2. 모의 가게·투자자·운영자 업무 화면과 역할별 흐름 연결.
-3. 모의 청약·배정과 제한형 테스트 토큰 발행.
-4. CSV 대조·정산 엔진·정산 기록 계약.
-5. Bojagi 공식 접근 확보 시 실제 SDK 통합.
-6. Agent의 근거 조회와 모델 호출. 현재 모델 호출은 구현하지 않았습니다.
-
-현재 상태와 결과는 [개발 상태](docs/bootstrap-status.md), [Bojagi 조사](docs/research/bojagi.md), [실제 체인 응답](docs/evidence/giwa-probe.json)에 남깁니다.
+[남은 승인·실제 연결 확인](docs/remaining-work.md)을 완료 판정에 포함합니다.

@@ -1,11 +1,11 @@
 {
   "status": "PASS",
-  "checkedAt": "2026-10-25T08:46:54.452Z",
+  "checkedAt": "2026-10-25T09:28:10.218Z",
   "mode": "READ_ONLY_TESTNET",
   "rpcHost": "sepolia-rpc.giwa.io",
   "chainId": 91342,
-  "blockNumber": "39572717",
-  "headBlockNumber": "39572895",
+  "blockNumber": "39574983",
+  "headBlockNumber": "39575369",
   "blockTag": "safe",
   "contracts": {
     "DojangScroll": {
@@ -32,11 +32,11 @@
   "finality": {
     "safe": {
       "supported": true,
-      "blockNumber": "39572717"
+      "blockNumber": "39574983"
     },
     "finalized": {
       "supported": true,
-      "blockNumber": "39571664"
+      "blockNumber": "39574235"
     }
   },
   "transactionsSent": 0

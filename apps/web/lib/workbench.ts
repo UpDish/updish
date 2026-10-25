@@ -1,16 +1,18 @@
 import {api} from './auth';
-export type Offering = {id:string;run_id:string;store_name:string;title:string;owner_address:string;contract_version:number;target_units:number;unit_price:string;rate_bps:number;months:number;status:string;token_id:string;accepted_units:number;risk:string;principal_redemption:string};
-export type Sub = {id:string;address:string;units:number;status:string;synthetic:boolean};
-export type Holding = {id:string;address:string;units:number;chain_units:number;synthetic:boolean};
-export type Report = {grossWon:string;discountWon:string;refundWon:string;netWon:string;pgWon:string;bankWon:string;rowCount:number;acceptedCount:number;ready:boolean;issues:{code:string;eventId:string;message:string;blocking:boolean}[]};
-export type Evidence = {id:string;period:string;filename:string;status:string;report:Report;submitted_by:string;reviewed_by:string|null};
-export type Settlement = {id:string;period:string;version:number;status:string;pool_won:string;cash_available:string;digest:string;created_by:string;approved_by:string|null};
-export type Line = {id:string;settlement_id:string;address:string;units:number;amount_won:string;paid_won:string;prior_paid_won:string;delta_won:string};
-export type MySettlement = Settlement & Line & {line_id:string};
-export type Job = {id:string;kind:string;status:string;reference_id:string;target:string|null;calldata:`0x${string}`|null;tx_hash:`0x${string}`|null;block_number:number|null;error_code:string|null};
-export type Attachment={id:string;filename:string;size_bytes:number;status:string};
-export type Dashboard={offering:Offering;user:{address:string;role:string};subscriptions:Sub[];holdings:Holding[];settlements:MySettlement[];chain_jobs:Job[];evidence?:Evidence[];all_subscriptions?:Sub[];all_holdings?:Holding[];all_settlements?:Settlement[];all_lines?:Line[];all_jobs?:Job[];events?:{id:string;actor:string;action:string;reason:string}[];contracts:{units_address:string;registry_address:string;operator_address:string}[]};
-export type Explanation={explanation:string;sourceIds:string[];uncertainties:string[];dataVersion:string;mode:string};
+import type {components} from './api.generated';
+type Schema=components['schemas'];
+export type Offering=Schema['Offering'];
+export type Sub=Schema['Subscription'];
+export type Holding=Schema['Holding'];
+export type Report=Schema['Report'];
+export type Evidence=Schema['Evidence'];
+export type Settlement=Schema['Settlement'];
+export type Line=Schema['Line'];
+export type MySettlement=Schema['MySettlement'];
+export type Job=Omit<Schema['Job'],'calldata'|'tx_hash'> & {calldata:`0x${string}`|null;tx_hash:`0x${string}`|null};
+export type Attachment=Schema['Attachment'];
+export type Dashboard=Omit<Schema['Dashboard'],'chain_jobs'|'all_jobs'> & {chain_jobs:Job[];all_jobs?:Job[]};
+export type Explanation=Schema['Explanation'];
 export function won(value:string|number|bigint) {try {return BigInt(value).toLocaleString('ko-KR')+'원';} catch {return '확인 필요';}}
 export function short(address:string) {return address.slice(0,6)+'…'+address.slice(-4);}
 export function due(line:Pick<Line,'amount_won'|'paid_won'|'prior_paid_won'>) {const n=BigInt(line.amount_won)-BigInt(line.paid_won)-BigInt(line.prior_paid_won);return n>0?n:0n;}

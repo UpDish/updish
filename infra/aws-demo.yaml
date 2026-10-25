@@ -22,7 +22,7 @@ Resources:
       BucketEncryption: {ServerSideEncryptionConfiguration: [{ServerSideEncryptionByDefault: {SSEAlgorithm: AES256}}]}
       PublicAccessBlockConfiguration: {BlockPublicAcls: true, IgnorePublicAcls: true, BlockPublicPolicy: true, RestrictPublicBuckets: true}
       CorsConfiguration:
-        CorsRules: [{AllowedOrigins: [!Ref WebOrigin], AllowedMethods: [GET, PUT, HEAD], AllowedHeaders: ['Content-Type'], ExposedHeaders: [ETag], MaxAge: 300}]
+        CorsRules: [{AllowedOrigins: [!Ref WebOrigin], AllowedMethods: [GET, PUT, HEAD], AllowedHeaders: ['*'], ExposedHeaders: [ETag], MaxAge: 300}]
       Tags: [{Key: Project, Value: UpDish}, {Key: Purpose, Value: hackathon}]
   BucketPolicy:
     Type: AWS::S3::BucketPolicy
@@ -74,7 +74,10 @@ Resources:
           set -euo pipefail
           export DEBIAN_FRONTEND=noninteractive
           apt-get update -qq
-          apt-get install -y docker.io docker-compose-v2 awscli curl
+          apt-get install -y docker.io docker-compose-v2 curl unzip
+          curl -fsS https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip -o /tmp/updish-awscliv2.zip
+          unzip -q /tmp/updish-awscliv2.zip -d /tmp/updish-awscli
+          /tmp/updish-awscli/aws/install
           systemctl enable --now docker
           install -d -m 700 /opt/updish
           cd /opt/updish

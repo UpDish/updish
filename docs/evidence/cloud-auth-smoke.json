@@ -1,0 +1,25 @@
+{
+  "checkedAt": "2026-10-25T09:47:45.376Z",
+  "scope": "Direct Core HTTPS SIWE with ephemeral unfunded EOA; PostgreSQL and live GIWA read. Web BFF not included.",
+  "origin": "https://updish-hackathon-20261025-betaplayers-projects.vercel.app",
+  "checks": [
+    "protected Dojang requires session",
+    "CSRF required",
+    "Core rejects foreign Origin",
+    "EIP-4361 canonical domain, URI, chain, address",
+    "wrong signer rejected",
+    "viem signature accepted by Java; session ID rotated; HttpOnly SameSite cookie; server role",
+    "login persists across HTTP requests",
+    "nonce replay rejected",
+    "authenticated wallet -> Spring -> live GIWA safe block -> Dojang negative result",
+    "logout invalidates session"
+  ],
+  "dojang": {
+    "address": "0xbab9dedcc3984b9328f3642734f5146013728ace",
+    "verified": false,
+    "blockNumber": "39576186",
+    "blockTag": "safe"
+  },
+  "userWalletIssueRevoke": "PENDING_USER_SIGNATURE",
+  "transactionsSent": 0
+}

@@ -1,0 +1,29 @@
+{
+  "checkedAt": "2026-10-25T09:47:57.747Z",
+  "scope": "LOCAL_ANVIL_ONLY: direct Core HTTP, dedicated database, test wallets, mock Dojang, real UpDish contracts and database. No GIWA transactions.",
+  "checks": [
+    "CSV duplicate and partial-refund reconciliation -> net 30,000,000",
+    "separate submitter/reviewer and evidence privacy",
+    "idempotent subscription; no holding before allocation; 120 requested -> 100 allocated + 20 simulated refund",
+    "900,000 pool / 25,000 per 100 units; approval separation; private statement",
+    "compiled contract deployment and Java runtime/immutable/owner/attester validation",
+    "wallet transaction -> receipt -> safe state -> DB/onchain balance 100; settlement record",
+    "canonical salted digest and altered candidate mismatch",
+    "payment idempotency and unpaid-balance bound",
+    "unconfigured model is unavailable, never a fake answer",
+    "revocation preserves previously minted holdings"
+  ],
+  "receipts": [
+    {
+      "kind": "MINT",
+      "hash": "0x5ae5e17389155973d4bb112ab45ac20ef70cf298fa52471e75556cf034b23647",
+      "status": "SAFE"
+    },
+    {
+      "kind": "SETTLEMENT",
+      "hash": "0x0b223a1c908d50f7238ce37013d8e2d92d2d4da0c219c0038b384bc6dbc47b13",
+      "status": "SAFE"
+    }
+  ],
+  "userWalletTransactions": 0
+}

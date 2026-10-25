@@ -6,11 +6,13 @@ import { parseSiweMessage } from 'viem/siwe';
 // Disposable, unfunded test signer. Never reads a user key or submits a transaction.
 const account = privateKeyToAccount(generatePrivateKey());
 const origin = process.env.WEB_ORIGIN ?? 'http://127.0.0.1:3000';
+const directCore = process.env.API_BASE_URL;
 let cookie = '';
 async function request(path: string, init: RequestInit = {}) {
   const headers = new Headers(init.headers);
   if (cookie) headers.set('Cookie', cookie);
-  const response = await fetch(origin + path, { ...init, headers });
+  const url=directCore ? directCore+path.replace(/^\/api\//,'/api/v1/') : origin+path;
+  const response = await fetch(url, { ...init, headers });
   for (const value of response.headers.getSetCookie()) {
     if (value.startsWith('UPDISH_SESSION=')) cookie = value.split(';')[0];
   }
@@ -26,7 +28,7 @@ assert.equal((await request('/api/me/dojang')).status, 401); checks.push('protec
 assert.equal((await post('/api/auth/challenge', { address: account.address })).status, 403); checks.push('CSRF required');
 let token = await csrf();
 assert.equal((await post('/api/auth/challenge', { address: account.address }, token, 'https://evil.example')).status, 403);
-checks.push('BFF rejects foreign Origin');
+checks.push(directCore?'Core rejects foreign Origin':'BFF rejects foreign Origin');
 const c = await post('/api/auth/challenge', { address: account.address }, token);
 assert.equal(c.status, 200);
 const parsed = parseSiweMessage(c.body.message);
@@ -44,6 +46,7 @@ assert.equal(verified.status, 200); assert.equal(verified.body.user.role, 'INVES
 assert.equal(verified.body.user.address, account.address.toLowerCase()); assert.notEqual(cookie, oldCookie);
 assert.match(verified.headers.get('set-cookie') ?? '', /HttpOnly/i);
 assert.match(verified.headers.get('set-cookie') ?? '', /SameSite=Lax/i);
+if(origin.startsWith('https://')) assert.match(verified.headers.get('set-cookie')??'', /; Secure/i);
 checks.push('viem signature accepted by Java; session ID rotated; HttpOnly SameSite cookie; server role');
 assert.equal((await request('/api/auth/session')).body.authenticated, true); checks.push('login persists across HTTP requests');
 token = await csrf();
@@ -55,9 +58,9 @@ checks.push('authenticated wallet -> Spring -> live GIWA safe block -> Dojang ne
 assert.equal((await post('/api/auth/logout', {}, token)).status, 200);
 assert.equal((await request('/api/auth/session')).body.authenticated, false);
 assert.equal((await request('/api/me/dojang')).status, 401); checks.push('logout invalidates session');
-const report = { checkedAt: new Date().toISOString(), scope: 'Local full-stack SIWE with ephemeral unfunded EOA; live GIWA read. No user-wallet transaction.',
+const report = { checkedAt: new Date().toISOString(), scope: directCore?'Direct Core HTTPS SIWE with ephemeral unfunded EOA; PostgreSQL and live GIWA read. Web BFF not included.':'Local full-stack SIWE with ephemeral unfunded EOA; live GIWA read. No user-wallet transaction.',origin,
   checks, dojang: { address: dojang.body.address, verified: dojang.body.verified, blockNumber: dojang.body.blockNumber, blockTag: dojang.body.blockTag },
-  userWalletIssueRevoke: 'PENDING_USER_SIGNATURE_AND_TEST_ETH', transactionsSent: 0 };
+  userWalletIssueRevoke: 'PENDING_USER_SIGNATURE', transactionsSent: 0 };
 const output = process.argv[2];
 if (output) await writeFile(output, JSON.stringify(report, null, 2) + '\n');
 console.log(JSON.stringify(report, null, 2));
