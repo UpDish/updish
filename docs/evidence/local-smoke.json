@@ -1,0 +1,77 @@
+{
+  "mode": "READ_ONLY_LOCAL_SMOKE",
+  "checks": [
+    {
+      "path": "/actuator/health",
+      "status": 200,
+      "response": {
+        "groups": [
+          "liveness",
+          "readiness"
+        ],
+        "status": "UP"
+      }
+    },
+    {
+      "path": "/api/v1/chain/status",
+      "status": 200,
+      "response": {
+        "network": "GIWA Sepolia",
+        "chainId": 91342,
+        "blockNumber": "39508787",
+        "contractCodeBytes": {
+          "EAS": 2059,
+          "DojangScroll": 141
+        },
+        "checkedAt": "2026-10-24T15:01:41.787021700Z",
+        "mode": "SIMULATION",
+        "blockTag": "safe"
+      }
+    },
+    {
+      "path": "/api/v1/dojang/0x0000000000000000000000000000000000000000",
+      "status": 200,
+      "response": {
+        "address": "0x0000000000000000000000000000000000000000",
+        "status": "NOT_VERIFIED",
+        "verified": false,
+        "attester": "TESTNET FAUCET",
+        "attesterId": "0xaa92f8c143657dde575de430aecaea6ca91f2e6072339b16932d426895d8d678",
+        "attestationUid": null,
+        "blockNumber": "39508787",
+        "checkedAt": "2026-10-24T15:01:41.910537Z",
+        "mode": "SIMULATION",
+        "disclaimer": "Testnet attestation only; this is not Upbit identity verification or investment eligibility.",
+        "blockTag": "safe"
+      }
+    },
+    {
+      "path": "/api/v1/dojang/0x1234",
+      "status": 400,
+      "response": {
+        "message": "0x로 시작하는 20바이트 지갑 주소를 입력해 주세요.",
+        "code": "INVALID_ADDRESS"
+      }
+    },
+    {
+      "path": "/api/v1/integrations",
+      "status": 200,
+      "response": {
+        "bojagi": {
+          "status": "NOT_CONNECTED",
+          "reason": "Official SDK and test environment access have not been verified"
+        },
+        "mode": "SIMULATION"
+      }
+    },
+    {
+      "path": "POST /api/v1/dojang/{address}",
+      "status": 403
+    }
+  ],
+  "agent": {
+    "status": "ok",
+    "service": "agent-api",
+    "mode": "SIMULATION"
+  }
+}

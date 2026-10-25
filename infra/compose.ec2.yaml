@@ -1,0 +1,59 @@
+name: updish-demo
+x-logging: &logs
+  driver: json-file
+  options: {max-size: "5m", max-file: "2"}
+services:
+  postgres:
+    image: postgres:18.6
+    environment:
+      POSTGRES_DB: updish
+      POSTGRES_USER: updish
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?required}
+    volumes: ["./data/postgres:/var/lib/postgresql"]
+    mem_limit: 512m
+    shm_size: 128m
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U updish -d updish"]
+      interval: 5s
+      timeout: 3s
+      retries: 24
+    restart: unless-stopped
+    logging: *logs
+  core-api:
+    image: updish/core-api:demo
+    environment:
+      SERVER_ADDRESS: 0.0.0.0
+      DATABASE_URL: jdbc:postgresql://postgres:5432/updish
+      POSTGRES_USER: updish
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?required}
+      GIWA_RPC_URL: https://sepolia-rpc.giwa.io
+      UPDISH_ALLOWED_ORIGINS: ${UPDISH_ALLOWED_ORIGINS:?required}
+      SESSION_COOKIE_SECURE: "true"
+      DEMO_OPERATOR_WALLET: ${DEMO_OPERATOR_WALLET:?required}
+      AGENT_API_URL: http://agent-api:8000
+      AGENT_SHARED_TOKEN: ${AGENT_SHARED_TOKEN:?required}
+      S3_BUCKET: ${S3_BUCKET:?required}
+      AWS_REGION: ap-northeast-2
+    ports: ["127.0.0.1:8080:8080"]
+    mem_limit: 1500m
+    depends_on: {postgres: {condition: service_healthy}}
+    restart: unless-stopped
+    logging: *logs
+  agent-api:
+    image: updish/agent-api:demo
+    environment:
+      AGENT_SHARED_TOKEN: ${AGENT_SHARED_TOKEN:?required}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-5-mini}
+    mem_limit: 600m
+    restart: unless-stopped
+    logging: *logs
+  proxy:
+    image: caddy:2-alpine
+    environment: {API_DOMAIN: "${API_DOMAIN:?required}"}
+    ports: ["80:80", "443:443"]
+    volumes: ["./Caddyfile:/etc/caddy/Caddyfile:ro", "./data/caddy:/data", "./data/caddy-config:/config"]
+    mem_limit: 128m
+    depends_on: [core-api]
+    restart: unless-stopped
+    logging: *logs

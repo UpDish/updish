@@ -1,0 +1,102 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: UpDish hackathon - one stoppable EC2, private S3, no ALB NAT RDS
+Parameters:
+  VpcId: {Type: 'AWS::EC2::VPC::Id'}
+  SubnetId: {Type: 'AWS::EC2::Subnet::Id'}
+  ImageId:
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: /aws/service/canonical/ubuntu/server/24.04/stable/current/arm64/hvm/ebs-gp3/ami-id
+  WebOrigin:
+    Type: String
+    AllowedPattern: 'https://[A-Za-z0-9.-]+'
+  OperatorWallet:
+    Type: String
+    AllowedPattern: '0x[0-9a-fA-F]{40}'
+    Default: '0x26473024a9118e8f39b1a0ce01ac726c36dd0976'
+Resources:
+  Bucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      BucketEncryption: {ServerSideEncryptionConfiguration: [{ServerSideEncryptionByDefault: {SSEAlgorithm: AES256}}]}
+      PublicAccessBlockConfiguration: {BlockPublicAcls: true, IgnorePublicAcls: true, BlockPublicPolicy: true, RestrictPublicBuckets: true}
+      CorsConfiguration:
+        CorsRules: [{AllowedOrigins: [!Ref WebOrigin], AllowedMethods: [GET, PUT, HEAD], AllowedHeaders: ['Content-Type'], ExposedHeaders: [ETag], MaxAge: 300}]
+      Tags: [{Key: Project, Value: UpDish}, {Key: Purpose, Value: hackathon}]
+  BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref Bucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement: [{Effect: Deny, Principal: '*', Action: 's3:*', Resource: [!GetAtt Bucket.Arn, !Sub '${Bucket.Arn}/*'], Condition: {Bool: {'aws:SecureTransport': false}}}]
+  Role:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement: [{Effect: Allow, Principal: {Service: ec2.amazonaws.com}, Action: 'sts:AssumeRole'}]
+      ManagedPolicyArns: ['arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore']
+      Policies:
+        - PolicyName: UpDishPrivateFiles
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - {Effect: Allow, Action: ['s3:GetObject'], Resource: !Sub '${Bucket.Arn}/release/*'}
+              - {Effect: Allow, Action: ['s3:GetObject', 's3:PutObject'], Resource: !Sub '${Bucket.Arn}/demo/*'}
+  Profile:
+    Type: AWS::IAM::InstanceProfile
+    Properties: {Roles: [!Ref Role]}
+  SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: HTTPS API and certificate challenge only
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - {IpProtocol: tcp, FromPort: 80, ToPort: 80, CidrIp: 0.0.0.0/0}
+        - {IpProtocol: tcp, FromPort: 443, ToPort: 443, CidrIp: 0.0.0.0/0}
+      Tags: [{Key: Project, Value: UpDish}]
+  Server:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref ImageId
+      InstanceType: t4g.medium
+      IamInstanceProfile: !Ref Profile
+      MetadataOptions: {HttpTokens: required, HttpEndpoint: enabled, HttpPutResponseHopLimit: 2}
+      CreditSpecification: {CPUCredits: standard}
+      NetworkInterfaces: [{DeviceIndex: '0', AssociatePublicIpAddress: true, SubnetId: !Ref SubnetId, GroupSet: [!Ref SecurityGroup]}]
+      BlockDeviceMappings: [{DeviceName: /dev/sda1, Ebs: {VolumeSize: 25, VolumeType: gp3, Encrypted: true, DeleteOnTermination: true}}]
+      Tags: [{Key: Name, Value: updish-hackathon}, {Key: Project, Value: UpDish}, {Key: Purpose, Value: hackathon}]
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          set -euo pipefail
+          export DEBIAN_FRONTEND=noninteractive
+          apt-get update -qq
+          apt-get install -y docker.io docker-compose-v2 awscli curl
+          systemctl enable --now docker
+          install -d -m 700 /opt/updish
+          cd /opt/updish
+          for i in $(seq 1 180); do
+            if aws s3 cp s3://${Bucket}/release/updish-images.tar.gz images.tar.gz --region ${AWS::Region} --only-show-errors; then break; fi
+            sleep 10
+          done
+          aws s3 cp s3://${Bucket}/release/compose.ec2.yaml compose.yaml --region ${AWS::Region} --only-show-errors
+          aws s3 cp s3://${Bucket}/release/Caddyfile Caddyfile --region ${AWS::Region} --only-show-errors
+          docker load -i images.tar.gz
+          TOKEN=$(curl -fsS -X PUT -H 'X-aws-ec2-metadata-token-ttl-seconds: 60' http://169.254.169.254/latest/api/token)
+          PUBIP=$(curl -fsS -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/public-ipv4)
+          umask 077
+          python3 - <<'PY'
+          import secrets
+          from pathlib import Path
+          Path('.env').write_text('POSTGRES_PASSWORD='+secrets.token_hex(24)+'\nAGENT_SHARED_TOKEN='+secrets.token_hex(32)+'\n')
+          PY
+          printf 'API_DOMAIN=%s.sslip.io\nUPDISH_ALLOWED_ORIGINS=${WebOrigin}\nS3_BUCKET=${Bucket}\nDEMO_OPERATOR_WALLET=${OperatorWallet}\n' "$PUBIP" >> .env
+          docker compose up -d
+Outputs:
+  InstanceId: {Value: !Ref Server}
+  Bucket: {Value: !Ref Bucket}
+  ApiBaseUrl: {Value: !Sub 'https://${Server.PublicIp}.sslip.io'}
+  PublicIp: {Value: !GetAtt Server.PublicIp}

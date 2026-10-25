@@ -1,0 +1,8 @@
+CREATE TABLE demo_run (
+    id UUID PRIMARY KEY,
+    label VARCHAR(120) NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO demo_run (id, label)
+VALUES ('00000000-0000-0000-0000-000000000001', 'GIWA integration bootstrap');

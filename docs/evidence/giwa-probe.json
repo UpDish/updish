@@ -1,0 +1,43 @@
+{
+  "status": "PASS",
+  "checkedAt": "2026-10-24T15:00:15.273Z",
+  "mode": "READ_ONLY_TESTNET",
+  "rpcHost": "sepolia-rpc.giwa.io",
+  "chainId": 91342,
+  "blockNumber": "39508683",
+  "headBlockNumber": "39508896",
+  "blockTag": "safe",
+  "contracts": {
+    "DojangScroll": {
+      "address": "0xd5077b67dcb56cac8b270c7788fc3e6ee03f17b9",
+      "bytes": 141,
+      "observedCodeHash": "0x0a93e871cf766e25342f367e2fc69ec189911bbd47d375265c3ee451001dc330"
+    },
+    "EAS": {
+      "address": "0x4200000000000000000000000000000000000021",
+      "bytes": 2059,
+      "observedCodeHash": "0xfa8c9db6c6cab7108dea276f4cd09d575674eb0852c0fa3187e59e98ef977998"
+    }
+  },
+  "walletCheck": {
+    "address": "0x0000000000000000000000000000000000000000",
+    "isZeroAddressNegativeControl": true,
+    "attester": "TESTNET FAUCET",
+    "attesterId": "0xaa92f8c143657dde575de430aecaea6ca91f2e6072339b16932d426895d8d678",
+    "verified": false,
+    "attestationUid": null,
+    "status": "NOT_VERIFIED",
+    "disclaimer": "No identity verification or investment eligibility is implied."
+  },
+  "finality": {
+    "safe": {
+      "supported": true,
+      "blockNumber": "39508683"
+    },
+    "finalized": {
+      "supported": true,
+      "blockNumber": "39507844"
+    }
+  },
+  "transactionsSent": 0
+}

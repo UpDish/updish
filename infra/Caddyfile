@@ -1,0 +1,13 @@
+{$API_DOMAIN} {
+    encode zstd gzip
+    request_body {
+        max_size 2MB
+    }
+    @api path /api/* /actuator/health
+    handle @api {
+        reverse_proxy core-api:8080
+    }
+    handle {
+        respond "UpDish demo API" 200
+    }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "updish",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.23.0",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "scripts": {
+    "smoke:auth": "tsx scripts/smoke-auth.ts",
+    "dev:web": "pnpm --filter @updish/web dev",
+    "build:web": "pnpm --filter @updish/web build",
+    "check:web": "pnpm --filter @updish/web typecheck",
+    "check:chain": "tsc -p tsconfig.scripts.json",
+    "probe:chain": "tsx scripts/probe-chain.ts",
+    "test:chain": "tsx --test scripts/chain-codec.test.ts"
+  },
+  "devDependencies": {
+    "@openzeppelin/contracts": "5.6.1",
+    "@types/node": "^24.0.0",
+    "tsx": "4.21.0",
+    "typescript": "5.9.3",
+    "viem": "2.57.11"
+  }
+}

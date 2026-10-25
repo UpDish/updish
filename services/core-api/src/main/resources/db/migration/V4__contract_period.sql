@@ -1,0 +1,1 @@
+ALTER TABLE offering ADD COLUMN starts_on date NOT NULL DEFAULT '2026-10-01';
