@@ -1,52 +1,52 @@
-# Source design implementation QA
+# Upbit-informed UI/UX revision
 
-final result: passed
+final result: blocked
 
-## Target and evidence
+## Reference and audit evidence
 
-- Primary source: user-provided `updish_sto_platform.zip` → `updish_sto_platform.html`, rendered locally. The attachment is design data, not authority to change authentication, business rules or permissions.
-- Secondary reference: https://www.upbit.com/exchange?code=CRIX.UPBIT.KRW-BTC, inspected for compact navigation, tabular information and adjacent action panels. This is not an Upbit exchange clone.
-- Source captures: `docs/evidence/design/source-home.png`, `source-detail.png`.
-- Rendered implementation: `http://127.0.0.1:3000/`; `implementation-home-final.png`, `implementation-detail-final.png` in the same evidence folder.
-- Desktop CSS viewport: 1280×720. Source and implementation captures are both 1265×712 content pixels from CUA. No scaling or density conversion was applied before composition.
-- Full-view comparisons: `comparison-home-final.png`, `comparison-detail-final.png`. Source is left, implementation right, with a 16px separator. Both combined images were opened and inspected in the same comparison input.
-- Focused comparison: `comparison-header-focus.png`, equal 510×220 regions of source/implementation; logo, navigation, header spacing, type and start of tiles are readable at native scale.
-- Mobile: actual CSS viewport 390×844, measured document scroll width 375px (scrollbar excluded), no document overflow. `mobile-home.png`, `mobile-detail.png`. Mobile adaptation is intentional because the provided HTML does not define a usable small-screen layout.
+The user requested research of Upbit image-search results and its actual service, followed by an UpDish UI/UX revision. This supersedes the previous HTML-prototype fidelity target. The earlier passed QA is preserved at `docs/evidence/design/design-qa-original-html.md` and applies only to the previous deployed app.
 
-## Comparison history
+- Two Google Images queries were browsed across six captured viewports. Captures `01-image-search-pc-top.png` through `06-image-search-mobile-more.png` in `docs/evidence/upbit-research/` show recurring PC/mobile information, navigation and order-entry patterns. This is a sampled visual survey, not an exhaustive crawl of every web image.
+- Primary current visual: `docs/evidence/upbit-research/07-upbit-live-exchange.png`, captured from https://www.upbit.com/exchange?code=CRIX.UPBIT.KRW-BTC . It was opened from disk and inspected. Navy navigation, flat white panels, gray gutters, adjacent selected-instrument context and market list are visible. `08-upbit-chart-interaction.png` is a second chart interaction, not an order-panel screenshot. It is not evidence that the order panel was audited.
+- Primary interaction documentation: https://support.upbit.com/hc/ko/articles/900005595146 . Price/quantity/total inputs, primary order action and investment-history navigation are described. No trades were placed on Upbit.
+- Before, product: `docs/evidence/design/public-home.png`, saved and inspected in the preceding deployment work and opened again during this research. Source capture is 1265×712 content pixels at the prior 1280×720 CSS viewport. It is historical same-day evidence; a new product capture was blocked before navigation completed.
+- Before, detail: `docs/evidence/design/public-detail.png`, historical same-day evidence from the preceding deployment.
+- Before, wallet: `docs/evidence/upbit-research/09-before-wallet.png`, freshly captured during this research and inspected from disk. Its smaller viewport is not valid for pixel comparison against the desktop exchange reference.
+- Structured sources, findings and evidence limits: `docs/evidence/upbit-research/research.json`.
+- An unscaled research comparison was composed and opened as `docs/evidence/upbit-research/comparison-before.png`: Upbit 1253×705 pixels on the left, previous UpDish 1265×712 on the right with a 16px separator. It supports the structural audit only; it is not a same-state, normalized comparison of the revised implementation.
 
-1. The former implementation used a large marketing heading, invented CSS storefront art and a combined product/application view. The provided source instead uses a 64px header, 40px notice row, 2:1:1 color tiles, a product table and a separate 2:1 detail/application layout. These structural differences were removed.
-2. First implementation comparison (`comparison-home-v1.png`, `comparison-detail-v1.png`) found a P2 detail-card height drift: extra description lines and row padding pushed the calculator down about 40px. Removed the extra line, restored four compact contract rows and moved scenario selection into the existing risk cards. Post-fix detail comparison has the calculator at the source's vertical rhythm.
-3. Initial phone captures (`mobile-home-v1.png`, `mobile-detail-v1.png`) found P2 long shortcut copy, awkward Korean word breaks and application controls after all calculator content. Shortened shortcut labels, kept Korean words together and placed the application panel immediately after contract information on small screens. Final phone captures were opened and inspected.
-4. Pink tile and badge contrast was increased by darkening the source pink hue and badge backing. The source's blue/red/pink hierarchy and tile proportions remain. This is an intentional accessibility adjustment.
+## Findings and implemented changes
 
-## Required fidelity surfaces
+1. **[P1] The 260px promotional tiles dominate the decision screen.** The before product capture gives a product and two account/merchant shortcuts equal color weight. Replaced these with a selected-product header, contract information and an adjacent directory/order column.
+2. **[P1] Information and subscription are split despite there being one product.** Before, the user must open a second screen before seeing the form. The revised workspace keeps conditions, quantity, total and next action together. Calculator/risk tabs preserve the parent quantity.
+3. **[P2] Arbitrary red/pink gradients, rounded cards and shadows compete with data.** Replaced the global shell with navy navigation, gray gutters, flat panels, tabular amounts and restrained blue active controls.
+4. **[P2] Mobile prioritizes tiles and long navigation labels.** Implemented short task labels, persistent bottom navigation and a direct subscription anchor. Main controls have a 44px mobile target. These remain unverified in a rendered phone viewport.
+5. **[P2] Anonymous users see a disabled application and a separate login action.** The revised guest form has one primary login action; signed users retain the three mandatory acknowledgements, quantity/status checks and the existing server-side controls.
 
-- Fonts/type: source Pretendard/system stack, 24px italic editable UpDish wordmark, 15px navigation, 13px tabular body, 20–21px section headings, tabular monetary numerals. No promotional display typography remains.
-- Spacing/layout: 64px desktop header, 40px notice row, max-width 1280px, 16px page inset, 260px tiles with 12px gaps, 24px section gap, 24px panel padding, 20px detail-column gap. Mobile uses one primary tile and two compact shortcuts; the product table scrolls inside its own container.
-- Colors/tokens: original blue #0062DF, dark blue #093687, gray #F9FAFC/#E9ECEF and red #C84A31. Pink is darkened for white-text contrast. Status color has a visible text label.
-- Assets: source home/detail use editable typography, colored UI surfaces, native inputs and tables, with no raster artwork. The supplied wordmark is text. No generated assets, fake photographs, decorative CSS storefront or replacement SVG illustrations are used.
-- Copy/content: live DB supplies the single product and actual collection/holding state. The other two tiles are shortcuts, not invented additional stores. Source annual-return/ranking/realtime examples are not represented as verified metrics. Calculator numbers are explicitly hypothetical. SIWE and three required acknowledgements replace the prototype's fake password login/one-checkbox flow.
+Search, status filters, keyboard tabs and quantity presets were implemented as real controls. No price chart, order book, return history or additional restaurants were invented. The UpDish wordmark remains its own editable text; no Upbit brand asset was copied. The selected reference's BTC icon/chart do not represent this product and are intentionally omitted rather than approximated with CSS/SVG artwork.
 
-## Interactions and runtime
+## Required surfaces and pending comparison
 
-- Product tile/table CTA opens detail; back control returns to product list.
-- Quantity 100 gives 25,000/month; quantity 200 gives 50,000/month. With sales 24,000,000 and quantity 200, the result is 40,000/month.
-- Quantity 0 shows validation and blocks submission without a runtime error.
-- Checking all acknowledgements while unauthenticated still leaves subscription disabled; acknowledgements were reset afterward.
-- Existing wallet/SIWE, server mutations, role checks, CSV, S3, chain jobs and Agent boundaries were retained.
-- Local browser error/warning logs: empty during the tested product/detail flow.
-- Production build/type checks and post-deployment auth verification are recorded separately; they do not substitute for this visual comparison.
+- Typography: compact 11–14px UI, 19px instrument heading, 32px unit amount and a Korean-capable system stack. Exact Upbit font matching is not claimed. Rendering/wrapping requires browser verification.
+- Spacing/layout: 60px desktop navy header, 34px notice strip, 10px gutters and 350px order/directory column. Desktop, tablet and 390px mobile still require measured viewport screenshots.
+- Colors: navy #093687, active blue #1763b6, neutral background #e9ecf1, flat white panels, restrained semantic badges. Header/bottom-navigation keyboard focus and mobile touch targets were addressed in source; contrast/visual quality still need inspection.
+- Assets: no raster artwork is needed for the adapted product/contract surfaces. No fake logo, chart or illustrations were generated.
+- Content: real Core offering only, hypothetical calculator clearly labelled, no guaranteed return, no live model/Bojagi claim and no false Upbit verification. Signed roles and wallet/account guards remain unchanged.
+- Full-view comparison: pending. No revised app screenshot has been accepted, and no combined source/implementation comparison has been made.
+- Focused comparison: pending for header, information table, order inputs and mobile navigation.
 
-## Deployed result
+## Verification and blocker
 
-- Production: https://updish-hackathon-20261025-betaplayers-projects.vercel.app/ . Vercel deployment `dpl_978FarAbNmizLSMmK3WGSD4iAxCs` is READY, built from app commit `0ff2430a6b35001f97d727a8d4377d2bd4bf02a1`.
-- Public screenshots: `docs/evidence/design/public-home.png`, `public-detail.png`. The deployed home/detail and return to the product list were verified in the browser; captured error/warning logs were empty.
-- Local and public SIWE regression checks each passed 12 checks at 11:06 UTC on 2026-10-25. Evidence: `docs/evidence/design/local-auth-smoke.json`, `production-auth-smoke.json`. These used ephemeral unfunded signers and submitted no transactions.
-- Backend-only tests, S3, backup and reboot were not rerun for this frontend change. Signed merchant/operator visual review and user-wallet transactions remain separate rehearsal steps.
+Type checking and production build passed during implementation. Local SIWE → BFF → Core → PostgreSQL → live GIWA read passed 12 checks, recorded in `docs/evidence/upbit-research/local-auth-smoke.json`. No user-wallet transaction was submitted. These checks do not prove visual quality.
 
-## Findings and limits
+CUA initially captured the research screenshots, then repeated operations timed out. After a runtime reset, its inventory returned no available browsers and selecting `iab` returned `Browser is not available: iab`. Opening the local preview through Codex returned `queued`. An async question asks whether a separate Playwright verification browser is permitted. That approval has not been received. No Playwright/browser fallback has been used.
 
-No actionable P0/P1/P2 remains in the compared home/detail surfaces. Intentional business/authentication differences are listed above. The dev-only Next indicator is not app chrome and is absent in production.
+The current public deployment remains `dpl_978FarAbNmizLSMmK3WGSD4iAxCs` from app commit `0ff2430a6b35001f97d727a8d4377d2bd4bf02a1`. This revision has not been deployed. Do not mark it visually verified or publish it as complete until browser capture, interaction checks and combined comparison pass.
 
-P3/follow-up: signed merchant/operator screens and real MetaMask transactions require the user's authorized wallets; their server controls remain unchanged. The additional 768px capture was not accepted unless its measured viewport matches; no unverified tablet screenshot is counted as evidence.
+## Remaining acceptance checks
+
+- Capture actual revised desktop, tablet and 390px mobile screens; measure viewport and document overflow.
+- Compare against the current Upbit reference in one combined input; inspect focused readable regions.
+- Exercise search/no results, state filters, keyboard tabs, quantity presets, invalid input, calculator scenarios, acknowledgements and login/portfolio/merchant navigation.
+- Check console errors and retained login flow; fix actionable P0/P1/P2 issues and recapture.
+- Deploy the verified app to the existing Vercel project, then check the canonical public URL and update deployment evidence.

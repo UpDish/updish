@@ -38,6 +38,8 @@ Backup은 /opt/updish/backups의 접근 제한된 pg_dump custom 파일을 만�
 
 ## 최종 Vercel 설정
 
+업비트 조사 기반의 다음 UI 수정은 로컬에 준비했으나 브라우저 시각 검증을 마치지 못해 배포하지 않았다. 아래 배포 정보는 이전에 검증한 HTML 시안 반영 버전이다. [현재 QA 상태](../design-qa.md)가 passed가 되기 전에는 다음 UI를 완료된 배포로 보고하지 않는다.
+
 사용자가 팀 접근을 승인한 뒤 실제 Origin을 수정했고, 제공된 시안 반영 앱을 production에 배포했다. 현재 배포 ID는 `dpl_978FarAbNmizLSMmK3WGSD4iAxCs`, 앱 소스 커밋은 `0ff2430a6b35001f97d727a8d4377d2bd4bf02a1`, 상태는 READY다. [현재 공개 웹 로그인 검사](evidence/design/production-auth-smoke.json)는 임시 무자금 서명자로 Vercel → EC2 → PostgreSQL → 실제 GIWA 조회와 로그아웃 12개 항목을 통과했다. 사용자 지갑 거래를 제출한 검사는 아니다. 화면 비교와 모바일 검증은 [디자인 검증](../design-qa.md)에 있다.
 
 production/preview에 아래 값을 설정했다.

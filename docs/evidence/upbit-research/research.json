@@ -1,0 +1,87 @@
+{
+  "observedAt": "2026-10-25",
+  "scope": "Two Google Images searches, six captured result viewports, live Upbit exchange, official PC trading guide. Not an exhaustive crawl of all images on the web.",
+  "sources": [
+    {
+      "url": "https://www.google.com/search?tbm=isch&q=업비트+PC+거래소+화면",
+      "captures": [
+        "01-image-search-pc-top.png",
+        "02-image-search-pc-middle.png",
+        "03-image-search-pc-lower.png",
+        "04-image-search-pc-more.png"
+      ],
+      "purpose": "Compare recurring PC structure across current guides and historical images; do not treat old third-party screenshots as current authority."
+    },
+    {
+      "url": "https://www.google.com/search?tbm=isch&q=업비트+투자내역+모바일+주문",
+      "captures": [
+        "05-image-search-mobile-top.png",
+        "06-image-search-mobile-more.png"
+      ],
+      "purpose": "Observe mobile tab hierarchy, compact order fields, quantity shortcuts, persistent navigation."
+    },
+    {
+      "url": "https://www.upbit.com/exchange?code=CRIX.UPBIT.KRW-BTC",
+      "captures": [
+        "07-upbit-live-exchange.png",
+        "08-upbit-chart-interaction.png"
+      ],
+      "purpose": "Live navy navigation, flat white panels, gray gutters, numeric hierarchy and market directory. Second capture is chart interaction, not an order-panel capture."
+    },
+    {
+      "url": "https://support.upbit.com/hc/ko/articles/900005595146",
+      "purpose": "Primary guide confirms price/quantity/total entry, order action and investment-history navigation."
+    }
+  ],
+  "findings": [
+    {
+      "priority": "P1",
+      "evidence": "../design/public-home.png",
+      "issue": "Three 260px colored tiles dominate before any contract information or order inputs. A product and account/merchant shortcuts have equal visual prominence.",
+      "change": "Remove tiles. Show selected product price/terms in the main column with adjacent directory and subscription input."
+    },
+    {
+      "priority": "P1",
+      "evidence": "../design/public-detail.png",
+      "issue": "Product decision and application require a second screen despite a single available product.",
+      "change": "Unify product context and subscription in one workspace. Make information/calculator/risk switch without losing quantity."
+    },
+    {
+      "priority": "P2",
+      "evidence": "../design/public-home.png",
+      "issue": "Red, pink, gradients, rounded cards and shadows compete with meaningful status and amounts.",
+      "change": "Navy header, neutral gray gutters, flat white panels, restrained blue active controls; no arbitrary return color."
+    },
+    {
+      "priority": "P2",
+      "evidence": "../design/mobile-home.png",
+      "issue": "Marketing tiles consume mobile space; long menu labels lack compact persistent navigation.",
+      "change": "Short task-based labels, mobile bottom navigation, direct jump to subscription."
+    },
+    {
+      "priority": "P2",
+      "evidence": "../design/public-detail.png",
+      "issue": "Disabled subscription plus separate login action gives anonymous visitors two competing next steps.",
+      "change": "One primary guest login action. Signed users retain mandatory consents and server-side gating."
+    }
+  ],
+  "intentionalDifferences": [
+    "No invented price chart, order book, trades or fake additional restaurants.",
+    "No copied Upbit wordmark or implied Upbit identity verification.",
+    "No wallet transactions or user credentials used in design research.",
+    "Original ZIP remains a historical prototype; user explicitly requested Upbit-led revision in this turn."
+  ],
+  "verification": {
+    "webTypecheck": "PASS",
+    "productionBuild": "PASS_FINAL_SOURCE",
+    "localAuth": "PASS_12_CHECKS",
+    "browserAfterChange": "BLOCKED_IAB_UNAVAILABLE_USER_APPROVAL_PENDING_FOR_PLAYWRIGHT",
+    "publicDeployment": "UNCHANGED_PREVIOUS_DESIGN"
+  },
+  "comparison": {
+    "file": "comparison-before.png",
+    "left": "Upbit live exchange, 1253x705 pixels",
+    "right": "Previous UpDish home, 1265x712 pixels",
+    "scaling": "None; structural research only, not revised implementation QA"
+  }
+}
