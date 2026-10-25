@@ -38,6 +38,13 @@ final result: passed
 - Local browser error/warning logs: empty during the tested product/detail flow.
 - Production build/type checks and post-deployment auth verification are recorded separately; they do not substitute for this visual comparison.
 
+## Deployed result
+
+- Production: https://updish-hackathon-20261025-betaplayers-projects.vercel.app/ . Vercel deployment `dpl_978FarAbNmizLSMmK3WGSD4iAxCs` is READY, built from app commit `0ff2430a6b35001f97d727a8d4377d2bd4bf02a1`.
+- Public screenshots: `docs/evidence/design/public-home.png`, `public-detail.png`. The deployed home/detail and return to the product list were verified in the browser; captured error/warning logs were empty.
+- Local and public SIWE regression checks each passed 12 checks at 11:06 UTC on 2026-10-25. Evidence: `docs/evidence/design/local-auth-smoke.json`, `production-auth-smoke.json`. These used ephemeral unfunded signers and submitted no transactions.
+- Backend-only tests, S3, backup and reboot were not rerun for this frontend change. Signed merchant/operator visual review and user-wallet transactions remain separate rehearsal steps.
+
 ## Findings and limits
 
 No actionable P0/P1/P2 remains in the compared home/detail surfaces. Intentional business/authentication differences are listed above. The dev-only Next indicator is not app chrome and is absent in production.

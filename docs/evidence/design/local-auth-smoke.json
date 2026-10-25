@@ -1,0 +1,27 @@
+{
+  "checkedAt": "2026-10-25T11:06:02.064Z",
+  "scope": "Local full-stack SIWE with ephemeral unfunded EOA; live GIWA read. No user-wallet transaction.",
+  "origin": "http://127.0.0.1:3000",
+  "checks": [
+    "protected Dojang requires session",
+    "CSRF required",
+    "BFF rejects foreign Origin",
+    "EIP-4361 canonical domain, URI, chain, address",
+    "wrong signer rejected",
+    "viem signature accepted by Java; session ID rotated; HttpOnly SameSite cookie; server role",
+    "login persists across HTTP requests",
+    "nonce replay rejected",
+    "authenticated wallet -> Spring -> live GIWA safe block -> Dojang negative result",
+    "authenticated dashboard returns own wallet scope without operator statements",
+    "public offering is backed by live Core business data",
+    "logout invalidates session"
+  ],
+  "dojang": {
+    "address": "0x648b97ec5a261476fbb4f88281f6320022b93329",
+    "verified": false,
+    "blockNumber": "39580857",
+    "blockTag": "safe"
+  },
+  "userWalletIssueRevoke": "PENDING_USER_SIGNATURE",
+  "transactionsSent": 0
+}

@@ -35,11 +35,13 @@
     "loginCode": "PASS_12_CHECKS",
     "latestSourceDeployed": true,
     "requiredAction": "User MetaMask issue/revoke and GIWA wallet-signed business transactions remain pending",
-    "deploymentId": "dpl_4wL7VXiSSvPgspumSE1roZQGdvu1",
+    "deploymentId": "dpl_978FarAbNmizLSMmK3WGSD4iAxCs",
     "deploymentState": "READY",
-    "sourceCommit": "7c0f3118b256d9532aaf6eb760995b20fe68c935",
-    "verificationReport": "vercel-auth-smoke.json",
-    "teamAccess": "USER_APPROVED"
+    "sourceCommit": "0ff2430a6b35001f97d727a8d4377d2bd4bf02a1",
+    "verificationReport": "design/production-auth-smoke.json",
+    "teamAccess": "USER_APPROVED",
+    "checkedAt": "2026-10-25T11:11:36Z",
+    "designQa": "../../design-qa.md"
   },
   "storage": {
     "bucket": "updish-hackathon-20261025-bucket-wclu49yzzqxx",
@@ -61,5 +63,6 @@
     "modelCalls": "NOT_CONFIGURED",
     "liveCall": false
   },
-  "bojagi": "NOT_CONNECTED"
+  "bojagi": "NOT_CONNECTED",
+  "latestVerificationScope": "Frontend deployment, public browser home/detail and 12 SIWE checks. Infrastructure fields retain their original checkedAt; no AWS resource changes."
 }

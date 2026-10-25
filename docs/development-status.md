@@ -12,7 +12,7 @@ UpDishDemoUnits는 상품 고정·cap·Dojang·배정 중복 방지·이전 제�
 
 FastAPI Agent는 승인 정산과 개인 명세를 한 번의 읽기 도구로 받아 구조화 설명을 생성합니다. 근거 ID·데이터 버전·SIMULATION을 포함하며 기본 모델 gpt-5-mini, store=false, 자동 재시도 없음, 출력/시간/동시·일일 제한과 버전별 캐시를 사용합니다. **키 저장 승인이 거절되어 실제 모델 응답은 확인하지 않았습니다.**
 
-웹은 시안의 파란 헤더·상품 카드 배치를 참고해 투자/보유/가게/검토/지갑을 연결했습니다. 업무 OpenAPI 29개 경로와 생성 타입을 공유합니다. Bojagi 공식 SDK·테스트 접근은 미확인으로 NOT_CONNECTED/503을 유지합니다.
+웹은 제공된 ZIP의 HTML을 직접 렌더링해 흰색 상단 메뉴·3개 컬러 타일·상품 표·별도 2열 상세/청약 화면을 반영했습니다. 임의의 대형 홍보 문구와 가게 그림을 제거하고, 실제 상품 1곳과 보유/매출 관리 바로가기를 배치했습니다. SIWE·역할·서버 검증은 유지했습니다. 데스크톱과 390px 모바일 비교 및 상호작용 결과는 [디자인 검증](../design-qa.md)에 보관합니다. 업무 OpenAPI 29개 경로와 생성 타입을 공유합니다. Bojagi 공식 SDK·테스트 접근은 미확인으로 NOT_CONNECTED/503을 유지합니다.
 
 ## 검증 범위
 
@@ -24,6 +24,6 @@ FastAPI Agent는 승인 정산과 개인 명세를 한 번의 읽기 도구로 �
 | [로컬 업무 E2E](evidence/business-local-e2e.json) | 별도 DB/Core+Anvil, 실제 로컬 계약 mint/registry safe, DB/체인 100 일치, 지급/권한/digest | 이 tx hash는 GIWA용이 아님 |
 | [SIWE HTTP](evidence/siwe-smoke.json) | 임시 무자금 서명 → Next → Spring → DB → 실제 GIWA 음성 조회 → logout | 사용자 MetaMask 승인 |
 | [사용자 지갑 probe](evidence/demo-wallet-probe.json) | safe TESTNET FAUCET 미인증 | ETH 수령은 Dojang 발급이 아님 |
-| [클라우드](evidence/cloud-status.json)·[공개 로그인](evidence/vercel-auth-smoke.json) | 최신 앱 Vercel READY·서명 로그인/개인 화면/로그아웃 12개 검사·private S3 CORS·백업/복원·EC2 reboot | 사용자 MetaMask 발급/거래·stop/start IP 갱신 |
+| [클라우드](evidence/cloud-status.json)·[수정 화면 공개 로그인](evidence/design/production-auth-smoke.json) | 시안 반영 앱 Vercel READY·서명 로그인/개인 화면/로그아웃 12개 검사. S3·백업·reboot는 기존 검증 기록 | 사용자 MetaMask 발급/거래·stop/start IP 갱신 |
 
 Web/체인 타입·production build·codec 결과는 [최종 검사](evidence/final-checks.json)에 보관합니다. 검증 시각 이후 상시 가동을 보장하는 기록은 아닙니다. [남은 확인](remaining-work.md)을 완료 판정에 포함합니다.

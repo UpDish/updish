@@ -38,7 +38,7 @@ Backup은 /opt/updish/backups의 접근 제한된 pg_dump custom 파일을 만�
 
 ## 최종 Vercel 설정
 
-사용자가 팀 접근을 승인한 뒤 실제 Origin을 수정하고 최종 앱 코드를 production에 배포했다. 배포 ID는 `dpl_4wL7VXiSSvPgspumSE1roZQGdvu1`, 앱 소스 커밋은 `7c0f3118b256d9532aaf6eb760995b20fe68c935`, 상태는 READY다. [공개 웹 로그인 검사](evidence/vercel-auth-smoke.json)는 임시 무자금 서명자로 Vercel → EC2 → PostgreSQL → 실제 GIWA 조회와 로그아웃 12개 항목을 통과했다. 사용자 지갑 거래를 제출한 검사는 아니다.
+사용자가 팀 접근을 승인한 뒤 실제 Origin을 수정했고, 제공된 시안 반영 앱을 production에 배포했다. 현재 배포 ID는 `dpl_978FarAbNmizLSMmK3WGSD4iAxCs`, 앱 소스 커밋은 `0ff2430a6b35001f97d727a8d4377d2bd4bf02a1`, 상태는 READY다. [현재 공개 웹 로그인 검사](evidence/design/production-auth-smoke.json)는 임시 무자금 서명자로 Vercel → EC2 → PostgreSQL → 실제 GIWA 조회와 로그아웃 12개 항목을 통과했다. 사용자 지갑 거래를 제출한 검사는 아니다. 화면 비교와 모바일 검증은 [디자인 검증](../design-qa.md)에 있다.
 
 production/preview에 아래 값을 설정했다.
 
@@ -61,6 +61,6 @@ S3 CORS는 실제 Web Origin과 presigned 업로드 헤더를 허용하도록 �
 
 ## 검증과 종료
 
-[클라우드 기록](evidence/cloud-status.json): HTTPS health, 공개 Web/로그인, S3 CORS/private, DB 백업/별도 복원, EC2 reboot 뒤 같은 IP/health. [직접 Core 로그인](evidence/cloud-auth-smoke.json)과 [Vercel 경유 로그인](evidence/vercel-auth-smoke.json)을 별도 기록했다. Secure 쿠키·SIWE·DB·실제 GIWA 조회를 확인했으며 사용자 MetaMask의 발급·거래 승인은 미실행이다.
+[클라우드 기록](evidence/cloud-status.json): HTTPS health, 공개 Web/로그인, S3 CORS/private, DB 백업/별도 복원, EC2 reboot 뒤 같은 IP/health. [직접 Core 로그인](evidence/cloud-auth-smoke.json), [이전 Vercel 경유 로그인](evidence/vercel-auth-smoke.json), [시안 반영 후 Vercel 경유 로그인](evidence/design/production-auth-smoke.json)을 별도 기록했다. Secure 쿠키·SIWE·DB·실제 GIWA 조회를 확인했으며 사용자 MetaMask의 발급·거래 승인은 미실행이다. 이번 화면 수정에서는 서버 자원을 변경하거나 백업/reboot 검사를 재실행하지 않았다.
 
 해커톤 후 Stop으로 컴퓨팅을 중지한다. 완전히 정리하려면 백업 필요 여부를 확인한 뒤 이 CloudFormation stack과 이 작업에서 만든 Vercel project만 정리한다. Bucket은 Retain이므로 stack 삭제 후에도 release/demo 객체와 bucket이 남는다. EC2 종료 시 루트 EBS는 삭제된다. 정리 요청 전에는 stack·bucket·사용자 자료를 임의 삭제하지 않는다.

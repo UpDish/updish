@@ -62,5 +62,32 @@
     "databasePreserved": true,
     "stopThreeApps": "PASS"
   },
-  "deploymentVerifiedAt": "2026-10-25T10:06:54.824Z"
+  "deploymentVerifiedAt": "2026-10-25T11:11:36Z",
+  "frontendDesign": {
+    "checkedAt": "2026-10-25T11:11:36Z",
+    "sourceZipSha256": "188C5B71B79C52D2D6C48164015324466C86C6881D100706C869341C59FAA8E8",
+    "appCommit": "0ff2430a6b35001f97d727a8d4377d2bd4bf02a1",
+    "designQa": "PASS_HOME_DETAIL",
+    "qaReport": "../../design-qa.md",
+    "desktopCssViewport": {
+      "width": 1280,
+      "height": 720
+    },
+    "mobileCssViewport": {
+      "width": 390,
+      "height": 844
+    },
+    "mobileDocumentOverflow": false,
+    "webTypes": "PASS",
+    "productionBuild": "PASS",
+    "calculatorAndAnonymousGate": "PASS",
+    "localAuthChecks": 12,
+    "publicAuthChecks": 12,
+    "publicProductDetailAndBack": "PASS",
+    "publicConsoleErrors": 0,
+    "publicConsoleWarnings": 0,
+    "evidenceDirectory": "design",
+    "scope": "Home/detail visual review and auth regression; earlier backend and infrastructure test dates remain unchanged.",
+    "signedMerchantOperatorVisualReview": "PENDING_USER_WALLET"
+  }
 }
