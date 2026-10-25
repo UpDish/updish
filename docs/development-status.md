@@ -24,6 +24,6 @@ FastAPI Agent는 승인 정산과 개인 명세를 한 번의 읽기 도구로 �
 | [로컬 업무 E2E](evidence/business-local-e2e.json) | 별도 DB/Core+Anvil, 실제 로컬 계약 mint/registry safe, DB/체인 100 일치, 지급/권한/digest | 이 tx hash는 GIWA용이 아님 |
 | [SIWE HTTP](evidence/siwe-smoke.json) | 임시 무자금 서명 → Next → Spring → DB → 실제 GIWA 음성 조회 → logout | 사용자 MetaMask 승인 |
 | [사용자 지갑 probe](evidence/demo-wallet-probe.json) | safe TESTNET FAUCET 미인증 | ETH 수령은 Dojang 발급이 아님 |
-| [클라우드](evidence/cloud-status.json) | HTTPS·공개 웹·private S3 CORS·백업/복원·EC2 reboot | 최종 Vercel 로그인·stop/start IP 갱신 |
+| [클라우드](evidence/cloud-status.json)·[공개 로그인](evidence/vercel-auth-smoke.json) | 최신 앱 Vercel READY·서명 로그인/개인 화면/로그아웃 12개 검사·private S3 CORS·백업/복원·EC2 reboot | 사용자 MetaMask 발급/거래·stop/start IP 갱신 |
 
 Web/체인 타입·production build·codec 결과는 [최종 검사](evidence/final-checks.json)에 보관합니다. 검증 시각 이후 상시 가동을 보장하는 기록은 아닙니다. [남은 확인](remaining-work.md)을 완료 판정에 포함합니다.

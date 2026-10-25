@@ -9,5 +9,5 @@
 - Do not expose secrets or commit local env files, private keys, dependency caches or generated builds.
 - Run checks appropriate to the changed layer; see README.md. PostgreSQL must be available for the Spring context test.
 - Store evidence of live integration separately from local mock test results. Read docs/development-status.md and docs/deploy-runbook.md before continuing. bootstrap-status.md and wallet-status.md are historical records.
-- OpenAI key destination confirmation was declined. No key was created or written; do not restart the key creation flow without renewed user authorization. Vercel team access requires the pending user grant; do not bypass it using another credential route.
+- OpenAI key destination confirmation was declined. No key was created or written; do not restart the key creation flow without renewed user authorization. Vercel team access was approved by the user on 2026-10-25; use the connected MCP and the documented team/project. Do not bypass future access restrictions using another credential route.
 - Business API schemas and generated Web types come from scripts/api-contract.mjs (`pnpm generate:api`). Maintain Flyway migrations append-only. Preserve old demo runs and chain attempts when resetting.

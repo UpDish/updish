@@ -55,10 +55,16 @@ const dojang = await request('/api/me/dojang');
 assert.equal(dojang.status, 200); assert.equal(dojang.body.address, account.address.toLowerCase());
 assert.equal(dojang.body.verified, false); assert.equal(dojang.body.attester, 'TESTNET FAUCET');
 checks.push('authenticated wallet -> Spring -> live GIWA safe block -> Dojang negative result');
+const dashboard=await request('/api/workbench/dashboard');
+assert.equal(dashboard.status,200);assert.equal(dashboard.body.user.address,account.address.toLowerCase());
+assert.equal(dashboard.body.user.role,'INVESTOR');assert.equal(dashboard.body.all_lines,undefined);
+checks.push('authenticated dashboard returns own wallet scope without operator statements');
+// Direct Core has a separate public route; the deployed BFF uses /api/offering.
+if(!directCore) {const offering=await request('/api/offering');assert.equal(offering.status,200);assert.equal(offering.body.mode,'SIMULATION');checks.push('public offering is backed by live Core business data');}
 assert.equal((await post('/api/auth/logout', {}, token)).status, 200);
 assert.equal((await request('/api/auth/session')).body.authenticated, false);
 assert.equal((await request('/api/me/dojang')).status, 401); checks.push('logout invalidates session');
-const report = { checkedAt: new Date().toISOString(), scope: directCore?'Direct Core HTTPS SIWE with ephemeral unfunded EOA; PostgreSQL and live GIWA read. Web BFF not included.':'Local full-stack SIWE with ephemeral unfunded EOA; live GIWA read. No user-wallet transaction.',origin,
+const report = { checkedAt: new Date().toISOString(), scope: directCore?'Direct Core HTTPS SIWE with ephemeral unfunded EOA; PostgreSQL and live GIWA read. Web BFF not included.':(origin.startsWith('https://')?'Deployed Vercel BFF -> EC2 Core -> PostgreSQL -> live GIWA; ephemeral unfunded EOA. No user-wallet transaction.':'Local full-stack SIWE with ephemeral unfunded EOA; live GIWA read. No user-wallet transaction.'),origin,
   checks, dojang: { address: dojang.body.address, verified: dojang.body.verified, blockNumber: dojang.body.blockNumber, blockTag: dojang.body.blockTag },
   userWalletIssueRevoke: 'PENDING_USER_SIGNATURE', transactionsSent: 0 };
 const output = process.argv[2];

@@ -34,7 +34,7 @@
   "siwe": {
     "localBffCoreDbGiwa": "PASS_10_CHECKS",
     "cloudCoreDbGiwa": "PASS_10_CHECKS",
-    "cloudBff": "BLOCKED_ORIGIN_CONFIGURATION"
+    "cloudBff": "PASS_12_CHECKS"
   },
   "browser": {
     "url": "http://127.0.0.1:3000",
@@ -43,7 +43,15 @@
     "consoleErrors": 0,
     "consoleWarnings": 0,
     "userMetaMaskIssueRevoke": "NOT_RUN",
-    "mobile390pxOverflow": false
+    "mobile390pxOverflow": false,
+    "public": {
+      "url": "https://updish-hackathon-20261025-betaplayers-projects.vercel.app",
+      "anonymousProduct": "PASS",
+      "walletEntry": "PASS",
+      "consoleErrors": 0,
+      "consoleWarnings": 0,
+      "userWalletSignature": "NOT_RUN"
+    }
   },
   "userGiwaTransactions": 0,
   "modelLiveCall": false,
@@ -53,5 +61,6 @@
     "pidAndStartTimeTracking": "PASS",
     "databasePreserved": true,
     "stopThreeApps": "PASS"
-  }
+  },
+  "deploymentVerifiedAt": "2026-10-25T10:06:54.824Z"
 }

@@ -38,16 +38,16 @@ Backup은 /opt/updish/backups의 접근 제한된 pg_dump custom 파일을 만�
 
 ## 최종 Vercel 설정
 
-현재 공개 페이지와 /api/offering은 응답한다. 연결 앱은 팀 접근 승인을 요구하므로 아직 최종 env 수정·최신 코드 재배포·전체 로그인 검사를 완료하지 않았다. 팀이 본인 작업 공간인지 사용자 확인이 먼저다. 권한 거부를 CLI 자격 증명으로 우회하지 않는다.
+사용자가 팀 접근을 승인한 뒤 실제 Origin을 수정하고 최종 앱 코드를 production에 배포했다. 배포 ID는 `dpl_4wL7VXiSSvPgspumSE1roZQGdvu1`, 앱 소스 커밋은 `7c0f3118b256d9532aaf6eb760995b20fe68c935`, 상태는 READY다. [공개 웹 로그인 검사](evidence/vercel-auth-smoke.json)는 임시 무자금 서명자로 Vercel → EC2 → PostgreSQL → 실제 GIWA 조회와 로그아웃 12개 항목을 통과했다. 사용자 지갑 거래를 제출한 검사는 아니다.
 
-승인 후 production/preview에 아래 값을 사용한다.
+production/preview에 아래 값을 설정했다.
 
 - CORE_API_URL=https://3.35.194.163.sslip.io
 - UPDISH_ALLOWED_ORIGINS=https://updish-hackathon-20261025-betaplayers-projects.vercel.app
 - Framework Next.js, root apps/web, Node 24, 외부 root source 포함.
 - install: pnpm install --frozen-lockfile / build: pnpm build.
 
-현재 Vercel Origin env는 짧은 미소유 주소로 설정돼 있어 로그인 POST 수정이 필요하다. 짧은 updish-hackathon-20261025.vercel.app은 다른 프로젝트 소유이므로 사용하지 않는다. preview마다 임의 Origin을 자동 허용하지 않는다. 시연 로그인은 실제 production 주소로 고정한다.
+초기 잘못된 짧은 Origin 설정으로 발생한 로그인 POST 403은 해결했다. 시연 로그인은 위의 긴 production 주소로 고정한다. 다른 alias·unique deployment URL·preview Origin은 자동 허용하지 않으므로 로그인할 때 검증된 production 주소를 사용한다.
 
 배포 소스는 scripts/vercel-source.mjs로 env 파일을 제외해 준비한다. API 키를 Web 환경이나 NEXT_PUBLIC 변수로 넣지 않는다.
 
@@ -61,6 +61,6 @@ S3 CORS는 실제 Web Origin과 presigned 업로드 헤더를 허용하도록 �
 
 ## 검증과 종료
 
-[클라우드 기록](evidence/cloud-status.json): HTTPS health, 공개 Web, S3 CORS/private, DB 백업/별도 복원, EC2 reboot 뒤 같은 IP/health. [직접 Core 로그인](evidence/cloud-auth-smoke.json)은 HTTPS·Secure 쿠키·SIWE·DB·실제 GIWA 조회를 검사했으며 Vercel BFF 전체 성공을 뜻하지 않는다.
+[클라우드 기록](evidence/cloud-status.json): HTTPS health, 공개 Web/로그인, S3 CORS/private, DB 백업/별도 복원, EC2 reboot 뒤 같은 IP/health. [직접 Core 로그인](evidence/cloud-auth-smoke.json)과 [Vercel 경유 로그인](evidence/vercel-auth-smoke.json)을 별도 기록했다. Secure 쿠키·SIWE·DB·실제 GIWA 조회를 확인했으며 사용자 MetaMask의 발급·거래 승인은 미실행이다.
 
 해커톤 후 Stop으로 컴퓨팅을 중지한다. 완전히 정리하려면 백업 필요 여부를 확인한 뒤 이 CloudFormation stack과 이 작업에서 만든 Vercel project만 정리한다. Bucket은 Retain이므로 stack 삭제 후에도 release/demo 객체와 bucket이 남는다. EC2 종료 시 루트 EBS는 삭제된다. 정리 요청 전에는 stack·bucket·사용자 자료를 임의 삭제하지 않는다.

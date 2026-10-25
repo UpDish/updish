@@ -4,6 +4,8 @@
 
 현재 상태는 [개발 결과](docs/development-status.md), 실제 지갑 사용 순서는 [시연 안내](docs/demo-guide.md), 클라우드 자원·중지 방법은 [배포 안내](docs/deploy-runbook.md)를 기준으로 합니다. bootstrap/wallet 상태 문서는 과거 이력입니다.
 
+[공개 시연 웹](https://updish-hackathon-20261025-betaplayers-projects.vercel.app)을 배포했습니다. Vercel → EC2 → DB → 실제 GIWA 조회와 서명 로그인·개인 화면·로그아웃 12개 검사가 통과했습니다. 사용자 MetaMask의 Dojang 발급·거래 승인은 별도로 진행합니다.
+
 ## 버전
 
 | 영역 | 고정 기준 |

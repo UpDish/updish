@@ -4,7 +4,7 @@
 
 | 조건 | 구현·검증 | 남은 확인 |
 | --- | --- | --- |
-| H01 인증·권한 | SIWE·DB 세션·CSRF·Origin·역할·개인 자료·별도 승인 지갑 | 사용자 MetaMask와 배포 로그인 리허설 |
+| H01 인증·권한 | SIWE·DB 세션·CSRF·Origin·역할·개인 자료·별도 승인 지갑, 공개 Vercel 로그인 12개 검사 | 사용자 MetaMask 계정/네트워크 조합 확인 |
 | H02 Dojang 참여 | 서버 청약·배정 자격 검사, 철회 후 기존 보유 보존, 실제 GIWA 미인증 조회 | 사용자 Playground 발급·철회와 Explorer 영수증. false만으로 철회/만료 사유는 구분하지 않음 |
 | H03 서버·계약 자격 | 같은 Scroll/attester, mint 재검사, RPC 실패 분리; 로컬 계약 검증 | GIWA 사용자 mint 자격 분기 |
 | H04 산식·총액 | 3,000만원 → 90만원 → 100단위 25,000원, 원 단위 총합 검증 | 실제 화면에서 승인 명세 확인 |
@@ -15,14 +15,15 @@
 | H09 Bojagi | 미연결 adapter/화면/503, 공식 경로 조사 | 공식 SDK·테스트 계약·자산·접근 확보, sample 검증과 실제 업무 통합 |
 | H10 예외 | 현금 부족·실패·부분 지급·중복·정정 차액·만기 청구 보존 테스트 | 브라우저 예외 시연 |
 | H11 Agent | FastAPI 도구·구조화 근거·개인 접근·호출 제한·캐시·실패 분리, mock SDK 테스트 | 키 저장 승인이 거절되어 키 생성/저장 안 됨. 실제 호출·한국어 품질/비용 평가 |
-| H12 배포 | EC2/S3/TLS·Vercel 공개 페이지, 백업/별도 DB 복원·EC2 reboot 후 health, 새 run | Vercel 팀 승인 후 Origin 수정·최신 재배포·전체 로그인. stop/start IP 갱신 리허설 |
+| H12 배포 | EC2/S3/TLS·Vercel 최종 배포·공개 로그인, 백업/별도 DB 복원·EC2 reboot 후 health, 새 run | 실제 사용자 전체 시연, stop/start IP 갱신 리허설 |
 
 ## 사용자가 준비할 것
 
 1. 운영 지갑 `0x26473024a9118E8F39b1A0ce01AC726C36Dd0976`으로 Playground **Issue Dojang** 승인. Faucet ETH와 Dojang 발급은 별개입니다.
 2. 검토용 두 번째 지갑 주소. 로그인·검토만 하면 ETH가 필요하지 않습니다. 운영자가 REVIEWER를 지정합니다.
 3. 앱 운영 화면의 계약 배포 2건·mint·정산 기록을 지갑에서 승인. GIWA 테스트 ETH 가스를 사용합니다.
-4. Vercel 팀 betaplayers-projects가 본인 작업 공간인지 확인 후 연결 접근 승인. 현재 조회 페이지는 열리지만 실제 Origin 수정과 최신 코드 배포가 남았습니다.
+
+Vercel 팀 접근 승인·Origin 수정·최신 앱 코드 배포·공개 서명 로그인 검증은 완료했습니다. [배포 검증 12개 항목](evidence/vercel-auth-smoke.json)은 임시 테스트 지갑을 사용했으며 사용자 지갑의 실제 발급·거래 승인은 포함하지 않습니다.
 
 OpenAI 키 저장 승인이 거절되어 생성 흐름은 중단했습니다. 다시 진행하겠다는 요청이 오면 보안 설정 흐름을 재개합니다. Bojagi는 접근 확보 후에도 개발·검증이 필요합니다.
 

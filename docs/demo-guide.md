@@ -1,6 +1,6 @@
 # 실제 지갑 시연 순서
 
-로컬은 http://127.0.0.1:3000 입니다. [공개 웹](https://updish-hackathon-20261025-betaplayers-projects.vercel.app)은 조회 가능하며 Vercel 팀 승인·Origin 수정·최종 배포 후 로그인 리허설을 완료합니다.
+로컬은 http://127.0.0.1:3000 입니다. [공개 웹](https://updish-hackathon-20261025-betaplayers-projects.vercel.app)은 최종 앱 코드를 배포했고 임시 테스트 지갑의 서명 로그인·개인 화면·로그아웃 검사를 통과했습니다. 이제 MetaMask가 설치된 브라우저에서 아래 순서로 실제 사용자 지갑을 확인합니다.
 
 ## 준비
 
