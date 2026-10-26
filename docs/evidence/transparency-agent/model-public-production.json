@@ -1,0 +1,23 @@
+{
+  "checkedAt": "2026-10-26T07:21:07.056Z",
+  "origin": "https://updish-hackathon-20261025-betaplayers-projects.vercel.app",
+  "scope": "Real deployed Vercel BFF -> EC2 Core -> FastAPI -> OpenAI, public synthetic store evidence, disposable unfunded SIWE account, no transaction.",
+  "status": "PASS",
+  "transactionsSent": 0,
+  "answer": {
+    "explanation": "은행 입금 자료가 누락된 샘플(source-mangwon-missing-bank)은 BLOCKED 상태이고, 가이드에 따라 누락·불일치 자료는 승인을 막습니다. 반면 SYNTHETIC_CSV 기반의 대조(revenue-mangwon-2026-10)는 RECONCILED로 준비 완료이나 이는 가상 예시이며 APPROVED_LEDGER와 구분됩니다. 따라서 실제 승인하려면 은행 자료를 제출·검증해 BLOCKED 이슈를 해소해야 합니다.",
+    "sourceIds": [
+      "source-mangwon-missing-bank",
+      "revenue-mangwon-2026-10",
+      "updish-demo-guide-v1"
+    ],
+    "uncertainties": [
+      "SYNTHETIC_CSV는 가상 예시로 실제 은행 입금과 다를 수 있음",
+      "실제 승인 여부는 별도 검토자와 승인자의 최종 판단에 따름"
+    ],
+    "model": "gpt-5-mini",
+    "mode": "SIMULATION",
+    "toolCalls": 1,
+    "dataVersion": "0x86e526ffedaa6bc57f91c4c95441c4d54db7f9c486062b726030755c766295f5"
+  }
+}

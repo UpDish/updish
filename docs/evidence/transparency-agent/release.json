@@ -1,11 +1,16 @@
 {
-  "checkedAt": "2026-10-26T07:13:40.240480+00:00",
-  "state": "CORE_DEPLOYED_WEB_PENDING",
+  "checkedAt": "2026-10-26T07:28:46.992537+00:00",
+  "state": "PUBLIC_READY",
   "coreCommandId": "a0a837b3-9b9b-4eba-8d69-22a24a1a6ac5",
   "coreHealth": "UP",
   "database": "EC2 PostgreSQL 18.6, V8, existing business rows preserved",
   "supabase": false,
   "modelKeyLocation": "EC2 /opt/updish/.env (0600), never Web or Git",
   "web": "https://updish-hackathon-20261025-betaplayers-projects.vercel.app/",
-  "realPublicModelVerification": "PENDING_NEW_WEB_DEPLOYMENT"
+  "realPublicModelVerification": "PASS",
+  "applicationCommit": "e0816bf0602aa5aab4432474671c52bd1059b5a9",
+  "deploymentId": "dpl_BWxaZ1fyqbxCvSiDiA3zBDWNmt6o",
+  "vercelReady": "READY",
+  "productionAuthChecks": 20,
+  "gitAutoDeploy": "CONNECTED: UpDish/updish -> existing Vercel project; production branch main"
 }

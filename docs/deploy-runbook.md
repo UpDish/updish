@@ -94,3 +94,16 @@ QR 연결에는 공개 Reown ID를 Web 환경에 설정한 뒤 재빌드해야 �
 
 
 웹 `dpl_HihA9BL52pzFKwtu8LmVXfTUQRZq`는 app commit `a91b6e2`에서 production READY입니다. 기존 canonical 주소에 반영됐습니다. Vercel의 루트는 `apps/web`, 외부 소스 포함은 true, install은 `cd ../.. && pnpm install --frozen-lockfile`, build는 `pnpm build`, output은 `.next`로 보정·저장했습니다. 최초 시도는 루트 lockfile 경로 오류로 실패했고 위 배포가 대체합니다. 공개 SIWE/BFF/Core/PG/GIWA 읽기 18개와 공개 비로그인 브라우저 7개 통과. [배포 기록](evidence/ux-journey/release.json).
+
+
+## 운영 투명성·실제 Agent·Git 자동 배포 — 2026-10-26
+
+앞선 키 미구성/로컬 검토 기록은 아래 상태로 대체합니다. 앱 커밋 `e0816bf0602aa5aab4432474671c52bd1059b5a9`를 main에 푸시하고 Vercel `dpl_BWxaZ1fyqbxCvSiDiA3zBDWNmt6o` production READY 및 canonical 주소를 확인했습니다. 고객/쿠폰 화면을 제거하고 POS/PG/은행 대조와 간단한 채팅 사이드바를 반영했습니다. 일반 지갑도 가게 공개 근거를 질문할 수 있고 개인 정산은 본인 승인 자료만 설명합니다.
+
+EC2 Core와 Agent 이미지 갱신 SSM `a0a837b3-9b9b-4eba-8d69-22a24a1a6ac5` Success, health UP, Flyway V8, 기존 업무 행 수 보존을 확인했습니다. 백업 `backups/updish-before-transparency-20261026T070909Z.dump` SHA-256 `9ef18dc8720a683ff22661cb810dcc0da81c7f6e418691dc9b23952b11373d29`. 롤백 이미지는 Core/Agent 각각 `before-transparency-20261026`입니다. 최초 SSM은 sh의 pipefail 비지원으로 작업 전 실패했고 bash 명시 후 완료했습니다.
+
+사용자 재승인으로 발급한 30일 모델 키를 ignored 로컬 `.env.local`과 EC2 `/opt/updish/.env` (0600)에 저장했습니다. EC2 내부 Agent만 읽으며 Vercel/Web/Git에는 넣지 않았습니다. 전송용 private S3 암호화 객체는 확인 후 삭제했습니다. 실제 공개 모델 응답과 SIWE/BFF/Core/PG/GIWA 조회 20개가 통과했습니다. [근거](evidence/transparency-agent/).
+
+사용자가 GitHub 연결을 승인했고 기존 Vercel 프로젝트를 `UpDish/updish`와 연결했습니다. 이제 main 푸시는 프론트 production 배포를 트리거합니다. 프로젝트를 새로 만들거나 도메인을 바꾸지 않았습니다. 기존 install `cd ../.. && pnpm install --frozen-lockfile`, root `apps/web`, 외부 소스 포함, build `pnpm build`, output `.next`를 유지합니다. EC2 Core/Agent 이미지는 별도 검증 후 배포하며 Git push만으로 서버 이미지가 바뀌지는 않습니다.
+
+DB는 EC2 PostgreSQL 18.6 그대로이며 Supabase 이전은 수행하지 않았습니다. 실측 DB 9,180,863바이트, PostgreSQL 71.7MiB, EC2 가용 메모리 2,904MiB입니다. 현재 규모에서는 DB 저장 공간 때문에 EC2를 증설할 필요가 없습니다. 외부 DB 이전만으로 고정 인스턴스 요금이 내려가지는 않으므로 이전과 인스턴스 축소는 별도 결정합니다.

@@ -225,6 +225,10 @@
     "realModelLocalPublic": "PASS",
     "realModelLocalOwnStatement": "PASS",
     "userGiwaTransactions": 0,
-    "evidence": "docs/evidence/transparency-agent/"
+    "evidence": "docs/evidence/transparency-agent/",
+    "productionModel": "PASS_REAL_OPENAI",
+    "productionAuth": 20,
+    "deployment": "dpl_BWxaZ1fyqbxCvSiDiA3zBDWNmt6o",
+    "gitAutoDeploy": "CONNECTED"
   }
 }
