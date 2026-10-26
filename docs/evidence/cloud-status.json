@@ -64,5 +64,30 @@
     "liveCall": false
   },
   "bojagi": "NOT_CONNECTED",
-  "latestVerificationScope": "Frontend deployment, public browser home/detail and 12 SIWE checks. Infrastructure fields retain their original checkedAt; no AWS resource changes."
+  "latestVerificationScope": "Frontend deployment, public browser home/detail and 12 SIWE checks. Infrastructure fields retain their original checkedAt; no AWS resource changes.",
+  "latestRelease": {
+    "checkedAt": "2026-10-26T04:47:18.902288Z",
+    "appCommit": "92fb4c994a165200fa17e58d913b66a356db27f1",
+    "deploymentId": "dpl_Gcvt4eFXZqx2QFgQirHQUxUR88M7",
+    "readyState": "READY",
+    "origin": "https://updish-hackathon-20261025-betaplayers-projects.vercel.app",
+    "core": {
+      "ssmCommand": "692ac889-b285-4bc5-a2d4-fc6a118cb06f",
+      "status": "Success",
+      "health": "UP",
+      "observedImageId": "sha256:b38fbf65c04d31cea216267a8395bb78130a959ddf5867c54827de6ccdd6e63b",
+      "releaseSha256": "3658ac623e23068eab4dd01ea8c2b593ca7c9526b065714f16f3e900ceaf9fa5",
+      "schemaMigration": false,
+      "existingDatabasePreserved": true
+    },
+    "publicAuthChecks": 12,
+    "publicGuestChecks": 17,
+    "publicReleaseChecks": 6,
+    "mode": "SIMULATION",
+    "modelLiveCall": false,
+    "bojagi": "NOT_CONNECTED",
+    "walletConnectQr": "DISABLED_NO_PROJECT_ID",
+    "userDojangSafeVerified": true,
+    "agentSentUserWalletTransactions": 0
+  }
 }

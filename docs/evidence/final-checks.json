@@ -1,7 +1,7 @@
 {
-  "checkedAt": "2026-10-25T09:50:39.473Z",
+  "checkedAt": "2026-10-26T04:47:18.902288Z",
   "java": {
-    "tests": 36,
+    "tests": 38,
     "failures": 0,
     "postgresql": true
   },
@@ -25,14 +25,15 @@
   },
   "nextProductionBuild": "PASS",
   "businessE2e": {
-    "checks": 10,
+    "checks": 12,
     "scope": "LOCAL_ANVIL_ONLY",
     "partialAllocation": "120 -> 100 allocated + 20 simulated refund",
     "mint": "SAFE_LOCAL",
-    "registry": "SAFE_LOCAL"
+    "registry": "SAFE_LOCAL",
+    "concurrency": "8 simultaneous 30-unit requests; four accepted, 3600 allocated, 20 excess refunded"
   },
   "siwe": {
-    "localBffCoreDbGiwa": "PASS_10_CHECKS",
+    "localBffCoreDbGiwa": "PASS_12_CHECKS",
     "cloudCoreDbGiwa": "PASS_10_CHECKS",
     "cloudBff": "PASS_12_CHECKS"
   },
@@ -42,7 +43,7 @@
     "anonymousProduct": "PASS",
     "consoleErrors": 0,
     "consoleWarnings": 0,
-    "userMetaMaskIssueRevoke": "NOT_RUN",
+    "userMetaMaskIssueRevoke": "User issued Dojang; safe state read by agent; revoke not exercised",
     "mobile390pxOverflow": false,
     "public": {
       "url": "https://updish-hackathon-20261025-betaplayers-projects.vercel.app",
@@ -62,8 +63,8 @@
     "databasePreserved": true,
     "stopThreeApps": "PASS"
   },
-  "deploymentVerifiedAt": "2026-10-25T11:11:36Z",
-  "frontendDesign": {
+  "deploymentVerifiedAt": "2026-10-26T04:47:18.902288Z",
+  "previousFrontendDesign": {
     "checkedAt": "2026-10-25T11:11:36Z",
     "sourceZipSha256": "188C5B71B79C52D2D6C48164015324466C86C6881D100706C869341C59FAA8E8",
     "appCommit": "0ff2430a6b35001f97d727a8d4377d2bd4bf02a1",
@@ -89,5 +90,63 @@
     "evidenceDirectory": "design",
     "scope": "Home/detail visual review and auth regression; earlier backend and infrastructure test dates remain unchanged.",
     "signedMerchantOperatorVisualReview": "PENDING_USER_WALLET"
-  }
+  },
+  "frontendDesign": {
+    "reference": "Upbit researched exchange",
+    "appCommit": "92fb4c994a165200fa17e58d913b66a356db27f1",
+    "designQa": "PASS",
+    "qaReport": "../../design-qa.md",
+    "desktopCssViewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "tabletCssViewport": {
+      "width": 768,
+      "height": 900
+    },
+    "mobileCssViewport": {
+      "width": 390,
+      "height": 844
+    },
+    "mobileDocumentOverflow": false,
+    "evidenceDirectory": "service-flow",
+    "guestBrowserChecks": 17,
+    "signedRoleBrowserChecks": 14,
+    "walletChartPerspectiveChecks": 15,
+    "publicAuthChecks": 12,
+    "publicGuestChecks": 17,
+    "publicReleaseChecks": 6,
+    "scope": "Anvil and injected browser wallet for signed role tests; public SIWE uses unfunded ephemeral signer; one fake AI response for UI privacy only."
+  },
+  "release": {
+    "checkedAt": "2026-10-26T04:47:18.902288Z",
+    "appCommit": "92fb4c994a165200fa17e58d913b66a356db27f1",
+    "deploymentId": "dpl_Gcvt4eFXZqx2QFgQirHQUxUR88M7",
+    "readyState": "READY",
+    "origin": "https://updish-hackathon-20261025-betaplayers-projects.vercel.app",
+    "core": {
+      "ssmCommand": "692ac889-b285-4bc5-a2d4-fc6a118cb06f",
+      "status": "Success",
+      "health": "UP",
+      "observedImageId": "sha256:b38fbf65c04d31cea216267a8395bb78130a959ddf5867c54827de6ccdd6e63b",
+      "releaseSha256": "3658ac623e23068eab4dd01ea8c2b593ca7c9526b065714f16f3e900ceaf9fa5",
+      "schemaMigration": false,
+      "existingDatabasePreserved": true
+    },
+    "publicAuthChecks": 12,
+    "publicGuestChecks": 17,
+    "publicReleaseChecks": 6,
+    "mode": "SIMULATION",
+    "modelLiveCall": false,
+    "bojagi": "NOT_CONNECTED",
+    "walletConnectQr": "DISABLED_NO_PROJECT_ID",
+    "userDojangSafeVerified": true,
+    "agentSentUserWalletTransactions": 0
+  },
+  "userDojang": {
+    "safeVerified": true,
+    "evidence": "service-flow/user-dojang-probe.json",
+    "revoke": "NOT_EXERCISED_BY_AGENT"
+  },
+  "walletConnectQr": "DISABLED_NO_PROJECT_ID"
 }

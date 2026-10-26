@@ -1,0 +1,24 @@
+{
+  "checkedAt": "2026-10-26T04:46:11.682Z",
+  "origin": "https://updish-hackathon-20261025-betaplayers-projects.vercel.app",
+  "checks": [
+    "Public deployed approved-performance API works without login",
+    "Public performance contains no personal lines or signing evidence",
+    "Correct empty chart: production has no approved settlement, no fabricated history",
+    "Production common wallet modal opens and X cancellation recovers button",
+    "User wallet Dojang is valid through public Vercel -> EC2 -> real GIWA safe read",
+    "No runtime errors"
+  ],
+  "errors": [],
+  "performance": {
+    "points": [],
+    "mode": "SIMULATION",
+    "offeringId": "a3df3d20-a41a-461f-90df-83dbee613ba8"
+  },
+  "dojang": {
+    "verified": true,
+    "blockNumber": "39644591",
+    "blockTag": "safe"
+  },
+  "transactionsSent": 0
+}

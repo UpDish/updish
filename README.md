@@ -2,7 +2,7 @@
 
 <img src="docs/brand/updish-logo.png" alt="UpDish" width="72" height="72" />
 
-[시연 웹](https://updish-hackathon-20261025-betaplayers-projects.vercel.app/) · [GitHub Organization](https://github.com/UpDish) · [공개 저장소](https://github.com/UpDish/updish)
+[시연 웹](https://updish-hackathon-20261025-betaplayers-projects.vercel.app/) · [GitHub Organization](https://github.com/UpDish) · [공개 저장소](https://github.com/UpDish/updish) · [팀원은 이슈 #1부터](https://github.com/UpDish/updish/issues/1)
 
 음식점 매출 증빙 → 모의 청약·배정 → 보유 → 정산·모의 지급을 연결하는 해커톤 데모입니다. Spring이 업무 원장을 계산하고 지갑은 SIWE 로그인과 GIWA 테스트 거래를 서명합니다. 실제 금전 수취·지급은 수행하지 않습니다.
 
@@ -10,7 +10,7 @@
 
 현재 상태는 [개발 결과](docs/development-status.md), 실제 지갑 사용 순서는 [시연 안내](docs/demo-guide.md), 클라우드 자원·중지 방법은 [배포 안내](docs/deploy-runbook.md)를 기준으로 합니다. bootstrap/wallet 상태 문서는 과거 이력입니다.
 
-[공개 시연 웹](https://updish-hackathon-20261025-betaplayers-projects.vercel.app)을 배포했습니다. Vercel → EC2 → DB → 실제 GIWA 조회와 서명 로그인·개인 화면·로그아웃 12개 검사가 통과했습니다. 사용자 MetaMask의 Dojang 발급·거래 승인은 별도로 진행합니다.
+[공개 시연 웹](https://updish-hackathon-20261025-betaplayers-projects.vercel.app)을 배포했습니다. Vercel → EC2 → DB → 실제 GIWA 조회와 서명 로그인·개인 화면·로그아웃 12개 검사가 통과했습니다. 운영 지갑의 Dojang 발급 유효 상태는 실제 safe에서 확인했습니다. 계약/mint/registry/철회 사용자 서명 시연은 [이슈 #2](https://github.com/UpDish/updish/issues/2)에 남겨 두었습니다.
 
 ## 버전
 

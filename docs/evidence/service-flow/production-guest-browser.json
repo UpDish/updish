@@ -1,0 +1,25 @@
+{
+  "checkedAt": "2026-10-26T04:44:29.492Z",
+  "origin": "https://updish-hackathon-20261025-betaplayers-projects.vercel.app",
+  "checks": [
+    "Search empty state",
+    "Closed status filter",
+    "Restore current product",
+    "Quantity preset retains 200 units",
+    "200 units -> 50,000 won hypothetical monthly amount",
+    "24m scenario -> 40,000 won",
+    "Invalid zero quantity",
+    "Keyboard arrow navigation",
+    "Risk tab",
+    "768px no document overflow",
+    "390px no document overflow",
+    "Mobile jump to subscription",
+    "Guest primary action opens wallet",
+    "Private portfolio locked",
+    "Merchant entry explained",
+    "Anonymous cannot submit CSV",
+    "No browser runtime errors"
+  ],
+  "errors": [],
+  "transactions": 0
+}

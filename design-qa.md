@@ -31,3 +31,8 @@ The actual Upbit exchange was recaptured at 1440×900 CSS pixels/DPR 1 as `docs/
 ## Remaining limits
 
 No live OpenAI response, Bojagi protocol transaction, QR/mobile WalletConnect session or user-signed GIWA deployment/mint/registry/revoke is claimed. These are tracked as team follow-ups. The third-party wallet modal still has an upstream Escape-dismiss/accessibility limitation and an English mobile wallet-count label; close-X and selection work. This is not a full accessibility certification. No security or authentication boundary was weakened for the operator's view selector.
+
+
+## Public release
+
+Deployment `dpl_Gcvt4eFXZqx2QFgQirHQUxUR88M7` reached READY from app commit `92fb4c9`. The canonical URL was opened and checked after deployment. Public auth 12, guest browser 17 and release API/modal/Dojang 6 checks passed. `production-home.png` was opened and visually inspected; it correctly shows no approved records. Current public Dojang read confirms the user's testnet proof is safe-valid. Public screenshots do not demonstrate another user's signed transaction.

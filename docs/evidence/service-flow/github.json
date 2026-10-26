@@ -1,0 +1,36 @@
+{
+  "checkedAt": "2026-10-26T04:47:18.902288Z",
+  "organization": "https://github.com/UpDish",
+  "repository": "https://github.com/UpDish/updish",
+  "visibility": "PUBLIC",
+  "defaultBranch": "main",
+  "owner": "raymond1203",
+  "organizationLogo": "docs/brand/updish-logo.png",
+  "issues": [
+    {
+      "url": "https://github.com/UpDish/updish/issues/1",
+      "title": "팀원 시작 안내: 실행 순서·구조·검증 근거 먼저 읽기"
+    },
+    {
+      "url": "https://github.com/UpDish/updish/issues/2",
+      "title": "[P1] 실제 GIWA 지갑 2개로 청약→배정→정산·첨부 전체 시연 확인"
+    },
+    {
+      "url": "https://github.com/UpDish/updish/issues/3",
+      "title": "[P1] Agent에 실제 모델 연결 후 한국어 정산 설명 검증"
+    },
+    {
+      "url": "https://github.com/UpDish/updish/issues/4",
+      "title": "[P1] Bojagi 공식 SDK·테스트 접근 확보 후 통합 범위 확정"
+    },
+    {
+      "url": "https://github.com/UpDish/updish/issues/5",
+      "title": "[P2] 공개 Reown Project ID 설정 후 WalletConnect QR·모바일 검증"
+    },
+    {
+      "url": "https://github.com/UpDish/updish/issues/6",
+      "title": "[P2] 공통 지갑 팝업의 키보드 닫기·모바일 문구 개선"
+    }
+  ],
+  "teamAnnouncement": "USER_WILL_SEND_MANUALLY"
+}

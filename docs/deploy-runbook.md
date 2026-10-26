@@ -38,9 +38,11 @@ Backup은 /opt/updish/backups의 접근 제한된 pg_dump custom 파일을 만�
 
 ## 최종 Vercel 설정
 
-업비트 조사 기반의 다음 UI 수정은 로컬에 준비했으나 브라우저 시각 검증을 마치지 못해 배포하지 않았다. 아래 배포 정보는 이전에 검증한 HTML 시안 반영 버전이다. [현재 QA 상태](../design-qa.md)가 passed가 되기 전에는 다음 UI를 완료된 배포로 보고하지 않는다.
+2026-10-26 업비트 조사 기반 UI·공통 지갑 팝업·승인 매출 차트·정산 근거·운영자 관점 전환을 production에 배포했습니다. [QA](../design-qa.md)는 passed이며 동일 크기 비교와 실제 모바일 화면을 확인했습니다.
 
-사용자가 팀 접근을 승인한 뒤 실제 Origin을 수정했고, 제공된 시안 반영 앱을 production에 배포했다. 현재 배포 ID는 `dpl_978FarAbNmizLSMmK3WGSD4iAxCs`, 앱 소스 커밋은 `0ff2430a6b35001f97d727a8d4377d2bd4bf02a1`, 상태는 READY다. [현재 공개 웹 로그인 검사](evidence/design/production-auth-smoke.json)는 임시 무자금 서명자로 Vercel → EC2 → PostgreSQL → 실제 GIWA 조회와 로그아웃 12개 항목을 통과했다. 사용자 지갑 거래를 제출한 검사는 아니다. 화면 비교와 모바일 검증은 [디자인 검증](../design-qa.md)에 있다.
+현재 배포 ID는 `dpl_Gcvt4eFXZqx2QFgQirHQUxUR88M7`, 앱 소스 커밋은 `92fb4c994a165200fa17e58d913b66a356db27f1`, 상태는 READY입니다. [공개 로그인 검사](evidence/service-flow/production-auth-smoke.json) 12개, [공개 브라우저 검사](evidence/service-flow/production-guest-browser.json) 17개, [배포 API/팝업/사용자 Dojang 검사](evidence/service-flow/production-release-browser.json) 6개를 통과했습니다. 개인 승인 자료와 체인 계약 전체 시연은 별도 로컬 DB/Anvil에서 확인했으며 사용자 거래를 대신 승인하지 않았습니다.
+
+같은 EC2에서 Core 이미지만 교체했습니다. SSM `692ac889-b285-4bc5-a2d4-fc6a118cb06f`는 Success, health UP, 공개 performance API 응답을 확인했습니다. private S3 아카이브 SHA-256은 `3658ac623e23068eab4dd01ea8c2b593ca7c9526b065714f16f3e900ceaf9fa5`입니다. 기존 DB/설정/자원은 보존했고 Flyway 변경은 없습니다. 교체 전 이미지는 `updish/core-api:before-chart-20261026`로 남겨 두었습니다. 일시적인 Docker Hub DNS 실패 때 이미 검증된 로컬 ARM64 이미지의 동일 JRE 기반에 새 JAR만 복사해 이미지를 만들었습니다. [릴리스 기록](evidence/service-flow/release.json).
 
 production/preview에 아래 값을 설정했다.
 
@@ -63,6 +65,13 @@ S3 CORS는 실제 Web Origin과 presigned 업로드 헤더를 허용하도록 �
 
 ## 검증과 종료
 
-[클라우드 기록](evidence/cloud-status.json): HTTPS health, 공개 Web/로그인, S3 CORS/private, DB 백업/별도 복원, EC2 reboot 뒤 같은 IP/health. [직접 Core 로그인](evidence/cloud-auth-smoke.json), [이전 Vercel 경유 로그인](evidence/vercel-auth-smoke.json), [시안 반영 후 Vercel 경유 로그인](evidence/design/production-auth-smoke.json)을 별도 기록했다. Secure 쿠키·SIWE·DB·실제 GIWA 조회를 확인했으며 사용자 MetaMask의 발급·거래 승인은 미실행이다. 이번 화면 수정에서는 서버 자원을 변경하거나 백업/reboot 검사를 재실행하지 않았다.
+[클라우드 기록](evidence/cloud-status.json): HTTPS health, 공개 Web/로그인, S3 CORS/private, DB 백업/별도 복원, EC2 reboot 뒤 같은 IP/health. [직접 Core 로그인](evidence/cloud-auth-smoke.json), [이전 Vercel 경유 로그인](evidence/vercel-auth-smoke.json), [시안 반영 후 Vercel 경유 로그인](evidence/design/production-auth-smoke.json)을 별도 기록했다. Secure 쿠키·SIWE·DB·실제 GIWA 조회를 확인했으며 사용자 MetaMask의 발급·거래 승인은 미실행이다. 이번에는 기존 EC2의 Core 컨테이너 이미지만 갱신했습니다. 자원/DB를 새로 만들거나 백업/reboot 검사를 반복하지 않았습니다.
 
 해커톤 후 Stop으로 컴퓨팅을 중지한다. 완전히 정리하려면 백업 필요 여부를 확인한 뒤 이 CloudFormation stack과 이 작업에서 만든 Vercel project만 정리한다. Bucket은 Retain이므로 stack 삭제 후에도 release/demo 객체와 bucket이 남는다. EC2 종료 시 루트 EBS는 삭제된다. 정리 요청 전에는 stack·bucket·사용자 자료를 임의 삭제하지 않는다.
+
+
+## 팀 저장소와 작업 안내
+
+공개 저장소는 https://github.com/UpDish/updish (`main`)입니다. [팀원 시작 이슈 #1](https://github.com/UpDish/updish/issues/1)을 먼저 읽고 각 후속 이슈의 완료 기준에 따라 작업합니다. 저장소 생성만으로 Vercel Git 자동 배포를 연결한 것은 아닙니다. 현재 릴리스는 승인된 Vercel 연결을 통한 소스 배포입니다.
+
+QR 연결에는 공개 Reown ID를 Web 환경에 설정한 뒤 재빌드해야 합니다. 현재는 ID가 없어 비활성 상태이며 브라우저 지갑 선택/로그인은 동작합니다.

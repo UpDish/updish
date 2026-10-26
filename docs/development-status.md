@@ -45,5 +45,5 @@ Web/체인 타입·production build·codec 결과는 [최종 검사](evidence/fi
 - Java 38, Foundry 9, Python 4, chain codec 1 통과. 모델/계약 테스트의 mock 범위는 기존 표와 같습니다.
 - [업무 E2E 12개](evidence/business-local-e2e.json): Anvil + 별도 PostgreSQL, 8개 동시 접수·배정·계약·지급. GIWA 거래가 아닙니다.
 - [비로그인 화면 17개](evidence/service-flow/guest-browser.json), [역할별 화면 14개](evidence/service-flow/role-browser.json), [공통 팝업·차트·화면 전환 15개](evidence/service-flow/wallet-chart-browser.json) 통과. 역할 검사 중 가짜 AI 응답 한 건은 지갑 간 UI 격리 검증에만 사용했고 앱에는 포함하지 않았습니다.
-- 개인 근거 API의 트랜잭션/잠금 조합을 실제 HTTP 검사에서 수정했습니다. 배포 API까지 확인한 뒤 완료로 기록합니다.
+- 개인 근거 API의 트랜잭션/잠금 조합을 실제 HTTP 검사에서 수정했습니다. 공개 Vercel/EC2 API와 실제 사용자 Dojang 읽기까지 확인했습니다.
 - Organization [UpDish](https://github.com/UpDish)과 공개 저장소 [updish](https://github.com/UpDish/updish)를 만들고 기존 아이콘을 프로필에 적용했습니다. 비밀값/환경 파일/빌드 결과는 업로드 대상에서 제외합니다.
