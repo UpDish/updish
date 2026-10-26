@@ -86,3 +86,8 @@ QR 연결에는 공개 Reown ID를 Web 환경에 설정한 뒤 재빌드해야 �
 [생성/시연 데이터 안내](../fixtures/ux/README.md), [배포 seed 근거](evidence/ux-demo/production-seed.json), [공개 로그인·fixture 권한 검사 14개](evidence/ux-demo/production-auth.json). OPERATOR의 전체/시나리오별 200 응답은 로컬 실제 SIWE/BFF/별도 DB로 검증했고, 클라우드에서는 seed/메타데이터/일반 사용자 접근 차단을 확인했습니다. 사용자 운영 지갑의 서명을 대신하지 않았습니다.
 
 현재 FastAPI Agent health는 정상, 내부 토큰은 있으나 `/capabilities`의 `model_calls`는 `NOT_CONFIGURED`입니다. 실제 AI 설명은 아직 미연결이고 정산 근거 화면만 모델 없이 동작합니다. 새 키 생성/저장을 승인 없이 재개하지 않습니다.
+
+
+## 로그인·역할별 UX 릴리스 — 2026-10-26
+
+[UX 동선/권한/데이터 구분](ux-flow.md). V7 Core 배포 SSM `d457b764-c9c1-4099-8e07-6be47a8ecf5f` Success, health UP, catalog 상품 두 개 추가, 초기 쿠폰 0건. 기존 active run/기존 상품/청약/보유/정산/chain job 행 수가 보존됐습니다. 백업 SSM `df99dc6f-a4e7-40ce-a09b-0db53c8ce3bf`, SHA-256 `4f03b9261c618857d0eeae20cc17328346ff2640fc10b0a35aba00e5ceac8faf`. 롤백 이미지는 `updish/core-api:before-journey-20261026`; V7 테이블/이력은 임의 삭제하지 않습니다. [실제 배포 근거](evidence/ux-journey/production-core.json). 웹 배포 식별자는 아래 후속 기록에 추가합니다.

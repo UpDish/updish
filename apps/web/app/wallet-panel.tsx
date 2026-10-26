@@ -14,7 +14,7 @@ function message(error: unknown) {
   return error instanceof Error ? error.message.split('\n')[0] : '지갑 요청을 완료하지 못했습니다.';
 }
 
-export function WalletPanel() {
+export function WalletPanel({onLogin,loginOnly=false}:{onLogin?:()=>void;loginOnly?:boolean}={}) {
   const config = useConfig();
   const wallet = useConnection();
   const connectors = useConnectors();
@@ -55,7 +55,7 @@ export function WalletPanel() {
       }
       return result;
     },
-    onSuccess: data => { cache.setQueryData(['session'], data); setNotice('지갑 서명으로 로그인했습니다.'); },
+    onSuccess: data => { cache.setQueryData(['session'], data); setNotice('지갑 서명으로 로그인했습니다.'); onLogin?.(); },
   });
 
   useEffect(() => { setMounted(true); }, []);
@@ -107,7 +107,7 @@ export function WalletPanel() {
         <p className="error" role="alert" key={index}>{message(error)}</p>)}
       {logout.isError ? <button className="secondary" onClick={() => logout.mutate()}>로그아웃 다시 시도</button> : null}
     </section>
-    {ready ? <DojangPanel key={serverAddress} address={serverAddress!} /> : <section className="card locked">
+    {loginOnly?null:ready ? <DojangPanel key={serverAddress} address={serverAddress!} /> : <section className="card locked">
       <span className="step">02 / DOJANG</span><h2>내 Dojang 발급·철회 확인</h2>
       <p>지갑 연결과 로그인을 마치면 내 지갑의 테스트 Dojang을 조회할 수 있습니다.</p>
       <ol><li>테스트 지갑 연결</li><li>GIWA Sepolia 선택 · 로그인 서명</li><li>공식 Playground에서 발급·철회 후 여기서 확인</li></ol>

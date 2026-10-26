@@ -144,6 +144,316 @@
         }
       }
     },
+    "/api/v1/workbench/market": {
+      "get": {
+        "operationId": "marketCatalog",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MarketCatalog"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Role, ownership, Origin or CSRF rejected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "State conflict or Dojang required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Dependency unavailable; never interpreted as success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/workbench/investments": {
+      "get": {
+        "operationId": "ownInvestments",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Investments"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Role, ownership, Origin or CSRF rejected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "State conflict or Dojang required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Dependency unavailable; never interpreted as success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/workbench/benefits": {
+      "get": {
+        "operationId": "customerBenefits",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerBenefits"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Role, ownership, Origin or CSRF rejected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "State conflict or Dojang required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Dependency unavailable; never interpreted as success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/workbench/benefits/{benefitId}/claim": {
+      "post": {
+        "operationId": "claimDemoBenefit",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "benefitId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-z0-9-]{1,80}$"
+            }
+          },
+          {
+            "name": "X-CSRF-TOKEN",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerBenefit"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Role, ownership, Origin or CSRF rejected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "State conflict or Dojang required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Dependency unavailable; never interpreted as success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/workbench/demo-data": {
       "get": {
         "operationId": "uxDemoDataset",
@@ -3063,6 +3373,300 @@
       }
     },
     "schemas": {
+      "MarketListing": {
+        "type": "object",
+        "properties": {
+          "store": {
+            "$ref": "#/components/schemas/UxStore"
+          },
+          "terms": {
+            "$ref": "#/components/schemas/UxOffering"
+          },
+          "offering": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Offering"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "revenues": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UxRevenue"
+            }
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "SIMULATION_LEDGER",
+              "SAMPLE_HISTORY"
+            ]
+          }
+        },
+        "required": [
+          "store",
+          "terms",
+          "offering",
+          "revenues",
+          "source"
+        ]
+      },
+      "MarketCatalog": {
+        "type": "object",
+        "properties": {
+          "listings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MarketListing"
+            }
+          },
+          "mode": {
+            "type": "string"
+          },
+          "asOf": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "listings",
+          "mode",
+          "asOf"
+        ]
+      },
+      "InvestmentSubscription": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Subscription"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "offering_id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "store_name": {
+                "type": "string"
+              },
+              "unit_price": {
+                "type": "string",
+                "pattern": "^-?[0-9]+$",
+                "description": "Integer KRW, decimal string; SIMULATION only"
+              },
+              "created_at": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "offering_id",
+              "store_name",
+              "unit_price",
+              "created_at"
+            ]
+          }
+        ]
+      },
+      "InvestmentHolding": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Holding"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "offering_id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "store_name": {
+                "type": "string"
+              },
+              "unit_price": {
+                "type": "string",
+                "pattern": "^-?[0-9]+$",
+                "description": "Integer KRW, decimal string; SIMULATION only"
+              },
+              "offering_status": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "offering_id",
+              "store_name",
+              "unit_price",
+              "offering_status"
+            ]
+          }
+        ]
+      },
+      "InvestmentSettlement": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "offering_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "store_name": {
+            "type": "string"
+          },
+          "period": {
+            "type": "string"
+          },
+          "version": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string"
+          },
+          "line_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "amount_won": {
+            "type": "string",
+            "pattern": "^-?[0-9]+$",
+            "description": "Integer KRW, decimal string; SIMULATION only"
+          },
+          "paid_won": {
+            "type": "string",
+            "pattern": "^-?[0-9]+$",
+            "description": "Integer KRW, decimal string; SIMULATION only"
+          },
+          "prior_paid_won": {
+            "type": "string",
+            "pattern": "^-?[0-9]+$",
+            "description": "Integer KRW, decimal string; SIMULATION only"
+          },
+          "delta_won": {
+            "type": "string",
+            "pattern": "^-?[0-9]+$",
+            "description": "Integer KRW, decimal string; SIMULATION only"
+          }
+        },
+        "required": [
+          "id",
+          "offering_id",
+          "store_name",
+          "period",
+          "version",
+          "status",
+          "line_id",
+          "amount_won",
+          "paid_won",
+          "prior_paid_won",
+          "delta_won"
+        ]
+      },
+      "Investments": {
+        "type": "object",
+        "properties": {
+          "subscriptions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InvestmentSubscription"
+            }
+          },
+          "holdings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InvestmentHolding"
+            }
+          },
+          "settlements": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InvestmentSettlement"
+            }
+          },
+          "mode": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "subscriptions",
+          "holdings",
+          "settlements",
+          "mode"
+        ]
+      },
+      "BenefitClaim": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "code": {
+            "type": "string"
+          },
+          "claimed_at": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "code",
+          "claimed_at"
+        ]
+      },
+      "CustomerBenefit": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/UxBenefit"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "heldUnits": {
+                "type": "integer"
+              },
+              "status": {
+                "type": "string"
+              },
+              "claim": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/BenefitClaim"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "heldUnits",
+              "status",
+              "claim"
+            ]
+          }
+        ]
+      },
+      "CustomerBenefits": {
+        "type": "object",
+        "properties": {
+          "benefits": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CustomerBenefit"
+            }
+          },
+          "mode": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "benefits",
+          "mode"
+        ]
+      },
       "UxPersona": {
         "type": "object",
         "properties": {
@@ -4966,8 +5570,7 @@
         "properties": {
           "units": {
             "type": "integer",
-            "minimum": 1,
-            "maximum": 3600
+            "minimum": 1
           },
           "requestKey": {
             "type": "string",

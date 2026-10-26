@@ -181,5 +181,16 @@
     "actualBusinessRowsAndActiveRun": "PRESERVED",
     "nextUxIssue": "https://github.com/UpDish/updish/issues/7",
     "frontendJourneyQa": "PENDING_USER_REQUESTED_REDESIGN"
+  },
+  "uxJourney": {
+    "javaPassed": 54,
+    "browserJourneyPassed": 25,
+    "realRoleBrowserPassed": 9,
+    "businessE2ePassed": 12,
+    "personaHttpPassed": 11,
+    "webBuild": "passed",
+    "coreDeployment": "d457b764-c9c1-4099-8e07-6be47a8ecf5f",
+    "mode": "SIMULATION",
+    "source": "docs/evidence/ux-journey/"
   }
 }

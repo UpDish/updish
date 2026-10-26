@@ -19,6 +19,7 @@ import org.web3j.crypto.Hash;
 import tools.jackson.databind.ObjectMapper;
 
 @Service
+@org.springframework.core.annotation.Order(10)
 public class WorkbenchService implements ApplicationRunner {
     public static final String BACKGROUND="0x000000000000000000000000000000000000b001";
     private final JdbcTemplate db;
@@ -83,7 +84,7 @@ public class WorkbenchService implements ApplicationRunner {
     public boolean isReviewer(WalletPrincipal actor) { return Set.of("OPERATOR","REVIEWER").contains(role(actor)); }
     public boolean canManage(WalletPrincipal actor,Map<String,Object> o) { return isReviewer(actor)||actor.address().equals(o.get("owner_address")); }
     public void requireManager(WalletPrincipal actor,Map<String,Object> o) { if(!canManage(actor,o)) throw BusinessFailure.forbidden(); }
-    private Map<String,Object> lockedOffering(UUID id) {return one("SELECT * FROM offering WHERE id=? AND run_id=? FOR UPDATE",id,runId());}
+    private Map<String,Object> lockedOffering(UUID id) {return one("SELECT * FROM offering WHERE id=? AND (run_id=? OR id IN (SELECT offering_id FROM market_offering)) FOR UPDATE",id,runId());}
     public void audit(WalletPrincipal actor,String action,UUID reference,String reason) {
         db.update("INSERT INTO business_event(id,run_id,actor,action,reference_id,reason) VALUES (?,?,?,?,?,?)",UUID.randomUUID(),runId(),actor.address(),action,reference,reason);
     }
@@ -114,8 +115,9 @@ public class WorkbenchService implements ApplicationRunner {
         if(!v.verified()) throw new BusinessFailure("DOJANG_REQUIRED",409,"유효한 TESTNET FAUCET Dojang이 필요합니다. 공식 Playground에서 발급해 주세요.");return v;
     }
     @Transactional public Map<String,Object> subscribe(WalletPrincipal actor,UUID offering,int units,UUID requestKey,boolean understood) {
-        if(units<=0||units>3600||requestKey==null||!understood||actor.address().equals(BACKGROUND)) throw BusinessFailure.invalid("수량과 원금·손실·모의 청약 동의를 확인해 주세요.");
+        if(units<=0||requestKey==null||!understood||actor.address().equals(BACKGROUND)) throw BusinessFailure.invalid("수량과 원금·손실·모의 청약 동의를 확인해 주세요.");
         var o=lockedOffering(offering);var old=rows("SELECT * FROM subscription WHERE offering_id=? AND address=? AND request_key=?",offering,actor.address(),requestKey);
+        if(units>number(o,"target_units")) throw BusinessFailure.invalid("상품 모집 수량 이하의 정수를 입력해 주세요.");
         if(!old.isEmpty()) {if(number(old.getFirst(),"units")!=units) throw BusinessFailure.conflict("같은 요청 키의 수량이 다릅니다.");return old.getFirst();}
         if(!o.get("status").equals("OPEN")) throw BusinessFailure.conflict("모집 중인 상품만 청약할 수 있습니다.");
         long accepted=db.queryForObject("SELECT coalesce(sum(units),0) FROM subscription WHERE offering_id=? AND status='ACCEPTED'",Long.class,offering);

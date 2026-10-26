@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import './exchange.css';
+import './journey.css';
 import { Providers } from './providers';
 
 export const metadata: Metadata = {

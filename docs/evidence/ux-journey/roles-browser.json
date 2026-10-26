@@ -1,0 +1,15 @@
+{
+  "checkedAt": "2026-10-26T05:55:45.215Z",
+  "scope": "LOCAL ANVIL ONLY: real SIWE merchant/reviewer roles and Core authorization. Final failure check explicitly injects a browser-side 503; no application success response is mocked.",
+  "checks": [
+    "Actual operator grants a local test wallet merchant role through UI and guarded Core API",
+    "Real merchant gets common first two tabs, own store management and benefits without operator tools",
+    "Actual store owner reaches CSV upload and private attachment controls",
+    "Real reviewer gets review tab without merchant/customer/operator menus",
+    "Reviewer sees evidence review without source submission controls",
+    "Reviewer cannot execute reset even with a direct CSRF-authenticated request",
+    "Forbidden operator deep link resolves to allowed market entry",
+    "Explicit browser fault injection shows retry error without a fake sample-success fallback",
+    "Retry recovers actual server data after injected read failure"
+  ]
+}

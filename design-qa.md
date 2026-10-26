@@ -1,8 +1,8 @@
 # Upbit-informed UI/UX and service-flow verification
 
-final result: blocked
+final result: passed — local UX journey; public release evidence below
 
-**Latest acceptance scope (2026-10-26):** The user rejected the current overall journey and requested login first, a store-discovery/investment first tab, an investment-history second tab, followed by merchant/customer/reviewer/operator sections. Earlier component and screenshot checks below are historical evidence, not acceptance of that new journey. The user asked for connected dummy data first; that data phase is now prepared. The next UI release remains pending [UX issue #7](https://github.com/UpDish/updish/issues/7). No frontend/layout/navigation change or Vercel redeployment was made in the data-only phase.
+**Latest acceptance scope (2026-10-26):** Implemented login-first → eight-store discovery/detail/investment → investment-history second tab → merchant/customer/reviewer/operator sections. Real wallet data and read-only operator persona examples remain distinct. Current local production browser evidence: 25 journey checks + 9 real-role/error-recovery checks; Java/PostgreSQL 54 tests; business E2E 12 and persona HTTP 11. See `docs/ux-flow.md` and `docs/evidence/ux-journey/`. Earlier component checks below remain historical. Public deployment is recorded separately after release.
 
 
 2026-10-26 KST. This result applies to the local production build prepared for the current release. Public deployment evidence is recorded separately in `docs/evidence/service-flow/` and the deployment runbook.
@@ -52,3 +52,12 @@ Targeted Java CSV/catalog checks: 6 passed (two new catalog tests, four existing
 Final result remains passed for this inspected local production revision. Public release identity and checks are recorded in `docs/evidence/demo-data/` after deployment.
 
 CSV revision public deployment `dpl_5TRVv5unotPzXnt1vE777QnvcevG` reached READY from `84d0725`. Canonical production browser checks passed all 13 items, including all nine download hashes. Production desktop/tablet/mobile captures are in `docs/evidence/demo-data/`. The public desktop capture was opened and visually checked. The public approved ledger remains untouched.
+
+
+## Login/store/role journey revision — 2026-10-26
+
+Inspected actual 1440×900 market/investment screens, 768×900 and 390×844 screens, mobile full detail, merchant and reviewer screenshots. Navy navigation, flat market rows, compact filters, exact amounts and information adjacent to subscription retain the existing Upbit-informed reference. The first two menu links are consistently discovery and investments; role tools follow them. Mobile navigation and numeric tables scroll internally. No document overflow in checked tablet/mobile states. A long-page capture was recaptured at scroll position zero to avoid displaced sticky elements in the screenshot.
+
+Browser 25 + 9 checks use actual local SIWE/BFF/Core/PG. The test wallet provider and Dojang are local Anvil only. The final role check deliberately injects one browser-side 503 and verifies error/retry; it does not fabricate an app-side success. Reading a sample persona does not grant its real role. New live-simulation offerings and claims are persisted separately from the immutable snapshot; historical sample offerings cannot be subscribed. Existing approved sales chart is preserved.
+
+React review: session-address keyed private state; no side effects during render; parallel independent queries; URL navigation and explicit error/loading states; native links/buttons/labels; dynamic chart/operations imports; no new dependency or application mock. Existing wallet-modal accessibility/QR, actual GIWA/model and Bojagi limits remain unchanged.

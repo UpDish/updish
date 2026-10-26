@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tools.jackson.databind.ObjectMapper;
 
 @Service
+@org.springframework.core.annotation.Order(20)
 public class UxDemoDataService implements ApplicationRunner {
     public static final String DATASET_ID="updish-ux-v1";
     private final JdbcTemplate db;private final ObjectMapper json;private final WorkbenchService work;
@@ -29,7 +30,7 @@ public class UxDemoDataService implements ApplicationRunner {
         if(!actual.equals(db.queryForObject("SELECT source_sha256 FROM ux_demo_dataset WHERE dataset_id=?",String.class,DATASET_ID)))throw new IllegalStateException("Existing UX fixture differs. Publish a new dataset version instead of replacing it.");
     }
     @Transactional(readOnly=true) public Map<String,Object> dataset(WalletPrincipal actor){work.requireOperator(actor);return read();}
-    @SuppressWarnings("unchecked") private Map<String,Object> read(){
+    @SuppressWarnings("unchecked") Map<String,Object> read(){
         var row=db.queryForMap("SELECT source_sha256,payload::text AS payload FROM ux_demo_dataset WHERE dataset_id=?",DATASET_ID);
         var result=new LinkedHashMap<String,Object>(json.readValue((String)row.get("payload"),Map.class));result.put("sourceSha256",row.get("source_sha256"));return result;
     }

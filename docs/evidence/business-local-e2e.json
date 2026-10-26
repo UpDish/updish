@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-26T04:54:51.880Z",
+  "checkedAt": "2026-10-26T05:49:18.653Z",
   "scope": "LOCAL_ANVIL_ONLY: direct Core HTTP, dedicated database, test wallets, mock Dojang, real UpDish contracts and database. No GIWA transactions.",
   "checks": [
     "8 simultaneous subscriptions: 4 accepted, cap 3,600, 20 units refunded after partial allocation",
@@ -18,12 +18,12 @@
   "receipts": [
     {
       "kind": "MINT",
-      "hash": "0x9138cf07139b044d59f9c555992038f1ed8e63d47166f9c03f8ef148474d1ed4",
+      "hash": "0x5ffb9b6e44a3fd6d8711032ec75ad8a0ec7e3f0d1608661b7b196a78d3e6e5c7",
       "status": "SAFE"
     },
     {
       "kind": "SETTLEMENT",
-      "hash": "0x610cdaf99ff47418f9cbdd1b5efeb16321b692aebdefc1c13df12ca38cd7346b",
+      "hash": "0xa299688cdc5c61c799f730ffe04cd0ccf8ee4dc7094b615f05fc2eb0af677704",
       "status": "SAFE"
     }
   ],

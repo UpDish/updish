@@ -1,0 +1,32 @@
+{
+  "checkedAt": "2026-10-26T05:52:39.568Z",
+  "scope": "LOCAL ANVIL ONLY: actual browser SIWE -> BFF -> Core -> dedicated PostgreSQL; local mock Dojang, no user GIWA transactions or model calls",
+  "checks": [
+    "Guest sees login entry, without investment/admin menus",
+    "SIWE login opens store list; first two tabs are market and investments; ordinary user has no merchant/operator menus",
+    "Signed user reads all eight store listings through BFF/Core/PostgreSQL",
+    "Search empty state and open-offering filter work",
+    "Existing approved sales chart remains the default for the active store",
+    "Historical refunded sample cannot accept a subscription",
+    "Selected bakery has its own 5,000 KRW unit price and 6,000-unit cap",
+    "Invalid quantity is blocked",
+    "Browser subscription -> CSRF BFF -> real Core -> mock-local Dojang -> PostgreSQL succeeds",
+    "Second tab shows chosen store, quantity and exact simulated amount",
+    "Cancellation reaches real server",
+    "Benefit claim persists with explicit unusable demo code",
+    "Coupon state survives reload",
+    "Operator gets role-specific tabs after the two common tabs",
+    "Existing merchant CSV/reconciliation tools remain reachable under store management",
+    "Existing operator allocation, role and chain controls remain under operations",
+    "Operator can inspect explicit sample portfolio with four holdings without changing real auth",
+    "Multi-store merchant sample is scoped to seven managed stores",
+    "Sample reviewer has review queue without operator tab",
+    "Sample benefits are read-only and cannot issue real claims",
+    "Wallet switch does not expose previous wallet coupon code",
+    "Tablet has no page overflow",
+    "Mobile store table scrolls internally; no document overflow",
+    "Mobile detail and investment form fit the viewport",
+    "No browser runtime errors"
+  ],
+  "errors": []
+}

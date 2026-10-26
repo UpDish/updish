@@ -1,0 +1,16 @@
+{
+  "scope": "Actual existing EC2 Core-only rollout. V7 creates two additional listings; old active run and business row counts preserved. No user wallet signing/model call.",
+  "commandId": "d457b764-c9c1-4099-8e07-6be47a8ecf5f",
+  "status": "Success",
+  "output": "core-journey-image.tar.gz: OK\nLoaded image: updish/core-api:demo\n{\"groups\":[\"liveness\",\"readiness\"],\"status\":\"UP\"}EXISTING_BUSINESS_ROWS_PRESERVED\n{\"migration\" : \"7\", \"newListings\" : 2, \"claims\" : 0}\nsha256:489eca90c9870c6b1cf82aabe87ae36a940774ee9a4d2c35f4a6d581899746e4\n",
+  "archive": {
+    "sha256": "bc5928688e8afbc761f458a793e439b82483415b0a8e00f75b1683b933a31c55",
+    "key": "release/20261026/journey-bc5928688e8a/core-image.tar.gz",
+    "bytes": 357573777
+  },
+  "backup": {
+    "commandId": "df99dc6f-a4e7-40ce-a09b-0db53c8ce3bf",
+    "path": "backups/updish-before-journey-20261026T054542Z.dump",
+    "sha256": "4f03b9261c618857d0eeae20cc17328346ff2640fc10b0a35aba00e5ceac8faf"
+  }
+}

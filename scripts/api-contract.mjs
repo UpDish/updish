@@ -8,6 +8,15 @@ const ref=name=>({$ref:`#/components/schemas/${name}`});
 const array=name=>({type:'array',items:typeof name==='string'?ref(name):name});
 const object=(properties,optional=[])=>({type:'object',properties,required:Object.keys(properties).filter(k=>!optional.includes(k))});
 const schemas={
+  MarketListing:object({store:ref('UxStore'),terms:ref('UxOffering'),offering:{anyOf:[ref('Offering'),{type:'null'}]},revenues:array('UxRevenue'),source:{type:'string',enum:['SIMULATION_LEDGER','SAMPLE_HISTORY']}}),
+  MarketCatalog:object({listings:array('MarketListing'),mode:str,asOf:str}),
+  InvestmentSubscription:{allOf:[ref('Subscription'),object({offering_id:uuid,store_name:str,unit_price:money,created_at:str})]},
+  InvestmentHolding:{allOf:[ref('Holding'),object({offering_id:uuid,store_name:str,unit_price:money,offering_status:str})]},
+  InvestmentSettlement:object({id:uuid,offering_id:uuid,store_name:str,period:str,version:integer,status:str,line_id:uuid,amount_won:money,paid_won:money,prior_paid_won:money,delta_won:money}),
+  Investments:object({subscriptions:array('InvestmentSubscription'),holdings:array('InvestmentHolding'),settlements:array('InvestmentSettlement'),mode:str}),
+  BenefitClaim:object({id:uuid,code:str,claimed_at:str}),
+  CustomerBenefit:{allOf:[ref('UxBenefit'),object({heldUnits:integer,status:str,claim:{anyOf:[ref('BenefitClaim'),{type:'null'}]}})]},
+  CustomerBenefits:object({benefits:array('CustomerBenefit'),mode:str}),
   UxPersona:object({id:str,name:str,roles:array(str),participation:str,selectable:bool,synthetic:bool}),
   UxStore:object({id:str,name:str,district:str,category:str,ownerPersonaId:str,description:str,synthetic:bool}),
   UxOffering:object({id:str,storeId:str,title:str,status:str,targetUnits:integer,unitPriceWon:money,targetWon:money,rateBps:integer,months:integer,startsOn:str,principalRedemption:str,acceptedUnits:integer,synthetic:bool}),
@@ -46,13 +55,13 @@ const schemas={
   Event:object({id:uuid,actor:address,action:str,reason:str}),
   Dashboard:object({offering:ref('Offering'),user:ref('User'),subscriptions:array('Subscription'),holdings:array('Holding'),settlements:array('MySettlement'),chain_jobs:array('Job'),evidence:array('Evidence'),all_subscriptions:array('Subscription'),all_holdings:array('Holding'),all_settlements:array('Settlement'),all_lines:array('Line'),all_jobs:array('Job'),events:array('Event'),contracts:array('Contract')},['evidence','all_subscriptions','all_holdings','all_settlements','all_lines','all_jobs','events']),
   Reason:object({reason:{type:'string',minLength:1,maxLength:500}}),
-  Subscribe:object({units:{type:'integer',minimum:1,maximum:3600},requestKey:uuid,understood:bool}),
+  Subscribe:object({units:{type:'integer',minimum:1},requestKey:uuid,understood:bool}),
   Upload:object({offeringId:uuid,filename:str,contentType:{type:'string',enum:['application/pdf','image/png','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']},sizeBytes:{type:'integer',minimum:1,maximum:5242880}}),
 };
 const paths={};
 const json=schema=>({'application/json':{schema}});
 function route(path,method,name,response={type:'object',additionalProperties:true},body,publicRead=false) {
-  const parameters=[...path.matchAll(/\{(\w+)\}/g)].map(m=>({name:m[1],in:'path',required:true,schema:m[1]==='address'?address:m[1]==='personaId'?{type:'string',pattern:'^[a-z0-9-]{1,80}$'}:uuid}));
+  const parameters=[...path.matchAll(/\{(\w+)\}/g)].map(m=>({name:m[1],in:'path',required:true,schema:m[1]==='address'?address:['personaId','benefitId'].includes(m[1])?{type:'string',pattern:'^[a-z0-9-]{1,80}$'}:uuid}));
   const operation={operationId:name,security:publicRead?[]:[{session:[]}],parameters,responses:{200:{description:'Success',content:json(typeof response==='string'?ref(response):response)},400:{description:'Invalid input',content:json(ref('Error'))},401:{description:'Session required',content:json(ref('Error'))},403:{description:'Role, ownership, Origin or CSRF rejected',content:json(ref('Error'))},409:{description:'State conflict or Dojang required',content:json(ref('Error'))},503:{description:'Dependency unavailable; never interpreted as success',content:json(ref('Error'))}}};
   if(method==='post') {
     operation.parameters.push({name:'X-CSRF-TOKEN',in:'header',required:true,schema:str});
@@ -63,6 +72,10 @@ function route(path,method,name,response={type:'object',additionalProperties:tru
 route('/api/v1/offerings/current','get','currentOffering','Offering',undefined,true);
 route('/api/v1/offerings/current/performance','get','offeringPerformance','Performance',undefined,true);
 const p='/api/v1/workbench';
+route(p+'/market','get','marketCatalog','MarketCatalog');
+route(p+'/investments','get','ownInvestments','Investments');
+route(p+'/benefits','get','customerBenefits','CustomerBenefits');
+route(p+'/benefits/{benefitId}/claim','post','claimDemoBenefit','CustomerBenefit');
 route(p+'/demo-data','get','uxDemoDataset','UxDemoDataset');
 route(p+'/demo-data/personas/{personaId}','get','uxDemoPersona','UxPersonaView');
 route(p+'/dashboard','get','dashboard','Dashboard');

@@ -1,0 +1,51 @@
+{
+  "scope": "Java + actual PostgreSQL; GiwaService mocked in business tests. No GIWA/model call claimed.",
+  "tests": 54,
+  "failures": 0,
+  "suites": [
+    {
+      "name": "io.updish.core.auth.SiweServiceTests",
+      "tests": 8
+    },
+    {
+      "name": "io.updish.core.business.CsvReconciliationTests",
+      "tests": 4
+    },
+    {
+      "name": "io.updish.core.business.DemoCatalogTests",
+      "tests": 2
+    },
+    {
+      "name": "io.updish.core.business.MarketTests",
+      "tests": 5
+    },
+    {
+      "name": "io.updish.core.business.SettlementMathTests",
+      "tests": 4
+    },
+    {
+      "name": "io.updish.core.business.UxDemoDataTests",
+      "tests": 4
+    },
+    {
+      "name": "io.updish.core.business.UxDemoIntegrityTests",
+      "tests": 5
+    },
+    {
+      "name": "io.updish.core.business.WorkbenchTests",
+      "tests": 10
+    },
+    {
+      "name": "io.updish.core.chain.GiwaServiceTests",
+      "tests": 8
+    },
+    {
+      "name": "io.updish.core.chain.RpcClientTests",
+      "tests": 3
+    },
+    {
+      "name": "io.updish.core.CoreApiApplicationTests",
+      "tests": 1
+    }
+  ]
+}

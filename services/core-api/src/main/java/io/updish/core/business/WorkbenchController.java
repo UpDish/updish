@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public class WorkbenchController {
     private final WorkbenchService service;
     public WorkbenchController(WorkbenchService service) {this.service=service;}
-    public record Subscription(@Min(1) @Max(3600) int units,@NotNull UUID requestKey,boolean understood) {}
+    public record Subscription(@Min(1) int units,@NotNull UUID requestKey,boolean understood) {}
     public record Evidence(@NotNull UUID offeringId,@NotBlank String period,@NotBlank @Size(max=120) String filename,@NotBlank @Size(max=1000000) String csv) {}
     public record Reason(@NotBlank @Size(max=500) String reason) {}
     public record Member(@NotBlank String address,@NotBlank String role,boolean ownStore) {}
