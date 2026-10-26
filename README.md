@@ -1,6 +1,12 @@
 # UpDish
 
+<img src="docs/brand/updish-logo.png" alt="UpDish" width="72" height="72" />
+
+[시연 웹](https://updish-hackathon-20261025-betaplayers-projects.vercel.app/) · [GitHub Organization](https://github.com/UpDish) · [공개 저장소](https://github.com/UpDish/updish)
+
 음식점 매출 증빙 → 모의 청약·배정 → 보유 → 정산·모의 지급을 연결하는 해커톤 데모입니다. Spring이 업무 원장을 계산하고 지갑은 SIWE 로그인과 GIWA 테스트 거래를 서명합니다. 실제 금전 수취·지급은 수행하지 않습니다.
+
+지갑 선택은 Web3-Onboard 공통 팝업, 로그인 검증은 Spring의 SIWE를 사용합니다. 월 매출·전체 배분금·내 정산액 차트는 최신 승인 자료만 표시합니다. 운영자는 상단 모드에서 가게·고객·투자자 화면을 시연할 수 있으며 실제 지갑과 권한은 유지됩니다.
 
 현재 상태는 [개발 결과](docs/development-status.md), 실제 지갑 사용 순서는 [시연 안내](docs/demo-guide.md), 클라우드 자원·중지 방법은 [배포 안내](docs/deploy-runbook.md)를 기준으로 합니다. bootstrap/wallet 상태 문서는 과거 이력입니다.
 

@@ -1,0 +1,22 @@
+{
+  "checkedAt": "2026-10-26T04:36:13.349Z",
+  "scope": "LOCAL_ANVIL_ONLY, dedicated DB, injected test wallet through standard modal. No user wallet or live model.",
+  "checks": [
+    "Selected Web3-Onboard provider -> wagmi 3 -> real SIWE login",
+    "Public chart latest approved v2, sales 29m",
+    "Pool metric 870,000 won",
+    "Private chart 24,167 won, no double-counting v1",
+    "Own statement endpoint works outside test transaction and preserves prior-payment excess",
+    "Chart mobile no page overflow",
+    "Reload silently restores selected provider and same signed session",
+    "Perspective 가게 retains real OPERATOR session",
+    "Perspective 고객 retains real OPERATOR session",
+    "Customer discovery has no investor submission form",
+    "Perspective 투자자 retains real OPERATOR session",
+    "Perspective 운영자 retains real OPERATOR session",
+    "Mobile perspective chooser fits viewport",
+    "Escape closes perspective chooser",
+    "No runtime errors"
+  ],
+  "errors": []
+}

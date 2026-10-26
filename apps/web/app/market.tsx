@@ -2,15 +2,17 @@
 
 import {useState, type FormEvent, type KeyboardEvent} from 'react';
 import {labels, won, type Dashboard, type Offering} from '../lib/workbench';
+import {PerformancePanel} from './performance-panel';
 
 type MarketProps = {
+  customer?:boolean;
   offering: Offering; dashboard?: Dashboard; units: number;
   onUnits: (value:number)=>void; agreements:boolean[];
   onAgreement:(index:number,checked:boolean)=>void;
   signed:boolean; pending:boolean; onSubscribe:()=>void;
   onWallet:()=>void; onPortfolio:()=>void; onEvidence:()=>void;
 };
-const views=[{id:'overview',label:'상품 정보'},{id:'calculator',label:'수령액 계산'},{id:'risk',label:'위험 안내'}] as const;
+const views=[{id:'performance',label:'매출 차트'},{id:'overview',label:'상품 정보'},{id:'calculator',label:'수령액 계산'},{id:'risk',label:'위험 안내'}] as const;
 type View=typeof views[number]['id'];
 
 export function ProductStatus({status}:{status:string}) {
@@ -18,8 +20,8 @@ export function ProductStatus({status}:{status:string}) {
   return <span className={`badge ${tone}`}>{labels[status]??status}</span>;
 }
 
-export function MarketHome({offering:o,dashboard:data,units,onUnits,agreements,onAgreement,signed,pending,onSubscribe,onWallet,onPortfolio,onEvidence}:MarketProps) {
-  const [view,setView]=useState<View>('overview');
+export function MarketHome({offering:o,dashboard:data,customer=false,units,onUnits,agreements,onAgreement,signed,pending,onSubscribe,onWallet,onPortfolio,onEvidence}:MarketProps) {
+  const [view,setView]=useState<View>('performance');
   const [sales,setSales]=useState(30_000_000);
   const [search,setSearch]=useState('');
   const [filter,setFilter]=useState('all');
@@ -53,6 +55,7 @@ export function MarketHome({offering:o,dashboard:data,units,onUnits,agreements,o
       <section className="exchange-panel information-panel">
         <div className="exchange-tabs" role="tablist" aria-label="상품 상세 정보">{views.map((item,index)=><button key={item.id} id={`product-tab-${item.id}`} role="tab" aria-selected={view===item.id} aria-controls="product-panel" tabIndex={view===item.id?0:-1} onClick={()=>setView(item.id)} onKeyDown={event=>moveTab(event,index)}>{item.label}</button>)}</div>
         <div id="product-panel" role="tabpanel" aria-labelledby={`product-tab-${view}`} className="information-content" tabIndex={0}>
+          {view==='performance'?<PerformancePanel key={o.id} offeringId={o.id} dashboard={data} onEvidence={onEvidence}/>:null}
           {view==='overview'?<><div className="panel-heading"><h2>계약 주요 조건</h2><span>계약 기준 · 수익 보장 없음</span></div>
             <table className="terms-table"><tbody><tr><th scope="row">배분 기준</th><td>검토·승인된 월 정산대상 매출</td></tr><tr><th scope="row">약정 배분율</th><td>전체 매출의 {(o.rate_bps/100).toFixed(1)}%</td></tr><tr><th scope="row">배분 기간</th><td>{o.months}개월</td></tr><tr><th scope="row">참여 단위</th><td>1단위 · {won(o.unit_price)}</td></tr><tr><th scope="row">배정 방식</th><td>접수 순서로 배정 · 마지막 초과분은 부분 배정 및 모의 환불</td></tr><tr><th scope="row">원금 처리</th><td>만기 원금을 별도로 상환할 의무가 없습니다.</td></tr></tbody></table>
             <div className="information-note"><b>매출과 정산액은 어디에서 확인하나요?</b><p>가게의 POS·PG·은행 자료를 대조·승인한 뒤, 보유 수량을 기준으로 산정합니다. 본인의 승인된 정산액은 투자내역에서 확인할 수 있습니다.</p><button className="inline-button" onClick={onPortfolio}>내 정산 내역 보기</button></div>
@@ -73,7 +76,7 @@ export function MarketHome({offering:o,dashboard:data,units,onUnits,agreements,o
         <div className="directory-filters" aria-label="상품 상태 필터">{[['all','전체'],['open','모집 중'],['closed','모집 종료']].map(([value,label])=><button key={value} className={filter===value?'active':''} aria-pressed={filter===value} onClick={()=>setFilter(value)}>{label}</button>)}</div><div className="directory-labels"><span>상품명</span><span>1단위 금액</span></div>
         {visible?<button className="directory-product" aria-label={`${o.store_name} 상품 정보 보기`} onClick={()=>setView('overview')}><span><b>{o.store_name}</b><small>{labels[o.status]??o.status} · 매출배분 {(o.rate_bps/100).toFixed(1)}%</small></span><strong>{won(o.unit_price)}</strong></button>:<p className="directory-empty" role="status">조건에 맞는 상품이 없습니다.</p>}<p className="directory-count">가상 상품 1개 · 해커톤 시연</p>
       </section>
-      <section className="exchange-panel subscription-card" aria-labelledby="subscription-title">
+      {customer?<section className="exchange-panel customer-guide"><div className="panel-heading"><h2>가게 공개 정보</h2></div><p>가게의 계약 조건과 승인된 월 매출·배분금을 확인할 수 있습니다.</p><p className="hint">해커톤의 고객 관점 안내 화면입니다. 음식 주문·결제 기능은 제공하지 않습니다.</p><button className="full" onClick={onWallet}>투자자 화면에서 참여 안내 보기</button></section>:<><section className="exchange-panel subscription-card" aria-labelledby="subscription-title">
         <div className="order-heading"><h2 id="subscription-title">모의 청약</h2><button onClick={onPortfolio}>내 청약내역</button></div><ol className="order-steps">{steps.map((label,index)=><li key={label} className={index===step?'current':index<step?'completed':''} aria-current={index===step?'step':undefined}>{index+1}. {label}</li>)}</ol>
         <form onSubmit={submit}><div className="order-price"><span>1단위 금액</span><b>{won(o.unit_price)}</b></div><label htmlFor="units">청약 수량 <span>단위</span></label><input id="units" type="number" min={1} max={o.target_units} step={1} value={Number.isFinite(units)?units:''} aria-invalid={!valid} aria-describedby={!valid?'units-error':undefined} onChange={event=>onUnits(Number(event.target.value))}/>
           <div className="quantity-presets" aria-label="수량 빠른 입력">{[10,50,100,200].filter(value=>value<=o.target_units).map(value=><button key={value} type="button" aria-pressed={units===value} onClick={()=>onUnits(value)}>{value}단위</button>)}</div>{!valid?<p id="units-error" className="error" role="alert">1~{o.target_units.toLocaleString()} 사이의 정수를 입력해 주세요.</p>:null}<div className="subscription-total" aria-live="polite"><span>모의 청약 총액</span><b>{won(principal)}</b></div>
@@ -81,7 +84,7 @@ export function MarketHome({offering:o,dashboard:data,units,onUnits,agreements,o
           {signed?<><button className="full" type="submit" disabled={blocked}>{pending?'청약 접수 중…':o.status==='OPEN'?'모의 청약 신청':labels[o.status]??o.status}</button><p className="order-help">{o.status!=='OPEN'?'현재 상품은 청약 접수가 종료됐습니다.':!valid?'유효한 청약 수량을 입력해 주세요.':!agreements.every(Boolean)?'필수 확인 3개 항목에 동의하면 신청할 수 있습니다.':'신규 참여 시 서버가 Dojang 자격을 확인합니다.'}</p></>:<><button className="full" type="button" onClick={onWallet}>지갑 연결하고 로그인</button><p className="order-help">로그인 후 모의 청약할 수 있습니다. 로그인 서명에는 가스비가 없습니다.</p></>}
         </form>
       </section>
-      <section className="exchange-panel my-account-panel"><div className="panel-heading"><h2>내 투자</h2><button className="inline-button" onClick={onPortfolio}>전체 내역</button></div><div className="account-holding"><span>배정 확정 수량</span><b>{held===undefined?'로그인 필요':`${held.toLocaleString()}단위`}</b></div><button className="workspace-link" onClick={onEvidence}>가게 매출 자료 관리</button></section>
+      <section className="exchange-panel my-account-panel"><div className="panel-heading"><h2>내 투자</h2><button className="inline-button" onClick={onPortfolio}>전체 내역</button></div><div className="account-holding"><span>배정 확정 수량</span><b>{held===undefined?'로그인 필요':`${held.toLocaleString()}단위`}</b></div><button className="workspace-link" onClick={onEvidence}>가게 매출 자료 관리</button></section></>}
     </aside>
   </div>;
 }

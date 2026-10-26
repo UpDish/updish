@@ -16,6 +16,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/offerings/current/performance": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["offeringPerformance"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/workbench/dashboard": {
         parameters: {
             query?: never;
@@ -232,6 +248,22 @@ export interface paths {
             cookie?: never;
         };
         get: operations["settlement"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/workbench/settlements/{id}/statement": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ownSettlementStatement"];
         put?: never;
         post?: never;
         delete?: never;
@@ -468,6 +500,21 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        PerformancePoint: {
+            period: string;
+            version: number;
+            /** @description Integer KRW, decimal string; SIMULATION only */
+            netSalesWon: string;
+            /** @description Integer KRW, decimal string; SIMULATION only */
+            poolWon: string;
+        };
+        Performance: {
+            /** Format: uuid */
+            offeringId: string;
+            points: components["schemas"]["PerformancePoint"][];
+            /** @constant */
+            mode: "SIMULATION";
+        };
         Error: {
             code: string;
             message?: string;
@@ -605,6 +652,56 @@ export interface components {
             dataVersion: string;
             mode: string;
         };
+        PaymentAttempt: {
+            /** Format: uuid */
+            id: string;
+            /** @description Integer KRW, decimal string; SIMULATION only */
+            requested_won: string;
+            /** @description Integer KRW, decimal string; SIMULATION only */
+            paid_won: string;
+            outcome: string;
+            created_at: string;
+        };
+        Statement: {
+            /** Format: uuid */
+            id: string;
+            period: string;
+            version: number;
+            status: string;
+            latest: boolean;
+            /** @description Integer KRW, decimal string; SIMULATION only */
+            netSalesWon: string;
+            rateBps: number;
+            totalUnits: number;
+            ownUnits: number;
+            /** @description Integer KRW, decimal string; SIMULATION only */
+            poolWon: string;
+            /** @description Integer KRW, decimal string; SIMULATION only */
+            amountWon: string;
+            /** @description Integer KRW, decimal string; SIMULATION only */
+            priorPaidWon: string;
+            /** @description Integer KRW, decimal string; SIMULATION only */
+            paidWon: string;
+            /** @description Integer KRW, decimal string; SIMULATION only */
+            unpaidWon: string;
+            /** @description Integer KRW, decimal string; SIMULATION only */
+            overpaidWon: string;
+            /** @description Integer KRW, decimal string; SIMULATION only */
+            deltaWon: string;
+            /** @description Integer KRW, decimal string; SIMULATION only */
+            cashAvailableWon: string;
+            /** @description Integer KRW, decimal string; SIMULATION only */
+            cashShortfallWon: string;
+            dataVersion: string;
+            /** Format: uuid */
+            evidenceId: string;
+            evidenceStatus: string;
+            sourceHash: string;
+            algorithm: string;
+            payments: components["schemas"]["PaymentAttempt"][];
+            /** @constant */
+            mode: "SIMULATION";
+        };
         Contract: {
             units_address: string;
             registry_address: string;
@@ -683,6 +780,71 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Offering"];
+                };
+            };
+            /** @description Invalid input */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Session required */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Role, ownership, Origin or CSRF rejected */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description State conflict or Dojang required */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Dependency unavailable; never interpreted as success */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    offeringPerformance: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Performance"];
                 };
             };
             /** @description Invalid input */
@@ -1680,6 +1842,73 @@ export interface operations {
                     "application/json": {
                         [key: string]: unknown;
                     };
+                };
+            };
+            /** @description Invalid input */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Session required */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Role, ownership, Origin or CSRF rejected */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description State conflict or Dojang required */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Dependency unavailable; never interpreted as success */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    ownSettlementStatement: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Statement"];
                 };
             };
             /** @description Invalid input */

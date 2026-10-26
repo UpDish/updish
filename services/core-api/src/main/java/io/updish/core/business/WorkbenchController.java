@@ -21,6 +21,7 @@ public class WorkbenchController {
     public record Payment(@Min(1) long amountWon,@NotBlank String outcome,@NotNull UUID requestKey) {}
     public record Digest(boolean tamper) {}
     @GetMapping("/offerings/current") Object offering() {return service.offering();}
+    @GetMapping("/offerings/current/performance") Object performance() {return service.performance();}
     @GetMapping("/workbench/dashboard") Object dashboard(@AuthenticationPrincipal WalletPrincipal actor) {return service.dashboard(actor);}
     @PostMapping("/workbench/members") Object member(@AuthenticationPrincipal WalletPrincipal a,@Valid @RequestBody Member b) {return service.member(a,b.address(),b.role(),b.ownStore());}
     @PostMapping("/workbench/evidence") Object evidence(@AuthenticationPrincipal WalletPrincipal a,@Valid @RequestBody Evidence b) {return service.submitEvidence(a,b.offeringId(),b.period(),b.filename(),b.csv());}
@@ -33,6 +34,7 @@ public class WorkbenchController {
     @PostMapping("/workbench/offerings/{id}/underfunded") Object underfunded(@AuthenticationPrincipal WalletPrincipal a,@PathVariable UUID id) {service.underfunded(a,id);return Map.of("status","REFUNDED");}
     @PostMapping("/workbench/settlements") Object calculate(@AuthenticationPrincipal WalletPrincipal a,@Valid @RequestBody Calculation b) {return service.calculate(a,b.evidenceId(),b.reason());}
     @GetMapping("/workbench/settlements/{id}") Object settlement(@AuthenticationPrincipal WalletPrincipal a,@PathVariable UUID id) {return service.settlement(a,id);}
+    @GetMapping("/workbench/settlements/{id}/statement") Object statement(@AuthenticationPrincipal WalletPrincipal a,@PathVariable UUID id) {return service.statement(a,id);}
     @PostMapping("/workbench/settlements/{id}/approve") Object approve(@AuthenticationPrincipal WalletPrincipal a,@PathVariable UUID id,@Valid @RequestBody Reason b) {return service.approve(a,id,b.reason());}
     @PostMapping("/workbench/settlements/{id}/digest") Object digest(@AuthenticationPrincipal WalletPrincipal a,@PathVariable UUID id,@RequestBody Digest b) {return service.digestCheck(a,id,b.tamper());}
     @PostMapping("/workbench/lines/{id}/pay") Object pay(@AuthenticationPrincipal WalletPrincipal a,@PathVariable UUID id,@Valid @RequestBody Payment b) {return service.pay(a,id,b.amountWon(),b.outcome(),b.requestKey());}

@@ -13,6 +13,8 @@ export type Job=Omit<Schema['Job'],'calldata'|'tx_hash'> & {calldata:`0x${string
 export type Attachment=Schema['Attachment'];
 export type Dashboard=Omit<Schema['Dashboard'],'chain_jobs'|'all_jobs'> & {chain_jobs:Job[];all_jobs?:Job[]};
 export type Explanation=Schema['Explanation'];
+export type Statement=Schema['Statement'];
+export type Performance=Schema['Performance'];
 export function won(value:string|number|bigint) {try {return BigInt(value).toLocaleString('ko-KR')+'원';} catch {return '확인 필요';}}
 export function short(address:string) {return address.slice(0,6)+'…'+address.slice(-4);}
 export function due(line:Pick<Line,'amount_won'|'paid_won'|'prior_paid_won'>) {const n=BigInt(line.amount_won)-BigInt(line.paid_won)-BigInt(line.prior_paid_won);return n>0?n:0n;}

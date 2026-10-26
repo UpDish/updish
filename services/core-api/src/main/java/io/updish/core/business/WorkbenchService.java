@@ -42,6 +42,14 @@ public class WorkbenchService implements ApplicationRunner {
         o.put("risk","매출 감소·현금 부족·지급 실패 시 손실이 생길 수 있습니다. 실제 자금은 받지 않습니다.");
         o.put("bojagi",Map.of("status","NOT_CONNECTED"));return o;
     }
+    @Transactional(readOnly=true,isolation=org.springframework.transaction.annotation.Isolation.REPEATABLE_READ)
+    public Map<String,Object> performance() {
+        var id=db.queryForObject("SELECT id FROM offering WHERE run_id=(SELECT run_id FROM demo_state WHERE singleton=true) ORDER BY created_at DESC LIMIT 1",UUID.class);
+        // Only the latest approved revision is public. Draft revisions and personal lines stay private.
+        var points=rows("SELECT DISTINCT ON (period) period,version,net_sales AS net_sales_won,pool_won FROM settlement WHERE offering_id=? AND status='APPROVED' ORDER BY period,version DESC",id)
+                .stream().map(row->Map.of("period",row.get("period"),"version",row.get("version"),"netSalesWon",row.get("net_sales_won"),"poolWon",row.get("pool_won"))).toList();
+        return Map.of("offeringId",id.toString(),"points",points,"mode","SIMULATION");
+    }
     public Map<String,Object> dashboard(WalletPrincipal actor) {
         var o=offering();var id=uuid(o,"id");
         var result=new LinkedHashMap<String,Object>();result.put("offering",o);result.put("user",Map.of("address",actor.address(),"role",role(actor)));
@@ -117,7 +125,7 @@ public class WorkbenchService implements ApplicationRunner {
         audit(actor,"SUBSCRIBE",id,"모의 자금 확인, 보유 반영 전");return one("SELECT * FROM subscription WHERE id=?",id);
     }
     @Transactional public Map<String,Object> background(WalletPrincipal actor) {
-        requireOperator(actor);var o=offering();var id=uuid(o,"id");lockedOffering(id);
+        requireOperator(actor);var id=uuid(offering(),"id");var o=lockedOffering(id);
         if(!o.get("status").equals("OPEN")) throw BusinessFailure.conflict("모집 중에만 배경 시연 자료를 적재할 수 있습니다.");
         if(db.queryForObject("SELECT count(*) FROM subscription WHERE offering_id=? AND synthetic",Long.class,id)>0) return o;
         long used=db.queryForObject("SELECT coalesce(sum(units),0) FROM subscription WHERE offering_id=? AND status='ACCEPTED'",Long.class,id);
@@ -195,6 +203,22 @@ public class WorkbenchService implements ApplicationRunner {
         var lines=reviewer?rows("SELECT * FROM settlement_line WHERE settlement_id=? ORDER BY id",id):rows("SELECT * FROM settlement_line WHERE settlement_id=? AND address=?",id,actor.address());
         if(lines.isEmpty()&&!reviewer) throw BusinessFailure.forbidden();
         s.remove("salt");s.remove("snapshot");s.put("lines",lines);s.put("mode","SIMULATION");s.put("tax","미설정 · 세전 금액");return s;
+    }
+    @Transactional(isolation=org.springframework.transaction.annotation.Isolation.REPEATABLE_READ)
+    public Map<String,Object> statement(WalletPrincipal actor,UUID id) {
+        var s=settlement(actor,id);var own=rows("SELECT * FROM settlement_line WHERE settlement_id=? AND address=?",id,actor.address());
+        if(own.isEmpty()) throw BusinessFailure.forbidden();
+        var line=own.getFirst();var o=one("SELECT * FROM offering WHERE id=?",uuid(s,"offering_id"));var e=one("SELECT id,status,source_hash FROM evidence WHERE id=?",uuid(s,"evidence_id"));
+        long paid=number(line,"paid_won")+number(line,"prior_paid_won");var result=new LinkedHashMap<String,Object>();
+        result.put("id",id.toString());result.put("period",s.get("period"));result.put("version",s.get("version"));result.put("status",s.get("status"));
+        result.put("latest",number(s,"version")==db.queryForObject("SELECT max(version) FROM settlement WHERE offering_id=? AND period=?",Integer.class,uuid(s,"offering_id"),s.get("period")));
+        result.put("netSalesWon",s.get("net_sales"));result.put("rateBps",o.get("rate_bps"));result.put("totalUnits",o.get("target_units"));result.put("ownUnits",line.get("units"));
+        result.put("poolWon",s.get("pool_won"));result.put("amountWon",line.get("amount_won"));result.put("priorPaidWon",line.get("prior_paid_won"));result.put("paidWon",line.get("paid_won"));
+        result.put("unpaidWon",Long.toString(Math.max(0,number(line,"amount_won")-paid)));result.put("overpaidWon",Long.toString(Math.max(0,paid-number(line,"amount_won"))));result.put("deltaWon",line.get("delta_won"));
+        result.put("cashAvailableWon",s.get("cash_available"));result.put("cashShortfallWon",Long.toString(Math.max(0,number(s,"pool_won")-number(s,"cash_available"))));
+        result.put("dataVersion",s.get("digest"));result.put("evidenceId",e.get("id"));result.put("evidenceStatus",e.get("status"));result.put("sourceHash",e.get("source_hash"));result.put("algorithm",s.get("algorithm"));
+        result.put("payments",rows("SELECT id,requested_won,paid_won,outcome,created_at FROM payment_attempt WHERE line_id=? ORDER BY created_at,id",uuid(line,"id")));
+        result.put("mode","SIMULATION");return result;
     }
     @Transactional public Map<String,Object> pay(WalletPrincipal actor,UUID lineId,long requested,String outcome,UUID requestKey) {
         requireOperator(actor);if(requested<=0||requestKey==null||!Set.of("SUCCESS","PARTIAL","FAIL").contains(outcome)) throw BusinessFailure.invalid("지급 금액·결과·요청 키를 확인해 주세요.");

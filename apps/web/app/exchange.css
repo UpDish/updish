@@ -1,4 +1,33 @@
 /* Upbit research: compact navigation, flat panels, adjacent information and action. */
+:root { --onboard-modal-z-index:1000; }
+.demo-view-switcher { position:relative; font-size:12px; color:white; }
+.demo-view-switcher summary { cursor:pointer; padding:8px; list-style:none; border:1px solid #6b88bc; border-radius:2px; min-height:36px; display:flex; align-items:center; gap:8px; }
+.demo-view-switcher summary:focus-visible { outline:2px solid white; outline-offset:2px; }
+.demo-view-options { position:absolute; top:calc(100% + 6px); right:0; width:208px; padding:10px; background:white; color:#252a31; border:1px solid #dfe3e8; box-shadow:0 4px 12px #0002; z-index:50; }
+.demo-view-options small { display:block; color:#667080; padding:4px 8px; }
+.demo-view-options button { display:block; width:100%; background:white; color:#252a31; padding:10px; text-align:left; min-height:42px; border:0; }
+.demo-view-options button[aria-pressed=true] { background:#edf3fb; color:#1763b6; font-weight:700; }
+.demo-view-options p { color:#667080; font-size:11px; padding:6px 8px; margin:0; }
+.demo-view-notice { background:#f4f7fc; border:1px solid #d9e3f3; padding:10px 14px; margin-bottom:10px; display:flex; flex-wrap:wrap; align-items:center; gap:8px 14px; font-size:12px; }
+.demo-view-notice span { color:#667080; flex:1; }
+.demo-view-notice button { background:transparent; color:#1763b6; padding:4px; }
+.customer-guide { padding:18px; line-height:1.8; }
+@media(max-width:600px) { .demo-view-switcher summary { min-height:40px; padding:6px; font-size:11px; } .demo-view-notice span { flex-basis:100%; } .customer-guide { grid-row:3; } }
+.performance-plot { width:100%; height:268px; min-width:0; margin:8px 0; }
+.chart-loading,.chart-empty { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:268px; text-align:center; gap:10px; color:#667080; }
+.chart-empty p { margin:0; line-height:1.7; max-width:380px; }
+.chart-empty strong { font-size:15px; color:#252a31; }
+.chart-metrics { display:flex; gap:4px; align-items:center; margin:8px 0; flex-wrap:wrap; }
+.chart-metrics button { background:#fff; color:#667080; border:1px solid #dfe3e8; padding:7px 12px; font-size:12px; min-height:36px; }
+.chart-metrics button[aria-pressed=true] { color:#1763b6; border-color:#1763b6; font-weight:700; }
+.chart-metrics .chart-refresh { margin-left:auto; border-color:transparent; }
+.performance-tooltip { padding:10px 12px; background:white; border:1px solid #dfe3e8; font-size:12px; color:#252a31; display:grid; gap:6px; }
+.performance-table { margin:0; font-size:12px; }
+.performance-table caption { text-align:left; padding:6px 0; font-size:11px; color:#667080; }
+.performance-table th,.performance-table td { padding:8px 10px; }
+.performance-table td:last-child { text-align:right; font-variant-numeric:tabular-nums; }
+.chart-footnote { margin:12px 0 0; font-size:11px; line-height:1.7; color:#667080; }
+@media (max-width:600px) { .performance-plot { height:230px; } .chart-metrics button { min-height:44px; padding:7px 9px; } }
 :root { --blue:#1763b6; --dark-blue:#093687; --ink:#252a31; --muted:#667080; --border:#dfe3e8; --red:#c84a31; --background:#e9ecf1; }
 body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Malgun Gothic",sans-serif; font-size:13px; }
 button { border-radius:2px; box-shadow:none; }
@@ -123,6 +152,14 @@ footer { padding:14px 0 0; margin-top:16px; font-size:10px; color:#687483; }
 .risk-list li:first-child { padding-top:0; }
 .risk-list p { font-size:11px; margin:3px 0 0; }
 #subscription-title { scroll-margin-top:74px; }
+.statement-formula { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); background:#f6f8fb; border:1px solid var(--border); }
+.statement-panel { scroll-margin-top:74px; }
+.statement-formula>span { padding:14px; color:var(--muted); font-size:11px; }
+.statement-formula b { display:block; color:var(--ink); font-size:15px; margin-top:5px; font-variant-numeric:tabular-nums; }
+.statement-panel h3 { margin-top:18px; }
+.statement-sources { margin-top:18px; font-size:12px; }
+.statement-sources summary { cursor:pointer; color:var(--blue); }
+.statement-panel table { min-width:0; }
 @media (max-width:1150px) {
   .header-left { gap:28px; } .main-nav { gap:22px; }
   .exchange-layout { grid-template-columns:minmax(0,1fr) 320px; }
@@ -200,6 +237,9 @@ footer { padding:14px 0 0; margin-top:16px; font-size:10px; color:#687483; }
   .order-heading { margin:0 -14px; }
   .subscription-card .full { padding:13px 10px; font-size:13px; }
   .check-row { font-size:11px; }
+  .statement-formula { grid-template-columns:1fr; }
+  .statement-formula>span { display:flex; justify-content:space-between; align-items:center; gap:10px; padding:10px 12px; }
+  .statement-formula b { font-size:13px; margin:0; }
   .card { border-radius:0; padding:18px; margin-bottom:8px; }
   .section-row { margin-bottom:12px; }
   .grid { gap:8px; }

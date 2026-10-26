@@ -34,6 +34,19 @@ class WorkbenchTests {
     Map<String,Object> settlement(String fixture,String period) throws Exception {
         var e=work.submitEvidence(operator,offering,period,fixture+".csv",CsvReconciliationTests.fixture(fixture));work.closeEvidence(reviewer,uuid(e,"id"),"검토 완료");var s=work.calculate(reviewer,uuid(e,"id"),"근거 산정");return work.approve(operator,uuid(s,"id"),"산정자와 별도 승인");
     }
+    @Test void publicPerformanceUsesLatestApprovedVersionWithoutPersonalDataAndKeepsRunsSeparate() throws Exception {
+        assertEquals(List.of(),work.performance().get("points"));
+        funded();settlement("normal","2026-10");
+        var e=work.submitEvidence(operator,offering,"2026-10","correction.csv",CsvReconciliationTests.fixture("correction"));
+        work.closeEvidence(reviewer,uuid(e,"id"),"정정 검토");var draft=work.calculate(reviewer,uuid(e,"id"),"정정 산정");
+        assertEquals(List.of(Map.of("period","2026-10","version",1,"netSalesWon","30000000","poolWon","900000")),work.performance().get("points"));
+        work.approve(operator,uuid(draft,"id"),"정정 승인");
+        assertEquals(Map.of("offeringId",offering.toString(),"mode","SIMULATION","points",List.of(Map.of("period","2026-10","version",2,"netSalesWon","29000000","poolWon","870000"))),work.performance());
+        settlement("cash-shortage","2026-11");
+        @SuppressWarnings("unchecked") var points=(List<Map<String,Object>>)work.performance().get("points");
+        assertEquals(List.of("2026-10","2026-11"),points.stream().map(p->p.get("period")).toList());
+        work.reset(operator);assertEquals(List.of(),work.performance().get("points"));
+    }
     @Test void fullFlowSeparatesSubscriptionHoldingChainAndPayment() throws Exception {
         funded();var s=settlement("normal","2026-10");
         var mine=work.settlement(investor,uuid(s,"id"));@SuppressWarnings("unchecked") var lines=(List<Map<String,Object>>)mine.get("lines");var line=lines.getFirst();assertEquals("25000",line.get("amount_won"));assertEquals("900000",s.get("pool_won"));
@@ -47,6 +60,18 @@ class WorkbenchTests {
         var e=work.submitEvidence(operator,offering,"2026-10","normal.csv",CsvReconciliationTests.fixture("normal"));
         assertThrows(BusinessFailure.class,()->work.closeEvidence(operator,uuid(e,"id"),"self"));assertThrows(BusinessFailure.class,()->work.evidence(investor,uuid(e,"id")));
         assertThrows(BusinessFailure.class,()->work.member(investor,other.address(),"REVIEWER",false));
+    }
+    @Test void ownStatementWorksWithoutModelAndKeepsPaymentAndCorrectionEvidence() throws Exception {
+        funded();var s=settlement("normal","2026-10");var id=uuid(s,"id");
+        var line=work.one("SELECT * FROM settlement_line WHERE settlement_id=? AND address=?",id,investor.address());
+        var first=work.statement(investor,id);assertEquals("30000000",first.get("netSalesWon"));assertEquals("900000",first.get("poolWon"));assertEquals("25000",first.get("unpaidWon"));
+        assertThrows(BusinessFailure.class,()->work.statement(other,id));assertThrows(BusinessFailure.class,()->work.statement(operator,id));
+        work.pay(operator,uuid(line,"id"),25000,"FAIL",UUID.randomUUID());assertEquals("25000",work.statement(investor,id).get("unpaidWon"));
+        work.pay(operator,uuid(line,"id"),25000,"PARTIAL",UUID.randomUUID());assertEquals("12500",work.statement(investor,id).get("unpaidWon"));
+        work.pay(operator,uuid(line,"id"),12500,"SUCCESS",UUID.randomUUID());var paid=work.statement(investor,id);assertEquals("0",paid.get("unpaidWon"));assertEquals(3,((List<?>)paid.get("payments")).size());
+        var correction=settlement("correction","2026-10");var revised=work.statement(investor,uuid(correction,"id"));
+        assertEquals("25000",revised.get("priorPaidWon"));assertEquals("833",revised.get("overpaidWon"));assertEquals("0",revised.get("unpaidWon"));assertEquals(false,work.statement(investor,id).get("latest"));
+        assertEquals(s.get("digest"),first.get("dataVersion"));assertEquals("CLOSED",first.get("evidenceStatus"));
     }
     @Test void unverifiedAndRpcFailuresCannotSubscribe() {
         when(giwa.verify(investor.address())).thenReturn(new GiwaService.Verification(investor.address(),"NOT_VERIFIED",false,"TESTNET FAUCET",DojangCodec.FAUCET,null,"123","2026-10-25T00:00:00Z","SIMULATION","test","safe"));

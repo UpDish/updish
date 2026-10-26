@@ -1,0 +1,7 @@
+{
+  "tests": 38,
+  "failures": 0,
+  "errors": 0,
+  "scope": "PostgreSQL-backed Spring tests; Dojang mocked where declared",
+  "latestSuiteAt": "2026-10-26T04:30:18.499Z"
+}

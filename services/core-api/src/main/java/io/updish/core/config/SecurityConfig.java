@@ -59,7 +59,7 @@ public class SecurityConfig {
                 }));
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.GET, "/actuator/health", "/api/v1/chain/status", "/api/v1/dojang/*",
-                        "/api/v1/integrations", "/api/v1/auth/csrf", "/api/v1/auth/session", "/api/v1/offerings/current").permitAll()
+                        "/api/v1/integrations", "/api/v1/auth/csrf", "/api/v1/auth/session", "/api/v1/offerings/current", "/api/v1/offerings/current/performance").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/auth/challenge", "/api/v1/auth/verify").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/me/dojang").authenticated()
                 .requestMatchers("/api/v1/workbench/**").authenticated()

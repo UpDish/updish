@@ -12,7 +12,7 @@ async function request(path: string, init: RequestInit = {}) {
   const headers = new Headers(init.headers);
   if (cookie) headers.set('Cookie', cookie);
   const url=directCore ? directCore+path.replace(/^\/api\//,'/api/v1/') : origin+path;
-  const response = await fetch(url, { ...init, headers });
+  const response = await fetch(url, { ...init, headers, signal: AbortSignal.timeout(45_000) });
   for (const value of response.headers.getSetCookie()) {
     if (value.startsWith('UPDISH_SESSION=')) cookie = value.split(';')[0];
   }

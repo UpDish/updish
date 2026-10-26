@@ -10,9 +10,14 @@
   },
   "dependencies": {
     "@tanstack/react-query": "5.104.5",
+    "@web3-onboard/core": "2.24.1",
+    "@web3-onboard/injected-wallets": "2.11.3",
+    "@web3-onboard/walletconnect": "2.6.3",
     "next": "16.4.3",
     "react": "19.3.1",
     "react-dom": "19.3.1",
+    "react-is": "19.3.1",
+    "recharts": "3.10.1",
     "viem": "2.57.11",
     "wagmi": "3.7.9"
   },

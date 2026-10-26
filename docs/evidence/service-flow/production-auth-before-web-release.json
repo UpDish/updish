@@ -1,0 +1,27 @@
+{
+  "checkedAt": "2026-10-26T04:41:06.935Z",
+  "scope": "Deployed Vercel BFF -> EC2 Core -> PostgreSQL -> live GIWA; ephemeral unfunded EOA. No user-wallet transaction.",
+  "origin": "https://updish-hackathon-20261025-betaplayers-projects.vercel.app",
+  "checks": [
+    "protected Dojang requires session",
+    "CSRF required",
+    "BFF rejects foreign Origin",
+    "EIP-4361 canonical domain, URI, chain, address",
+    "wrong signer rejected",
+    "viem signature accepted by Java; session ID rotated; HttpOnly SameSite cookie; server role",
+    "login persists across HTTP requests",
+    "nonce replay rejected",
+    "authenticated wallet -> Spring -> live GIWA safe block -> Dojang negative result",
+    "authenticated dashboard returns own wallet scope without operator statements",
+    "public offering is backed by live Core business data",
+    "logout invalidates session"
+  ],
+  "dojang": {
+    "address": "0xe5f493c7f7c0732d95320ebb444ad3c9fd80b692",
+    "verified": false,
+    "blockNumber": "39644334",
+    "blockTag": "safe"
+  },
+  "userWalletIssueRevoke": "PENDING_USER_SIGNATURE",
+  "transactionsSent": 0
+}

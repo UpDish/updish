@@ -6,6 +6,7 @@ import { useConfig, useConnect, useConnection, useConnectors, useDisconnect, use
 import { getConnection } from 'wagmi/actions';
 import { api, authPost, type Session } from '../lib/auth';
 import { DojangPanel } from './dojang-panel';
+import {qrWalletEnabled,selectWallet} from '../lib/wallet-modal';
 
 function message(error: unknown) {
   if (error instanceof Error && /provider not found/i.test(error.message)) return '브라우저 지갑을 찾지 못했습니다. 지갑이 설치된 Chrome·Edge에서 이 주소를 열어 주세요.';
@@ -24,6 +25,13 @@ export function WalletPanel() {
   const cache = useQueryClient();
   const [mounted, setMounted] = useState(false);
   const [notice, setNotice] = useState('');
+  const [selecting,setSelecting]=useState(false);
+  async function chooseWallet(connector:typeof connectors[number]) {
+    setNotice('');setSelecting(true);
+    try {await selectWallet();await connect.mutateAsync({connector});}
+    catch(error){setNotice(message(error));}
+    finally{setSelecting(false);}
+  }
   const session = useQuery({ queryKey: ['session'], queryFn: () => api<Session>('/api/auth/session'), retry: false });
   const serverAddress = session.data?.authenticated ? session.data.user.address : undefined;
   const sameWallet = wallet.address?.toLowerCase() === serverAddress?.toLowerCase();
@@ -72,15 +80,16 @@ export function WalletPanel() {
   }
 
   return <div className="grid wallet-grid">
-    <section className="card" aria-busy={login.isPending || connect.isPending}>
+    <section className="card" aria-busy={login.isPending || connect.isPending || selecting}>
       <span className="step">01 / WALLET</span><h2>지갑으로 로그인</h2>
       <p>서명 한 번으로 로그인합니다. 로그인 서명은 가스비가 없고, 자금 이동을 승인하지 않습니다.</p>
       {!mounted || wallet.status === 'reconnecting' ? <p>지갑 연결 확인 중…</p> : wallet.status !== 'connected' ? <>
         <div className="actions">{connectors.map(connector => <button key={connector.uid}
-          disabled={connect.isPending} onClick={() => { setNotice(''); connect.mutate({ connector }); }}>
-          {connect.isPending ? '지갑 확인 중…' : `${connector.name === 'Injected' ? '브라우저 지갑' : connector.name} 연결`}
+          disabled={connect.isPending||selecting} onClick={() => void chooseWallet(connector)}>
+          {connect.isPending||selecting ? '지갑 확인 중…' : '지갑 선택하고 연결'}
         </button>)}</div>
         <p className="hint">지갑이 없다면 <a href="https://metamask.io/download/" target="_blank" rel="noreferrer">MetaMask 설치 ↗</a> 후 테스트용 계정을 준비해 주세요. 확장 지갑을 쓸 수 있는 Chrome·Edge에서 이 주소를 열어 주세요.</p>
+        {!qrWalletEnabled?<p className="hint">현재는 설치된 브라우저 지갑을 지원합니다. 모바일 QR 연결은 준비 중입니다.</p>:null}
       </> : <>
         <p className="mono wallet-address">{wallet.address}</p>
         <p className="hint">{wallet.chainId === 91342 ? 'GIWA Sepolia · Chain 91342' : `현재 Chain ${wallet.chainId} · GIWA Sepolia 전환 필요`}</p>

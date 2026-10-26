@@ -8,6 +8,8 @@ const ref=name=>({$ref:`#/components/schemas/${name}`});
 const array=name=>({type:'array',items:typeof name==='string'?ref(name):name});
 const object=(properties,optional=[])=>({type:'object',properties,required:Object.keys(properties).filter(k=>!optional.includes(k))});
 const schemas={
+  PerformancePoint:object({period:str,version:integer,netSalesWon:money,poolWon:money}),
+  Performance:object({offeringId:uuid,points:array('PerformancePoint'),mode:{const:'SIMULATION',type:'string'}}),
   Error:object({code:str,message:str},['message']),
   Offering:object({id:uuid,run_id:uuid,store_name:str,title:str,owner_address:address,contract_version:integer,target_units:integer,unit_price:money,rate_bps:integer,months:integer,starts_on:{type:'string',format:'date'},status:str,token_id:money,accepted_units:integer,risk:str,principal_redemption:str,mode:{const:'SIMULATION',type:'string'}}),
   Subscription:object({id:uuid,address,units:integer,refunded_units:integer,status:str,synthetic:bool}),
@@ -20,6 +22,8 @@ const schemas={
   Job:object({id:uuid,kind:str,status:str,reference_id:uuid,target:nullable,calldata:nullable,tx_hash:nullable,block_number:{type:['integer','null']},error_code:nullable}),
   Attachment:object({id:uuid,filename:str,size_bytes:integer,status:str}),
   Explanation:object({explanation:str,sourceIds:array(str),uncertainties:array(str),dataVersion:str,mode:str}),
+  PaymentAttempt:object({id:uuid,requested_won:money,paid_won:money,outcome:str,created_at:str}),
+  Statement:object({id:uuid,period:str,version:integer,status:str,latest:bool,netSalesWon:money,rateBps:integer,totalUnits:integer,ownUnits:integer,poolWon:money,amountWon:money,priorPaidWon:money,paidWon:money,unpaidWon:money,overpaidWon:money,deltaWon:money,cashAvailableWon:money,cashShortfallWon:money,dataVersion:str,evidenceId:uuid,evidenceStatus:str,sourceHash:str,algorithm:str,payments:array('PaymentAttempt'),mode:{const:'SIMULATION',type:'string'}}),
   Contract:object({units_address:address,registry_address:address,operator_address:address}),
   User:object({address,role:str}),
   MySettlement:{allOf:[ref('Settlement'),ref('Line'),object({line_id:uuid})]},
@@ -41,6 +45,7 @@ function route(path,method,name,response={type:'object',additionalProperties:tru
   (paths[path]??={})[method]=operation;
 }
 route('/api/v1/offerings/current','get','currentOffering','Offering',undefined,true);
+route('/api/v1/offerings/current/performance','get','offeringPerformance','Performance',undefined,true);
 const p='/api/v1/workbench';
 route(p+'/dashboard','get','dashboard','Dashboard');
 route(p+'/members','post','assignRole',undefined,object({address,role:{type:'string',enum:['INVESTOR','MERCHANT','REVIEWER']},ownStore:bool}));
@@ -54,6 +59,7 @@ for(const action of ['allocate','underfunded','mature']) route(p+'/offerings/{id
 route(p+'/reset','post','newDemoRun','Offering');
 route(p+'/settlements','post','calculateSettlement',undefined,object({evidenceId:uuid,reason:str}));
 route(p+'/settlements/{id}','get','settlement');
+route(p+'/settlements/{id}/statement','get','ownSettlementStatement','Statement');
 route(p+'/settlements/{id}/approve','post','approveSettlement',undefined,'Reason');
 route(p+'/settlements/{id}/digest','post','checkDigest',undefined,object({tamper:bool}));
 route(p+'/lines/{id}/pay','post','simulatePayment',undefined,object({amountWon:{type:'integer',minimum:1},outcome:{type:'string',enum:['SUCCESS','PARTIAL','FAIL']},requestKey:uuid}));

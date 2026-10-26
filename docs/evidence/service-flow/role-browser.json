@@ -1,0 +1,10 @@
+{
+  "checkedAt": "2026-10-26T04:09:32.816Z",
+  "origin": "http://127.0.0.1:3001",
+  "checks": 14,
+  "result": "PASS",
+  "scope": "LOCAL_ANVIL_ONLY, dedicated PostgreSQL, browser SIWE, investor/operator/reviewer, correction submission/review/approval, own statement, wallet-change privacy",
+  "modelScope": "One mocked model response used only for cross-wallet UI isolation. Not a live Agent integration. All other business requests used real BFF/Core/DB.",
+  "browserRuntimeErrors": [],
+  "userWalletTransactions": 0
+}

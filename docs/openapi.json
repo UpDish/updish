@@ -75,6 +75,75 @@
         }
       }
     },
+    "/api/v1/offerings/current/performance": {
+      "get": {
+        "operationId": "offeringPerformance",
+        "security": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Performance"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Role, ownership, Origin or CSRF rejected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "State conflict or Dojang required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Dependency unavailable; never interpreted as success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/workbench/dashboard": {
       "get": {
         "operationId": "dashboard",
@@ -1327,6 +1396,89 @@
                 "schema": {
                   "type": "object",
                   "additionalProperties": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Role, ownership, Origin or CSRF rejected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "State conflict or Dojang required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Dependency unavailable; never interpreted as success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/workbench/settlements/{id}/statement": {
+      "get": {
+        "operationId": "ownSettlementStatement",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Statement"
                 }
               }
             }
@@ -2755,6 +2907,57 @@
       }
     },
     "schemas": {
+      "PerformancePoint": {
+        "type": "object",
+        "properties": {
+          "period": {
+            "type": "string"
+          },
+          "version": {
+            "type": "integer"
+          },
+          "netSalesWon": {
+            "type": "string",
+            "pattern": "^-?[0-9]+$",
+            "description": "Integer KRW, decimal string; SIMULATION only"
+          },
+          "poolWon": {
+            "type": "string",
+            "pattern": "^-?[0-9]+$",
+            "description": "Integer KRW, decimal string; SIMULATION only"
+          }
+        },
+        "required": [
+          "period",
+          "version",
+          "netSalesWon",
+          "poolWon"
+        ]
+      },
+      "Performance": {
+        "type": "object",
+        "properties": {
+          "offeringId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "points": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PerformancePoint"
+            }
+          },
+          "mode": {
+            "const": "SIMULATION",
+            "type": "string"
+          }
+        },
+        "required": [
+          "offeringId",
+          "points",
+          "mode"
+        ]
+      },
       "Error": {
         "type": "object",
         "properties": {
@@ -3256,6 +3459,171 @@
           "sourceIds",
           "uncertainties",
           "dataVersion",
+          "mode"
+        ]
+      },
+      "PaymentAttempt": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "requested_won": {
+            "type": "string",
+            "pattern": "^-?[0-9]+$",
+            "description": "Integer KRW, decimal string; SIMULATION only"
+          },
+          "paid_won": {
+            "type": "string",
+            "pattern": "^-?[0-9]+$",
+            "description": "Integer KRW, decimal string; SIMULATION only"
+          },
+          "outcome": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "requested_won",
+          "paid_won",
+          "outcome",
+          "created_at"
+        ]
+      },
+      "Statement": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "period": {
+            "type": "string"
+          },
+          "version": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string"
+          },
+          "latest": {
+            "type": "boolean"
+          },
+          "netSalesWon": {
+            "type": "string",
+            "pattern": "^-?[0-9]+$",
+            "description": "Integer KRW, decimal string; SIMULATION only"
+          },
+          "rateBps": {
+            "type": "integer"
+          },
+          "totalUnits": {
+            "type": "integer"
+          },
+          "ownUnits": {
+            "type": "integer"
+          },
+          "poolWon": {
+            "type": "string",
+            "pattern": "^-?[0-9]+$",
+            "description": "Integer KRW, decimal string; SIMULATION only"
+          },
+          "amountWon": {
+            "type": "string",
+            "pattern": "^-?[0-9]+$",
+            "description": "Integer KRW, decimal string; SIMULATION only"
+          },
+          "priorPaidWon": {
+            "type": "string",
+            "pattern": "^-?[0-9]+$",
+            "description": "Integer KRW, decimal string; SIMULATION only"
+          },
+          "paidWon": {
+            "type": "string",
+            "pattern": "^-?[0-9]+$",
+            "description": "Integer KRW, decimal string; SIMULATION only"
+          },
+          "unpaidWon": {
+            "type": "string",
+            "pattern": "^-?[0-9]+$",
+            "description": "Integer KRW, decimal string; SIMULATION only"
+          },
+          "overpaidWon": {
+            "type": "string",
+            "pattern": "^-?[0-9]+$",
+            "description": "Integer KRW, decimal string; SIMULATION only"
+          },
+          "deltaWon": {
+            "type": "string",
+            "pattern": "^-?[0-9]+$",
+            "description": "Integer KRW, decimal string; SIMULATION only"
+          },
+          "cashAvailableWon": {
+            "type": "string",
+            "pattern": "^-?[0-9]+$",
+            "description": "Integer KRW, decimal string; SIMULATION only"
+          },
+          "cashShortfallWon": {
+            "type": "string",
+            "pattern": "^-?[0-9]+$",
+            "description": "Integer KRW, decimal string; SIMULATION only"
+          },
+          "dataVersion": {
+            "type": "string"
+          },
+          "evidenceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "evidenceStatus": {
+            "type": "string"
+          },
+          "sourceHash": {
+            "type": "string"
+          },
+          "algorithm": {
+            "type": "string"
+          },
+          "payments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PaymentAttempt"
+            }
+          },
+          "mode": {
+            "const": "SIMULATION",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "period",
+          "version",
+          "status",
+          "latest",
+          "netSalesWon",
+          "rateBps",
+          "totalUnits",
+          "ownUnits",
+          "poolWon",
+          "amountWon",
+          "priorPaidWon",
+          "paidWon",
+          "unpaidWon",
+          "overpaidWon",
+          "deltaWon",
+          "cashAvailableWon",
+          "cashShortfallWon",
+          "dataVersion",
+          "evidenceId",
+          "evidenceStatus",
+          "sourceHash",
+          "algorithm",
+          "payments",
           "mode"
         ]
       },
