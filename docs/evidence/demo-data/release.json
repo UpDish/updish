@@ -1,0 +1,19 @@
+{
+  "checkedAt": "2026-10-26T05:01:50.813365Z",
+  "appCommit": "84d07252088d4533aab112364857caa4a438c88f",
+  "deploymentId": "dpl_5TRVv5unotPzXnt1vE777QnvcevG",
+  "readyState": "READY",
+  "origin": "https://updish-hackathon-20261025-betaplayers-projects.vercel.app",
+  "csvFiles": 9,
+  "chartReferenceMonths": 6,
+  "mode": "SIMULATION",
+  "publicBrowserChecks": 13,
+  "localSignedBrowserChecks": 40,
+  "targetedJavaChecks": 6,
+  "businessE2eChecks": 12,
+  "backendDeploymentChanged": false,
+  "cloudDatabaseSeeded": false,
+  "sampleApprovalsCreated": false,
+  "userWalletTransactionsSent": 0,
+  "sourceCatalog": "fixtures/catalog.json"
+}

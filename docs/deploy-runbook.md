@@ -40,7 +40,7 @@ Backup은 /opt/updish/backups의 접근 제한된 pg_dump custom 파일을 만�
 
 2026-10-26 업비트 조사 기반 UI·공통 지갑 팝업·승인 매출 차트·정산 근거·운영자 관점 전환을 production에 배포했습니다. [QA](../design-qa.md)는 passed이며 동일 크기 비교와 실제 모바일 화면을 확인했습니다.
 
-현재 배포 ID는 `dpl_Gcvt4eFXZqx2QFgQirHQUxUR88M7`, 앱 소스 커밋은 `92fb4c994a165200fa17e58d913b66a356db27f1`, 상태는 READY입니다. [공개 로그인 검사](evidence/service-flow/production-auth-smoke.json) 12개, [공개 브라우저 검사](evidence/service-flow/production-guest-browser.json) 17개, [배포 API/팝업/사용자 Dojang 검사](evidence/service-flow/production-release-browser.json) 6개를 통과했습니다. 개인 승인 자료와 체인 계약 전체 시연은 별도 로컬 DB/Anvil에서 확인했으며 사용자 거래를 대신 승인하지 않았습니다.
+현재 배포 ID는 `dpl_5TRVv5unotPzXnt1vE777QnvcevG`, 앱 소스 커밋은 `84d07252088d4533aab112364857caa4a438c88f`, 상태는 READY입니다. 샘플 CSV 9개와 6개월 참고 차트를 추가했고 [공개 샘플 검사](evidence/demo-data/production-browser.json) 13개를 통과했습니다. Web만 재배포했으며 EC2/Core/DB는 변경하지 않았습니다. 이전 `dpl_Gcvt4eFXZqx2QFgQirHQUxUR88M7`에서의 다음 로그인/API 검사도 별도 보존합니다. [공개 로그인 검사](evidence/service-flow/production-auth-smoke.json) 12개, [공개 브라우저 검사](evidence/service-flow/production-guest-browser.json) 17개, [배포 API/팝업/사용자 Dojang 검사](evidence/service-flow/production-release-browser.json) 6개를 통과했습니다. 개인 승인 자료와 체인 계약 전체 시연은 별도 로컬 DB/Anvil에서 확인했으며 사용자 거래를 대신 승인하지 않았습니다.
 
 같은 EC2에서 Core 이미지만 교체했습니다. SSM `692ac889-b285-4bc5-a2d4-fc6a118cb06f`는 Success, health UP, 공개 performance API 응답을 확인했습니다. private S3 아카이브 SHA-256은 `3658ac623e23068eab4dd01ea8c2b593ca7c9526b065714f16f3e900ceaf9fa5`입니다. 기존 DB/설정/자원은 보존했고 Flyway 변경은 없습니다. 교체 전 이미지는 `updish/core-api:before-chart-20261026`로 남겨 두었습니다. 일시적인 Docker Hub DNS 실패 때 이미 검증된 로컬 ARM64 이미지의 동일 JRE 기반에 새 JAR만 복사해 이미지를 만들었습니다. [릴리스 기록](evidence/service-flow/release.json).
 

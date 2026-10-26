@@ -1,0 +1,21 @@
+{
+  "checkedAt": "2026-10-26T05:01:03.256Z",
+  "origin": "https://updish-hackathon-20261025-betaplayers-projects.vercel.app",
+  "scope": "Static synthetic CSV downloads + real public performance API. One deliberately stubbed 503 for outage handling only. No ledger writes or user-wallet transactions.",
+  "checks": [
+    "Empty approved ledger defaults to clearly labelled sample view",
+    "Sample chart contains six months, not six invented approvals",
+    "First month sample net 22m",
+    "Nine downloadable CSV scenarios",
+    "All nine browser downloads match canonical CSV SHA-256",
+    "3% illustrative pool from 660k to 900k",
+    "Sample view never fills or mislabels the approved ledger",
+    "Normal/missing-bank/cash-shortage/correction downloads exposed publicly",
+    "768px sample view no page overflow",
+    "390px sample view no page overflow",
+    "Core outage is not silently disguised as a successful sample ledger",
+    "Explicit sample selection remains available during an API outage",
+    "No page runtime errors"
+  ],
+  "errors": []
+}
