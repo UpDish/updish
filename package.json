@@ -8,6 +8,9 @@
     "node": ">=24 <25"
   },
   "scripts": {
+    "generate:ux-demo": "node scripts/ux-demo-data.mjs",
+    "check:ux-demo": "node scripts/ux-demo-data.mjs --check",
+    "smoke:ux-demo": "tsx scripts/smoke-ux-demo.ts",
     "generate:demo": "node scripts/demo-fixtures.mjs",
     "check:demo": "node scripts/demo-fixtures.mjs --check",
     "generate:api": "node scripts/api-contract.mjs",

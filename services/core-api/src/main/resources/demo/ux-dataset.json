@@ -1,0 +1,2056 @@
+{
+  "datasetId": "updish-ux-v1",
+  "version": 1,
+  "asOf": "2026-10-26",
+  "mode": "SIMULATION",
+  "source": "SYNTHETIC_UX_FIXTURE",
+  "disclaimer": "UX 시연용 가상 자료. 실제 계정·가게·권한·Dojang·온체인 보유·정산 승인·지급·쿠폰이 아닙니다.",
+  "personas": [
+    {
+      "id": "investor-new",
+      "name": "처음 방문한 투자자",
+      "roles": [
+        "INVESTOR",
+        "CUSTOMER"
+      ],
+      "participation": "NOT_VERIFIED_SAMPLE",
+      "selectable": true,
+      "synthetic": true
+    },
+    {
+      "id": "investor-active",
+      "name": "여러 가게에 투자한 고객",
+      "roles": [
+        "INVESTOR",
+        "CUSTOMER"
+      ],
+      "participation": "ELIGIBLE_SAMPLE",
+      "selectable": true,
+      "synthetic": true
+    },
+    {
+      "id": "merchant-seongsu",
+      "name": "성수 가게 관리자",
+      "roles": [
+        "MERCHANT",
+        "INVESTOR",
+        "CUSTOMER"
+      ],
+      "participation": "ELIGIBLE_SAMPLE",
+      "selectable": true,
+      "synthetic": true
+    },
+    {
+      "id": "merchant-group",
+      "name": "여러 가게의 관리자",
+      "roles": [
+        "MERCHANT",
+        "CUSTOMER"
+      ],
+      "participation": "NOT_VERIFIED_SAMPLE",
+      "selectable": true,
+      "synthetic": true
+    },
+    {
+      "id": "customer-only",
+      "name": "혜택을 이용하는 고객",
+      "roles": [
+        "CUSTOMER"
+      ],
+      "participation": "NOT_VERIFIED_SAMPLE",
+      "selectable": true,
+      "synthetic": true
+    },
+    {
+      "id": "reviewer",
+      "name": "증빙 검토 담당자",
+      "roles": [
+        "REVIEWER"
+      ],
+      "participation": "NOT_APPLICABLE_SAMPLE",
+      "selectable": true,
+      "synthetic": true
+    },
+    {
+      "id": "operator",
+      "name": "시연 운영자",
+      "roles": [
+        "OPERATOR"
+      ],
+      "participation": "NOT_APPLICABLE_SAMPLE",
+      "selectable": true,
+      "synthetic": true
+    },
+    {
+      "id": "background",
+      "name": "가상 배경 참여자",
+      "roles": [],
+      "participation": "NOT_APPLICABLE_SAMPLE",
+      "selectable": false,
+      "synthetic": true
+    }
+  ],
+  "stores": [
+    {
+      "id": "store-seongsu",
+      "name": "성수 모퉁이 식당",
+      "district": "성동구 성수동",
+      "category": "한식",
+      "ownerPersonaId": "merchant-seongsu",
+      "description": "한식 매장을 가정한 UX 시연용 가상 가게입니다. 실제 업체·주소·매출과 무관합니다.",
+      "synthetic": true
+    },
+    {
+      "id": "store-yeonnam",
+      "name": "연남 온기 파스타",
+      "district": "마포구 연남동",
+      "category": "양식",
+      "ownerPersonaId": "merchant-group",
+      "description": "양식 매장을 가정한 UX 시연용 가상 가게입니다. 실제 업체·주소·매출과 무관합니다.",
+      "synthetic": true
+    },
+    {
+      "id": "store-mangwon",
+      "name": "망원 작은 베이커리",
+      "district": "마포구 망원동",
+      "category": "베이커리",
+      "ownerPersonaId": "merchant-group",
+      "description": "베이커리 매장을 가정한 UX 시연용 가상 가게입니다. 실제 업체·주소·매출과 무관합니다.",
+      "synthetic": true
+    },
+    {
+      "id": "store-eulji",
+      "name": "을지로 잔술집",
+      "district": "중구 을지로",
+      "category": "주점",
+      "ownerPersonaId": "merchant-group",
+      "description": "주점 매장을 가정한 UX 시연용 가상 가게입니다. 실제 업체·주소·매출과 무관합니다.",
+      "synthetic": true
+    },
+    {
+      "id": "store-hapjeong",
+      "name": "합정 화로 식탁",
+      "district": "마포구 합정동",
+      "category": "한식",
+      "ownerPersonaId": "merchant-group",
+      "description": "한식 매장을 가정한 UX 시연용 가상 가게입니다. 실제 업체·주소·매출과 무관합니다.",
+      "synthetic": true
+    },
+    {
+      "id": "store-seochon",
+      "name": "서촌 낮은 찻집",
+      "district": "종로구 서촌",
+      "category": "카페",
+      "ownerPersonaId": "merchant-group",
+      "description": "카페 매장을 가정한 UX 시연용 가상 가게입니다. 실제 업체·주소·매출과 무관합니다.",
+      "synthetic": true
+    },
+    {
+      "id": "store-songri",
+      "name": "송리 오븐 피자",
+      "district": "송파구 송파동",
+      "category": "양식",
+      "ownerPersonaId": "merchant-group",
+      "description": "양식 매장을 가정한 UX 시연용 가상 가게입니다. 실제 업체·주소·매출과 무관합니다.",
+      "synthetic": true
+    },
+    {
+      "id": "store-mullae",
+      "name": "문래 골목 카레",
+      "district": "영등포구 문래동",
+      "category": "일식",
+      "ownerPersonaId": "merchant-group",
+      "description": "일식 매장을 가정한 UX 시연용 가상 가게입니다. 실제 업체·주소·매출과 무관합니다.",
+      "synthetic": true
+    }
+  ],
+  "offerings": [
+    {
+      "id": "offering-seongsu",
+      "storeId": "store-seongsu",
+      "title": "성수 모퉁이 식당 매출배분 1호",
+      "status": "OPEN",
+      "targetUnits": 3600,
+      "unitPriceWon": "10000",
+      "targetWon": "36000000",
+      "rateBps": 300,
+      "months": 60,
+      "startsOn": "2026-10-01",
+      "principalRedemption": "만기 원금 별도 상환 의무 없음",
+      "acceptedUnits": 2080,
+      "synthetic": true
+    },
+    {
+      "id": "offering-yeonnam",
+      "storeId": "store-yeonnam",
+      "title": "연남 온기 파스타 매출배분 1호",
+      "status": "OPEN",
+      "targetUnits": 4000,
+      "unitPriceWon": "10000",
+      "targetWon": "40000000",
+      "rateBps": 250,
+      "months": 36,
+      "startsOn": "2026-11-01",
+      "principalRedemption": "만기 원금 별도 상환 의무 없음",
+      "acceptedUnits": 2750,
+      "synthetic": true
+    },
+    {
+      "id": "offering-mangwon",
+      "storeId": "store-mangwon",
+      "title": "망원 작은 베이커리 매출배분 1호",
+      "status": "OPEN",
+      "targetUnits": 6000,
+      "unitPriceWon": "5000",
+      "targetWon": "30000000",
+      "rateBps": 400,
+      "months": 24,
+      "startsOn": "2026-11-01",
+      "principalRedemption": "만기 원금 별도 상환 의무 없음",
+      "acceptedUnits": 1500,
+      "synthetic": true
+    },
+    {
+      "id": "offering-eulji",
+      "storeId": "store-eulji",
+      "title": "을지로 잔술집 매출배분 1호",
+      "status": "FUNDED",
+      "targetUnits": 3000,
+      "unitPriceWon": "20000",
+      "targetWon": "60000000",
+      "rateBps": 300,
+      "months": 36,
+      "startsOn": "2026-05-01",
+      "principalRedemption": "만기 원금 별도 상환 의무 없음",
+      "acceptedUnits": 3000,
+      "synthetic": true
+    },
+    {
+      "id": "offering-hapjeong",
+      "storeId": "store-hapjeong",
+      "title": "합정 화로 식탁 매출배분 1호",
+      "status": "FUNDED",
+      "targetUnits": 5000,
+      "unitPriceWon": "10000",
+      "targetWon": "50000000",
+      "rateBps": 350,
+      "months": 48,
+      "startsOn": "2026-06-01",
+      "principalRedemption": "만기 원금 별도 상환 의무 없음",
+      "acceptedUnits": 5000,
+      "synthetic": true
+    },
+    {
+      "id": "offering-seochon",
+      "storeId": "store-seochon",
+      "title": "서촌 낮은 찻집 매출배분 1호",
+      "status": "FUNDED",
+      "targetUnits": 2400,
+      "unitPriceWon": "10000",
+      "targetWon": "24000000",
+      "rateBps": 400,
+      "months": 24,
+      "startsOn": "2026-07-01",
+      "principalRedemption": "만기 원금 별도 상환 의무 없음",
+      "acceptedUnits": 2400,
+      "synthetic": true
+    },
+    {
+      "id": "offering-songri",
+      "storeId": "store-songri",
+      "title": "송리 오븐 피자 매출배분 1호",
+      "status": "REFUNDED",
+      "targetUnits": 3000,
+      "unitPriceWon": "20000",
+      "targetWon": "60000000",
+      "rateBps": 300,
+      "months": 36,
+      "startsOn": "2026-10-01",
+      "principalRedemption": "만기 원금 별도 상환 의무 없음",
+      "acceptedUnits": 0,
+      "synthetic": true
+    },
+    {
+      "id": "offering-mullae",
+      "storeId": "store-mullae",
+      "title": "문래 골목 카레 매출배분 1호",
+      "status": "MATURED",
+      "targetUnits": 3600,
+      "unitPriceWon": "10000",
+      "targetWon": "36000000",
+      "rateBps": 500,
+      "months": 6,
+      "startsOn": "2026-04-01",
+      "principalRedemption": "만기 원금 별도 상환 의무 없음",
+      "acceptedUnits": 3600,
+      "synthetic": true
+    }
+  ],
+  "subscriptions": [
+    {
+      "id": "subscription-seongsu-investor-active",
+      "offeringId": "offering-seongsu",
+      "personaId": "investor-active",
+      "units": 80,
+      "allocatedUnits": 0,
+      "refundedUnits": 0,
+      "status": "ACCEPTED",
+      "synthetic": true
+    },
+    {
+      "id": "subscription-seongsu-background",
+      "offeringId": "offering-seongsu",
+      "personaId": "background",
+      "units": 2000,
+      "allocatedUnits": 0,
+      "refundedUnits": 0,
+      "status": "ACCEPTED",
+      "synthetic": true
+    },
+    {
+      "id": "subscription-yeonnam-investor-new",
+      "offeringId": "offering-yeonnam",
+      "personaId": "investor-new",
+      "units": 50,
+      "allocatedUnits": 0,
+      "refundedUnits": 0,
+      "status": "ACCEPTED",
+      "synthetic": true
+    },
+    {
+      "id": "subscription-yeonnam-background",
+      "offeringId": "offering-yeonnam",
+      "personaId": "background",
+      "units": 2700,
+      "allocatedUnits": 0,
+      "refundedUnits": 0,
+      "status": "ACCEPTED",
+      "synthetic": true
+    },
+    {
+      "id": "subscription-mangwon-investor-active",
+      "offeringId": "offering-mangwon",
+      "personaId": "investor-active",
+      "units": 50,
+      "allocatedUnits": 0,
+      "refundedUnits": 50,
+      "status": "CANCELLED",
+      "synthetic": true
+    },
+    {
+      "id": "subscription-mangwon-background",
+      "offeringId": "offering-mangwon",
+      "personaId": "background",
+      "units": 1500,
+      "allocatedUnits": 0,
+      "refundedUnits": 0,
+      "status": "ACCEPTED",
+      "synthetic": true
+    },
+    {
+      "id": "subscription-eulji-investor-active",
+      "offeringId": "offering-eulji",
+      "personaId": "investor-active",
+      "units": 100,
+      "allocatedUnits": 100,
+      "refundedUnits": 0,
+      "status": "ALLOCATED",
+      "synthetic": true
+    },
+    {
+      "id": "subscription-eulji-background",
+      "offeringId": "offering-eulji",
+      "personaId": "background",
+      "units": 2900,
+      "allocatedUnits": 2900,
+      "refundedUnits": 0,
+      "status": "ALLOCATED",
+      "synthetic": true
+    },
+    {
+      "id": "subscription-hapjeong-investor-active",
+      "offeringId": "offering-hapjeong",
+      "personaId": "investor-active",
+      "units": 200,
+      "allocatedUnits": 200,
+      "refundedUnits": 0,
+      "status": "ALLOCATED",
+      "synthetic": true
+    },
+    {
+      "id": "subscription-hapjeong-background",
+      "offeringId": "offering-hapjeong",
+      "personaId": "background",
+      "units": 4800,
+      "allocatedUnits": 4800,
+      "refundedUnits": 0,
+      "status": "ALLOCATED",
+      "synthetic": true
+    },
+    {
+      "id": "subscription-mullae-investor-active",
+      "offeringId": "offering-mullae",
+      "personaId": "investor-active",
+      "units": 100,
+      "allocatedUnits": 100,
+      "refundedUnits": 0,
+      "status": "ALLOCATED",
+      "synthetic": true
+    },
+    {
+      "id": "subscription-mullae-background",
+      "offeringId": "offering-mullae",
+      "personaId": "background",
+      "units": 3500,
+      "allocatedUnits": 3500,
+      "refundedUnits": 0,
+      "status": "ALLOCATED",
+      "synthetic": true
+    },
+    {
+      "id": "subscription-seochon-investor-active",
+      "offeringId": "offering-seochon",
+      "personaId": "investor-active",
+      "units": 70,
+      "allocatedUnits": 50,
+      "refundedUnits": 20,
+      "status": "ALLOCATED",
+      "synthetic": true
+    },
+    {
+      "id": "subscription-seochon-merchant-seongsu",
+      "offeringId": "offering-seochon",
+      "personaId": "merchant-seongsu",
+      "units": 30,
+      "allocatedUnits": 30,
+      "refundedUnits": 0,
+      "status": "ALLOCATED",
+      "synthetic": true
+    },
+    {
+      "id": "subscription-seochon-background",
+      "offeringId": "offering-seochon",
+      "personaId": "background",
+      "units": 2320,
+      "allocatedUnits": 2320,
+      "refundedUnits": 0,
+      "status": "ALLOCATED",
+      "synthetic": true
+    },
+    {
+      "id": "subscription-songri-investor-active",
+      "offeringId": "offering-songri",
+      "personaId": "investor-active",
+      "units": 100,
+      "allocatedUnits": 0,
+      "refundedUnits": 100,
+      "status": "REFUNDED",
+      "synthetic": true
+    },
+    {
+      "id": "subscription-songri-background",
+      "offeringId": "offering-songri",
+      "personaId": "background",
+      "units": 1000,
+      "allocatedUnits": 0,
+      "refundedUnits": 1000,
+      "status": "REFUNDED",
+      "synthetic": true
+    }
+  ],
+  "holdings": [
+    {
+      "id": "holding-eulji-investor-active",
+      "offeringId": "offering-eulji",
+      "personaId": "investor-active",
+      "units": 100,
+      "chainUnits": 0,
+      "chainStatus": "NOT_SUBMITTED",
+      "synthetic": true
+    },
+    {
+      "id": "holding-eulji-background",
+      "offeringId": "offering-eulji",
+      "personaId": "background",
+      "units": 2900,
+      "chainUnits": 0,
+      "chainStatus": "NOT_SUBMITTED",
+      "synthetic": true
+    },
+    {
+      "id": "holding-hapjeong-investor-active",
+      "offeringId": "offering-hapjeong",
+      "personaId": "investor-active",
+      "units": 200,
+      "chainUnits": 0,
+      "chainStatus": "NOT_SUBMITTED",
+      "synthetic": true
+    },
+    {
+      "id": "holding-hapjeong-background",
+      "offeringId": "offering-hapjeong",
+      "personaId": "background",
+      "units": 4800,
+      "chainUnits": 0,
+      "chainStatus": "NOT_SUBMITTED",
+      "synthetic": true
+    },
+    {
+      "id": "holding-mullae-investor-active",
+      "offeringId": "offering-mullae",
+      "personaId": "investor-active",
+      "units": 100,
+      "chainUnits": 0,
+      "chainStatus": "NOT_SUBMITTED",
+      "synthetic": true
+    },
+    {
+      "id": "holding-mullae-background",
+      "offeringId": "offering-mullae",
+      "personaId": "background",
+      "units": 3500,
+      "chainUnits": 0,
+      "chainStatus": "NOT_SUBMITTED",
+      "synthetic": true
+    },
+    {
+      "id": "holding-seochon-investor-active",
+      "offeringId": "offering-seochon",
+      "personaId": "investor-active",
+      "units": 50,
+      "chainUnits": 0,
+      "chainStatus": "NOT_SUBMITTED",
+      "synthetic": true
+    },
+    {
+      "id": "holding-seochon-merchant-seongsu",
+      "offeringId": "offering-seochon",
+      "personaId": "merchant-seongsu",
+      "units": 30,
+      "chainUnits": 0,
+      "chainStatus": "NOT_SUBMITTED",
+      "synthetic": true
+    },
+    {
+      "id": "holding-seochon-background",
+      "offeringId": "offering-seochon",
+      "personaId": "background",
+      "units": 2320,
+      "chainUnits": 0,
+      "chainStatus": "NOT_SUBMITTED",
+      "synthetic": true
+    }
+  ],
+  "revenues": [
+    {
+      "id": "revenue-seongsu-2026-05",
+      "storeId": "store-seongsu",
+      "period": "2026-05",
+      "sourceCsv": "ux/csv/revenue-seongsu-2026-05.csv",
+      "sha256": "b63f2cbf07127bf7ed28d3e8bc8f5af745fea311f6cf0d10b8bc32ec6a7455b9",
+      "netSalesWon": "22000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-seongsu-2026-06",
+      "storeId": "store-seongsu",
+      "period": "2026-06",
+      "sourceCsv": "ux/csv/revenue-seongsu-2026-06.csv",
+      "sha256": "48d0af021246afb7c6600eca7b443fb836a55b4dfe8ea0d4a4fe3376568d1ef7",
+      "netSalesWon": "24000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-seongsu-2026-07",
+      "storeId": "store-seongsu",
+      "period": "2026-07",
+      "sourceCsv": "ux/csv/revenue-seongsu-2026-07.csv",
+      "sha256": "203d2bae03dc12f543521fb7834507b7dee30a39a61cef6da266dcec51bffdbd",
+      "netSalesWon": "27000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-seongsu-2026-08",
+      "storeId": "store-seongsu",
+      "period": "2026-08",
+      "sourceCsv": "ux/csv/revenue-seongsu-2026-08.csv",
+      "sha256": "78675ebc589b7427f8987ec5fc0c776df68e3e5404c770af727d38573e82264a",
+      "netSalesWon": "25000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-seongsu-2026-09",
+      "storeId": "store-seongsu",
+      "period": "2026-09",
+      "sourceCsv": "ux/csv/revenue-seongsu-2026-09.csv",
+      "sha256": "2fd3575738e80471483fff83e04369ef40594c5704583d09b2972a26e8166bbb",
+      "netSalesWon": "28000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-seongsu-2026-10",
+      "storeId": "store-seongsu",
+      "period": "2026-10",
+      "sourceCsv": "ux/csv/revenue-seongsu-2026-10.csv",
+      "sha256": "a5af6f633707f480f1363943c4643656bc91d79d3494f21a69275c2c245244c2",
+      "netSalesWon": "30000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-yeonnam-2026-05",
+      "storeId": "store-yeonnam",
+      "period": "2026-05",
+      "sourceCsv": "ux/csv/revenue-yeonnam-2026-05.csv",
+      "sha256": "12bd5e299b4bc4b9b348d039b1ab912477395dd409e44ce63365942cc0a3517a",
+      "netSalesWon": "26000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-yeonnam-2026-06",
+      "storeId": "store-yeonnam",
+      "period": "2026-06",
+      "sourceCsv": "ux/csv/revenue-yeonnam-2026-06.csv",
+      "sha256": "2a738975218cc1f1fc8b89d9a7387d1d3c8c25584cda62155cfef221a9a6e0ff",
+      "netSalesWon": "28000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-yeonnam-2026-07",
+      "storeId": "store-yeonnam",
+      "period": "2026-07",
+      "sourceCsv": "ux/csv/revenue-yeonnam-2026-07.csv",
+      "sha256": "ef8a259a23bacc0744af02405a3624a7026943bb26739c9724deccdb7c4ac252",
+      "netSalesWon": "29000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-yeonnam-2026-08",
+      "storeId": "store-yeonnam",
+      "period": "2026-08",
+      "sourceCsv": "ux/csv/revenue-yeonnam-2026-08.csv",
+      "sha256": "5cdcfa9f6361b26dbc6fb0ff85951c0312fe2c9f4d3ee84fb096111ff2e3a9ff",
+      "netSalesWon": "31000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-yeonnam-2026-09",
+      "storeId": "store-yeonnam",
+      "period": "2026-09",
+      "sourceCsv": "ux/csv/revenue-yeonnam-2026-09.csv",
+      "sha256": "943093b455b26f3c73482d80436575b244199bb1f950e050abc5f0850f533eb8",
+      "netSalesWon": "33000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-yeonnam-2026-10",
+      "storeId": "store-yeonnam",
+      "period": "2026-10",
+      "sourceCsv": "ux/csv/revenue-yeonnam-2026-10.csv",
+      "sha256": "539fea7d1ef14d39e8f011518080395e97ee5729f9d4a7c63e7e6e3f6858d2ab",
+      "netSalesWon": "35000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-mangwon-2026-05",
+      "storeId": "store-mangwon",
+      "period": "2026-05",
+      "sourceCsv": "ux/csv/revenue-mangwon-2026-05.csv",
+      "sha256": "da3924274cbf77fe7148d609c301439a3d13139b9286ee03052fbaaa6745d0ed",
+      "netSalesWon": "18000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-mangwon-2026-06",
+      "storeId": "store-mangwon",
+      "period": "2026-06",
+      "sourceCsv": "ux/csv/revenue-mangwon-2026-06.csv",
+      "sha256": "c722a50dcc6ea9d44bc51ff47662b2e87b22b46a08efc88b17889d92e49ac9e7",
+      "netSalesWon": "20000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-mangwon-2026-07",
+      "storeId": "store-mangwon",
+      "period": "2026-07",
+      "sourceCsv": "ux/csv/revenue-mangwon-2026-07.csv",
+      "sha256": "027fceb5ca220700142dc307321c9185770042d92c3dc1f2a86da11e3c06a100",
+      "netSalesWon": "21000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-mangwon-2026-08",
+      "storeId": "store-mangwon",
+      "period": "2026-08",
+      "sourceCsv": "ux/csv/revenue-mangwon-2026-08.csv",
+      "sha256": "3c97c07fcdac22a03f110f33f2892a33eb4fd24c4a17723180ae614e99002c1d",
+      "netSalesWon": "23000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-mangwon-2026-09",
+      "storeId": "store-mangwon",
+      "period": "2026-09",
+      "sourceCsv": "ux/csv/revenue-mangwon-2026-09.csv",
+      "sha256": "ad28ba76c5ec973ab1ae5e7355f528365f7b12053671fbe9c1093adc8b04926e",
+      "netSalesWon": "24000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-mangwon-2026-10",
+      "storeId": "store-mangwon",
+      "period": "2026-10",
+      "sourceCsv": "ux/csv/revenue-mangwon-2026-10.csv",
+      "sha256": "9c6b40f1d6524de7a9b5c2728c9202bbd98d64c87967bca01b6fc95fc7a9e1e4",
+      "netSalesWon": "26000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-eulji-2026-05",
+      "storeId": "store-eulji",
+      "period": "2026-05",
+      "sourceCsv": "ux/csv/revenue-eulji-2026-05.csv",
+      "sha256": "6a8dd0bcb4f3c1b4b4e3f661970a4f87b1c9ff0ab3b710d48103989e4fb82a92",
+      "netSalesWon": "24000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-eulji-2026-06",
+      "storeId": "store-eulji",
+      "period": "2026-06",
+      "sourceCsv": "ux/csv/revenue-eulji-2026-06.csv",
+      "sha256": "e19aad4934bdc37c1da5dd0295d66decba48e286d11676d6bfd75ce3200a8afa",
+      "netSalesWon": "26000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-eulji-2026-07",
+      "storeId": "store-eulji",
+      "period": "2026-07",
+      "sourceCsv": "ux/csv/revenue-eulji-2026-07.csv",
+      "sha256": "b36ce1bf8795a59acb719e6a3cc5819b502d9bb1ec0c9320b509ff8a9cd65926",
+      "netSalesWon": "27000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-eulji-2026-08",
+      "storeId": "store-eulji",
+      "period": "2026-08",
+      "sourceCsv": "ux/csv/revenue-eulji-2026-08.csv",
+      "sha256": "9f5c7c533cab8072277a365b26712008b994922de9fd2fd36e35015c4310ced7",
+      "netSalesWon": "28000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-eulji-2026-09",
+      "storeId": "store-eulji",
+      "period": "2026-09",
+      "sourceCsv": "ux/csv/revenue-eulji-2026-09.csv",
+      "sha256": "c389f4d350840d2ccb95af5926a3563880a97ccedc096f6da27a6151aac5d3e4",
+      "netSalesWon": "30000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-eulji-2026-10",
+      "storeId": "store-eulji",
+      "period": "2026-10",
+      "sourceCsv": "ux/csv/revenue-eulji-2026-10.csv",
+      "sha256": "beebba7fd0593ba5cfe80a11bd05fe6486d761bfe54caa76f98dbaa38510740d",
+      "netSalesWon": "32000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-hapjeong-2026-05",
+      "storeId": "store-hapjeong",
+      "period": "2026-05",
+      "sourceCsv": "ux/csv/revenue-hapjeong-2026-05.csv",
+      "sha256": "10c6f8d257036a846f6a03e71f7c600cb703b147fb1914dcb50fc313c5368634",
+      "netSalesWon": "42000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-hapjeong-2026-06",
+      "storeId": "store-hapjeong",
+      "period": "2026-06",
+      "sourceCsv": "ux/csv/revenue-hapjeong-2026-06.csv",
+      "sha256": "471d277fc5b362f09648edc48ad90f2de39bde1d16b9cb0fd40d1b9b3aea53f5",
+      "netSalesWon": "44000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-hapjeong-2026-07",
+      "storeId": "store-hapjeong",
+      "period": "2026-07",
+      "sourceCsv": "ux/csv/revenue-hapjeong-2026-07.csv",
+      "sha256": "4c87606d4e65bc526a624490b048fd4cb773a2b0781b931ad81ca5ecc1cf536b",
+      "netSalesWon": "46000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-hapjeong-2026-08",
+      "storeId": "store-hapjeong",
+      "period": "2026-08",
+      "sourceCsv": "ux/csv/revenue-hapjeong-2026-08.csv",
+      "sha256": "82aad3ded53620972b078d5aced6f76247f7608769af132327adf1171b60a021",
+      "netSalesWon": "45000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-hapjeong-2026-09",
+      "storeId": "store-hapjeong",
+      "period": "2026-09",
+      "sourceCsv": "ux/csv/revenue-hapjeong-2026-09.csv",
+      "sha256": "f6196d940cc4290c06860b825037ccf7ba0438cc49e11f60f740302dd6dc90d5",
+      "netSalesWon": "48000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-hapjeong-2026-10",
+      "storeId": "store-hapjeong",
+      "period": "2026-10",
+      "sourceCsv": "ux/csv/revenue-hapjeong-2026-10.csv",
+      "sha256": "a2eb6ea5403f25aa4e683ad124a6d16910750f705cb48806d5525351127574bd",
+      "netSalesWon": "24000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-seochon-2026-05",
+      "storeId": "store-seochon",
+      "period": "2026-05",
+      "sourceCsv": "ux/csv/revenue-seochon-2026-05.csv",
+      "sha256": "945ea48d5831bcd7e6634a214b569326911899172da512d5b52cc993688a3794",
+      "netSalesWon": "22000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-seochon-2026-06",
+      "storeId": "store-seochon",
+      "period": "2026-06",
+      "sourceCsv": "ux/csv/revenue-seochon-2026-06.csv",
+      "sha256": "22c43cd2eac3788ec22121249f1b4b4e58b63500892cad7a965d24e4a2e0cb8c",
+      "netSalesWon": "24000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-seochon-2026-07",
+      "storeId": "store-seochon",
+      "period": "2026-07",
+      "sourceCsv": "ux/csv/revenue-seochon-2026-07.csv",
+      "sha256": "9574008df56c98c32665493c5b7190dff99ebf4966c16e3a79324a67dc46cb96",
+      "netSalesWon": "25000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-seochon-2026-08",
+      "storeId": "store-seochon",
+      "period": "2026-08",
+      "sourceCsv": "ux/csv/revenue-seochon-2026-08.csv",
+      "sha256": "2c6e35cdef4f7140e079015039aa8aa63d2910a0b9fc0e8e1c3d7a1d0a2ef180",
+      "netSalesWon": "26000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-seochon-2026-09",
+      "storeId": "store-seochon",
+      "period": "2026-09",
+      "sourceCsv": "ux/csv/revenue-seochon-2026-09.csv",
+      "sha256": "736e83bf1d57a0bce00ba122736d293b4fbfb69a314f81abd26d6bf9d59c97bb",
+      "netSalesWon": "27000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-seochon-2026-10",
+      "storeId": "store-seochon",
+      "period": "2026-10",
+      "sourceCsv": "ux/csv/revenue-seochon-2026-10.csv",
+      "sha256": "ffaa94284caee574ddeb3b52bb7497ca6966da0497ec3e66b37c62d17f786bd9",
+      "netSalesWon": "28000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-songri-2026-05",
+      "storeId": "store-songri",
+      "period": "2026-05",
+      "sourceCsv": "ux/csv/revenue-songri-2026-05.csv",
+      "sha256": "89578860655cda4923f381f064c9dd7e407c14c42b481311bd51283aa6ba709a",
+      "netSalesWon": "30000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-songri-2026-06",
+      "storeId": "store-songri",
+      "period": "2026-06",
+      "sourceCsv": "ux/csv/revenue-songri-2026-06.csv",
+      "sha256": "b477041933b8586d6a303cec5827f48c77af4aee474fd34c00bd56984419d829",
+      "netSalesWon": "32000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-songri-2026-07",
+      "storeId": "store-songri",
+      "period": "2026-07",
+      "sourceCsv": "ux/csv/revenue-songri-2026-07.csv",
+      "sha256": "3783fe1bec0b72ca84dee5720927d7f5f895b101ed1353b1036a6ed4e0dfb95a",
+      "netSalesWon": "28000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-songri-2026-08",
+      "storeId": "store-songri",
+      "period": "2026-08",
+      "sourceCsv": "ux/csv/revenue-songri-2026-08.csv",
+      "sha256": "e67e4c2ebe4cdc57aa521fb00c646a75a398a5e088aac8a02a7ceba615f64504",
+      "netSalesWon": "29000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-songri-2026-09",
+      "storeId": "store-songri",
+      "period": "2026-09",
+      "sourceCsv": "ux/csv/revenue-songri-2026-09.csv",
+      "sha256": "6b81256153f615c90a5e7cf4274dd899187dbecedaf0898e0e71154820a1e4dc",
+      "netSalesWon": "31000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-songri-2026-10",
+      "storeId": "store-songri",
+      "period": "2026-10",
+      "sourceCsv": "ux/csv/revenue-songri-2026-10.csv",
+      "sha256": "e6bcefdcaa6f9a926c932e9c3069c172ab76035165200740e8fb4c538f3acc36",
+      "netSalesWon": "27000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-mullae-2026-05",
+      "storeId": "store-mullae",
+      "period": "2026-05",
+      "sourceCsv": "ux/csv/revenue-mullae-2026-05.csv",
+      "sha256": "500665fbec9c153ef4cfcfae12e42233307a952ab06516c44df8484557386eea",
+      "netSalesWon": "22000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-mullae-2026-06",
+      "storeId": "store-mullae",
+      "period": "2026-06",
+      "sourceCsv": "ux/csv/revenue-mullae-2026-06.csv",
+      "sha256": "f06fcd0b0da978108ecffb35cc7a47f188c31c874f664beeb306839a5fcd32a3",
+      "netSalesWon": "24000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-mullae-2026-07",
+      "storeId": "store-mullae",
+      "period": "2026-07",
+      "sourceCsv": "ux/csv/revenue-mullae-2026-07.csv",
+      "sha256": "772bf73b21f33fcb273380dd7dac1da9a58277a30da46615e0dd82f170cd5bd8",
+      "netSalesWon": "25000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-mullae-2026-08",
+      "storeId": "store-mullae",
+      "period": "2026-08",
+      "sourceCsv": "ux/csv/revenue-mullae-2026-08.csv",
+      "sha256": "1ec7c70e821bc22461d2eb61d439cec3b1bca3cfc6133b83d898d2976b231c76",
+      "netSalesWon": "28000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-mullae-2026-09",
+      "storeId": "store-mullae",
+      "period": "2026-09",
+      "sourceCsv": "ux/csv/revenue-mullae-2026-09.csv",
+      "sha256": "0f8b12a9822731f909fecdec0b8f4c2ad1151a790c17a5e651d8b9643002c972",
+      "netSalesWon": "30000000",
+      "reconciled": true,
+      "synthetic": true
+    },
+    {
+      "id": "revenue-mullae-2026-10",
+      "storeId": "store-mullae",
+      "period": "2026-10",
+      "sourceCsv": "ux/csv/revenue-mullae-2026-10.csv",
+      "sha256": "3fea68b0e8fcc844d569cfc99e0fe62c688b85437212baa8dfbce55a7dff5859",
+      "netSalesWon": "27000000",
+      "reconciled": true,
+      "synthetic": true
+    }
+  ],
+  "exceptionSources": [
+    {
+      "id": "source-mangwon-missing-bank",
+      "storeId": "store-mangwon",
+      "period": "2026-10",
+      "sourceCsv": "ux/csv/source-mangwon-missing-bank.csv",
+      "sha256": "26254660f72a6f755075e73f1e59cf74dce182c75ca73fb36fd324594ba0e251",
+      "netSalesWon": "26000000",
+      "reconciled": false,
+      "synthetic": true
+    },
+    {
+      "id": "source-hapjeong-pg-mismatch",
+      "storeId": "store-hapjeong",
+      "period": "2026-09",
+      "sourceCsv": "ux/csv/source-hapjeong-pg-mismatch.csv",
+      "sha256": "1667b1e421b2b946f6a1840058b7d7ae923cfc1ee425f7babe316046e26a29f8",
+      "netSalesWon": "48000000",
+      "reconciled": false,
+      "synthetic": true
+    },
+    {
+      "id": "source-eulji-correction",
+      "storeId": "store-eulji",
+      "period": "2026-10",
+      "sourceCsv": "ux/csv/source-eulji-correction.csv",
+      "sha256": "c8bd63c731360029bc8f187a119ae22be5e6d3c26c72ae5dc719794cf6a40945",
+      "netSalesWon": "31400000",
+      "reconciled": true,
+      "synthetic": true
+    }
+  ],
+  "evidence": [
+    {
+      "id": "evidence-seongsu-review",
+      "storeId": "store-seongsu",
+      "offeringId": "offering-seongsu",
+      "period": "2026-10",
+      "status": "REVIEW_SAMPLE",
+      "sourceId": "revenue-seongsu-2026-10",
+      "submittedBy": "merchant-seongsu",
+      "reviewedBy": null,
+      "synthetic": true
+    },
+    {
+      "id": "evidence-mangwon-blocked",
+      "storeId": "store-mangwon",
+      "offeringId": "offering-mangwon",
+      "period": "2026-10",
+      "status": "BLOCKED_SAMPLE",
+      "sourceId": "source-mangwon-missing-bank",
+      "submittedBy": "merchant-group",
+      "reviewedBy": null,
+      "synthetic": true
+    },
+    {
+      "id": "evidence-hapjeong-blocked",
+      "storeId": "store-hapjeong",
+      "offeringId": "offering-hapjeong",
+      "period": "2026-09",
+      "status": "BLOCKED_SAMPLE",
+      "sourceId": "source-hapjeong-pg-mismatch",
+      "submittedBy": "merchant-group",
+      "reviewedBy": null,
+      "synthetic": true
+    },
+    {
+      "id": "evidence-seochon-review",
+      "storeId": "store-seochon",
+      "offeringId": "offering-seochon",
+      "period": "2026-09",
+      "status": "CLOSED_SAMPLE",
+      "sourceId": "revenue-seochon-2026-09",
+      "submittedBy": "merchant-group",
+      "reviewedBy": "reviewer",
+      "synthetic": true
+    },
+    {
+      "id": "evidence-eulji-correction",
+      "storeId": "store-eulji",
+      "offeringId": "offering-eulji",
+      "period": "2026-10",
+      "status": "CLOSED_SAMPLE",
+      "sourceId": "source-eulji-correction",
+      "submittedBy": "merchant-group",
+      "reviewedBy": "reviewer",
+      "synthetic": true
+    }
+  ],
+  "settlements": [
+    {
+      "id": "settlement-eulji-2026-09-v1",
+      "offeringId": "offering-eulji",
+      "storeId": "store-eulji",
+      "period": "2026-09",
+      "version": 1,
+      "previousId": null,
+      "status": "APPROVED_SAMPLE",
+      "sourceId": "revenue-eulji-2026-09",
+      "netSalesWon": "30000000",
+      "poolWon": "900000",
+      "cashAvailableWon": "3000000",
+      "calculatedBy": "reviewer",
+      "approvedBy": "operator",
+      "chainStatus": "NOT_SUBMITTED",
+      "synthetic": true
+    },
+    {
+      "id": "settlement-eulji-2026-10-v1",
+      "offeringId": "offering-eulji",
+      "storeId": "store-eulji",
+      "period": "2026-10",
+      "version": 1,
+      "previousId": null,
+      "status": "APPROVED_SAMPLE",
+      "sourceId": "revenue-eulji-2026-10",
+      "netSalesWon": "32000000",
+      "poolWon": "960000",
+      "cashAvailableWon": "3900000",
+      "calculatedBy": "reviewer",
+      "approvedBy": "operator",
+      "chainStatus": "NOT_SUBMITTED",
+      "synthetic": true
+    },
+    {
+      "id": "settlement-eulji-2026-10-v2",
+      "offeringId": "offering-eulji",
+      "storeId": "store-eulji",
+      "period": "2026-10",
+      "version": 2,
+      "previousId": "settlement-eulji-2026-10-v1",
+      "status": "APPROVED_SAMPLE",
+      "sourceId": "source-eulji-correction",
+      "netSalesWon": "31400000",
+      "poolWon": "942000",
+      "cashAvailableWon": "3630000",
+      "calculatedBy": "reviewer",
+      "approvedBy": "operator",
+      "chainStatus": "NOT_SUBMITTED",
+      "synthetic": true
+    },
+    {
+      "id": "settlement-hapjeong-2026-10-v1",
+      "offeringId": "offering-hapjeong",
+      "storeId": "store-hapjeong",
+      "period": "2026-10",
+      "version": 1,
+      "previousId": null,
+      "status": "APPROVED_SAMPLE",
+      "sourceId": "revenue-hapjeong-2026-10",
+      "netSalesWon": "24000000",
+      "poolWon": "840000",
+      "cashAvailableWon": "300000",
+      "calculatedBy": "reviewer",
+      "approvedBy": "operator",
+      "chainStatus": "NOT_SUBMITTED",
+      "synthetic": true
+    },
+    {
+      "id": "settlement-seochon-2026-09-v1",
+      "offeringId": "offering-seochon",
+      "storeId": "store-seochon",
+      "period": "2026-09",
+      "version": 1,
+      "previousId": null,
+      "status": "REVIEW_SAMPLE",
+      "sourceId": "revenue-seochon-2026-09",
+      "netSalesWon": "27000000",
+      "poolWon": "1080000",
+      "cashAvailableWon": "1650000",
+      "calculatedBy": "reviewer",
+      "approvedBy": null,
+      "chainStatus": "NOT_SUBMITTED",
+      "synthetic": true
+    },
+    {
+      "id": "settlement-seochon-2026-10-v1",
+      "offeringId": "offering-seochon",
+      "storeId": "store-seochon",
+      "period": "2026-10",
+      "version": 1,
+      "previousId": null,
+      "status": "APPROVED_SAMPLE",
+      "sourceId": "revenue-seochon-2026-10",
+      "netSalesWon": "28000000",
+      "poolWon": "1120000",
+      "cashAvailableWon": "2100000",
+      "calculatedBy": "reviewer",
+      "approvedBy": "operator",
+      "chainStatus": "NOT_SUBMITTED",
+      "synthetic": true
+    },
+    {
+      "id": "settlement-mullae-2026-09-v1",
+      "offeringId": "offering-mullae",
+      "storeId": "store-mullae",
+      "period": "2026-09",
+      "version": 1,
+      "previousId": null,
+      "status": "APPROVED_SAMPLE",
+      "sourceId": "revenue-mullae-2026-09",
+      "netSalesWon": "30000000",
+      "poolWon": "1500000",
+      "cashAvailableWon": "3000000",
+      "calculatedBy": "reviewer",
+      "approvedBy": "operator",
+      "chainStatus": "NOT_SUBMITTED",
+      "synthetic": true
+    }
+  ],
+  "settlementLines": [
+    {
+      "id": "line-settlement-eulji-2026-09-v1-investor-active",
+      "settlementId": "settlement-eulji-2026-09-v1",
+      "holdingId": "holding-eulji-investor-active",
+      "personaId": "investor-active",
+      "units": 100,
+      "amountWon": "30000",
+      "paidWon": "30000",
+      "priorPaidWon": "0",
+      "deltaWon": "30000",
+      "synthetic": true,
+      "unpaidWon": "0",
+      "overpaidWon": "0"
+    },
+    {
+      "id": "line-settlement-eulji-2026-09-v1-background",
+      "settlementId": "settlement-eulji-2026-09-v1",
+      "holdingId": "holding-eulji-background",
+      "personaId": "background",
+      "units": 2900,
+      "amountWon": "870000",
+      "paidWon": "870000",
+      "priorPaidWon": "0",
+      "deltaWon": "870000",
+      "synthetic": true,
+      "unpaidWon": "0",
+      "overpaidWon": "0"
+    },
+    {
+      "id": "line-settlement-eulji-2026-10-v1-investor-active",
+      "settlementId": "settlement-eulji-2026-10-v1",
+      "holdingId": "holding-eulji-investor-active",
+      "personaId": "investor-active",
+      "units": 100,
+      "amountWon": "32000",
+      "paidWon": "32000",
+      "priorPaidWon": "0",
+      "deltaWon": "32000",
+      "synthetic": true,
+      "unpaidWon": "0",
+      "overpaidWon": "0"
+    },
+    {
+      "id": "line-settlement-eulji-2026-10-v1-background",
+      "settlementId": "settlement-eulji-2026-10-v1",
+      "holdingId": "holding-eulji-background",
+      "personaId": "background",
+      "units": 2900,
+      "amountWon": "928000",
+      "paidWon": "928000",
+      "priorPaidWon": "0",
+      "deltaWon": "928000",
+      "synthetic": true,
+      "unpaidWon": "0",
+      "overpaidWon": "0"
+    },
+    {
+      "id": "line-settlement-eulji-2026-10-v2-investor-active",
+      "settlementId": "settlement-eulji-2026-10-v2",
+      "holdingId": "holding-eulji-investor-active",
+      "personaId": "investor-active",
+      "units": 100,
+      "amountWon": "31400",
+      "paidWon": "0",
+      "priorPaidWon": "32000",
+      "deltaWon": "-600",
+      "synthetic": true,
+      "unpaidWon": "0",
+      "overpaidWon": "600"
+    },
+    {
+      "id": "line-settlement-eulji-2026-10-v2-background",
+      "settlementId": "settlement-eulji-2026-10-v2",
+      "holdingId": "holding-eulji-background",
+      "personaId": "background",
+      "units": 2900,
+      "amountWon": "910600",
+      "paidWon": "0",
+      "priorPaidWon": "928000",
+      "deltaWon": "-17400",
+      "synthetic": true,
+      "unpaidWon": "0",
+      "overpaidWon": "17400"
+    },
+    {
+      "id": "line-settlement-hapjeong-2026-10-v1-investor-active",
+      "settlementId": "settlement-hapjeong-2026-10-v1",
+      "holdingId": "holding-hapjeong-investor-active",
+      "personaId": "investor-active",
+      "units": 200,
+      "amountWon": "33600",
+      "paidWon": "15000",
+      "priorPaidWon": "0",
+      "deltaWon": "33600",
+      "synthetic": true,
+      "unpaidWon": "18600",
+      "overpaidWon": "0"
+    },
+    {
+      "id": "line-settlement-hapjeong-2026-10-v1-background",
+      "settlementId": "settlement-hapjeong-2026-10-v1",
+      "holdingId": "holding-hapjeong-background",
+      "personaId": "background",
+      "units": 4800,
+      "amountWon": "806400",
+      "paidWon": "285000",
+      "priorPaidWon": "0",
+      "deltaWon": "806400",
+      "synthetic": true,
+      "unpaidWon": "521400",
+      "overpaidWon": "0"
+    },
+    {
+      "id": "line-settlement-seochon-2026-09-v1-investor-active",
+      "settlementId": "settlement-seochon-2026-09-v1",
+      "holdingId": "holding-seochon-investor-active",
+      "personaId": "investor-active",
+      "units": 50,
+      "amountWon": "22500",
+      "paidWon": "0",
+      "priorPaidWon": "0",
+      "deltaWon": "22500",
+      "synthetic": true,
+      "unpaidWon": "22500",
+      "overpaidWon": "0"
+    },
+    {
+      "id": "line-settlement-seochon-2026-09-v1-merchant-seongsu",
+      "settlementId": "settlement-seochon-2026-09-v1",
+      "holdingId": "holding-seochon-merchant-seongsu",
+      "personaId": "merchant-seongsu",
+      "units": 30,
+      "amountWon": "13500",
+      "paidWon": "0",
+      "priorPaidWon": "0",
+      "deltaWon": "13500",
+      "synthetic": true,
+      "unpaidWon": "13500",
+      "overpaidWon": "0"
+    },
+    {
+      "id": "line-settlement-seochon-2026-09-v1-background",
+      "settlementId": "settlement-seochon-2026-09-v1",
+      "holdingId": "holding-seochon-background",
+      "personaId": "background",
+      "units": 2320,
+      "amountWon": "1044000",
+      "paidWon": "0",
+      "priorPaidWon": "0",
+      "deltaWon": "1044000",
+      "synthetic": true,
+      "unpaidWon": "1044000",
+      "overpaidWon": "0"
+    },
+    {
+      "id": "line-settlement-seochon-2026-10-v1-investor-active",
+      "settlementId": "settlement-seochon-2026-10-v1",
+      "holdingId": "holding-seochon-investor-active",
+      "personaId": "investor-active",
+      "units": 50,
+      "amountWon": "23333",
+      "paidWon": "0",
+      "priorPaidWon": "0",
+      "deltaWon": "23333",
+      "synthetic": true,
+      "unpaidWon": "23333",
+      "overpaidWon": "0"
+    },
+    {
+      "id": "line-settlement-seochon-2026-10-v1-merchant-seongsu",
+      "settlementId": "settlement-seochon-2026-10-v1",
+      "holdingId": "holding-seochon-merchant-seongsu",
+      "personaId": "merchant-seongsu",
+      "units": 30,
+      "amountWon": "14000",
+      "paidWon": "0",
+      "priorPaidWon": "0",
+      "deltaWon": "14000",
+      "synthetic": true,
+      "unpaidWon": "14000",
+      "overpaidWon": "0"
+    },
+    {
+      "id": "line-settlement-seochon-2026-10-v1-background",
+      "settlementId": "settlement-seochon-2026-10-v1",
+      "holdingId": "holding-seochon-background",
+      "personaId": "background",
+      "units": 2320,
+      "amountWon": "1082667",
+      "paidWon": "0",
+      "priorPaidWon": "0",
+      "deltaWon": "1082667",
+      "synthetic": true,
+      "unpaidWon": "1082667",
+      "overpaidWon": "0"
+    },
+    {
+      "id": "line-settlement-mullae-2026-09-v1-investor-active",
+      "settlementId": "settlement-mullae-2026-09-v1",
+      "holdingId": "holding-mullae-investor-active",
+      "personaId": "investor-active",
+      "units": 100,
+      "amountWon": "41667",
+      "paidWon": "20000",
+      "priorPaidWon": "0",
+      "deltaWon": "41667",
+      "synthetic": true,
+      "unpaidWon": "21667",
+      "overpaidWon": "0"
+    },
+    {
+      "id": "line-settlement-mullae-2026-09-v1-background",
+      "settlementId": "settlement-mullae-2026-09-v1",
+      "holdingId": "holding-mullae-background",
+      "personaId": "background",
+      "units": 3500,
+      "amountWon": "1458333",
+      "paidWon": "1458333",
+      "priorPaidWon": "0",
+      "deltaWon": "1458333",
+      "synthetic": true,
+      "unpaidWon": "0",
+      "overpaidWon": "0"
+    }
+  ],
+  "payments": [
+    {
+      "id": "payment-1",
+      "lineId": "line-settlement-eulji-2026-09-v1-investor-active",
+      "personaId": "investor-active",
+      "requestedWon": "30000",
+      "paidWon": "30000",
+      "outcome": "SUCCESS_SAMPLE",
+      "synthetic": true
+    },
+    {
+      "id": "payment-2",
+      "lineId": "line-settlement-eulji-2026-09-v1-background",
+      "personaId": "background",
+      "requestedWon": "870000",
+      "paidWon": "870000",
+      "outcome": "SUCCESS_SAMPLE",
+      "synthetic": true
+    },
+    {
+      "id": "payment-3",
+      "lineId": "line-settlement-eulji-2026-10-v1-investor-active",
+      "personaId": "investor-active",
+      "requestedWon": "32000",
+      "paidWon": "32000",
+      "outcome": "SUCCESS_SAMPLE",
+      "synthetic": true
+    },
+    {
+      "id": "payment-4",
+      "lineId": "line-settlement-eulji-2026-10-v1-background",
+      "personaId": "background",
+      "requestedWon": "928000",
+      "paidWon": "928000",
+      "outcome": "SUCCESS_SAMPLE",
+      "synthetic": true
+    },
+    {
+      "id": "payment-5",
+      "lineId": "line-settlement-hapjeong-2026-10-v1-investor-active",
+      "personaId": "investor-active",
+      "requestedWon": "33600",
+      "paidWon": "0",
+      "outcome": "FAILED_SAMPLE",
+      "synthetic": true
+    },
+    {
+      "id": "payment-6",
+      "lineId": "line-settlement-hapjeong-2026-10-v1-investor-active",
+      "personaId": "investor-active",
+      "requestedWon": "33600",
+      "paidWon": "15000",
+      "outcome": "PARTIAL_SAMPLE",
+      "synthetic": true
+    },
+    {
+      "id": "payment-7",
+      "lineId": "line-settlement-hapjeong-2026-10-v1-background",
+      "personaId": "background",
+      "requestedWon": "806400",
+      "paidWon": "285000",
+      "outcome": "PARTIAL_SAMPLE",
+      "synthetic": true
+    },
+    {
+      "id": "payment-8",
+      "lineId": "line-settlement-mullae-2026-09-v1-investor-active",
+      "personaId": "investor-active",
+      "requestedWon": "41667",
+      "paidWon": "20000",
+      "outcome": "PARTIAL_SAMPLE",
+      "synthetic": true
+    },
+    {
+      "id": "payment-9",
+      "lineId": "line-settlement-mullae-2026-09-v1-background",
+      "personaId": "background",
+      "requestedWon": "1458333",
+      "paidWon": "1458333",
+      "outcome": "SUCCESS_SAMPLE",
+      "synthetic": true
+    }
+  ],
+  "benefits": [
+    {
+      "id": "first-visit",
+      "storeId": "store-seongsu",
+      "offeringId": "offering-seongsu",
+      "title": "첫 방문 음료 1잔",
+      "requiredUnits": 0,
+      "validFrom": "2026-10-01",
+      "validUntil": "2026-11-30",
+      "maxClaims": 100,
+      "maxPerPersona": 1,
+      "synthetic": true
+    },
+    {
+      "id": "eulji-side",
+      "storeId": "store-eulji",
+      "offeringId": "offering-eulji",
+      "title": "투자자 안주 1회",
+      "requiredUnits": 50,
+      "validFrom": "2026-10-01",
+      "validUntil": "2026-11-30",
+      "maxClaims": 100,
+      "maxPerPersona": 1,
+      "synthetic": true
+    },
+    {
+      "id": "hapjeong-discount",
+      "storeId": "store-hapjeong",
+      "offeringId": "offering-hapjeong",
+      "title": "식사 금액 10% 할인",
+      "requiredUnits": 100,
+      "validFrom": "2026-10-01",
+      "validUntil": "2026-11-30",
+      "maxClaims": 100,
+      "maxPerPersona": 1,
+      "synthetic": true
+    },
+    {
+      "id": "seochon-tea",
+      "storeId": "store-seochon",
+      "offeringId": "offering-seochon",
+      "title": "차 한 잔 혜택",
+      "requiredUnits": 20,
+      "validFrom": "2026-10-01",
+      "validUntil": "2026-11-30",
+      "maxClaims": 100,
+      "maxPerPersona": 1,
+      "synthetic": true
+    },
+    {
+      "id": "seochon-tier",
+      "storeId": "store-seochon",
+      "offeringId": "offering-seochon",
+      "title": "100단위 이상 시식 초대",
+      "requiredUnits": 100,
+      "validFrom": "2026-10-01",
+      "validUntil": "2026-11-30",
+      "maxClaims": 100,
+      "maxPerPersona": 1,
+      "synthetic": true
+    },
+    {
+      "id": "mullae-expired",
+      "storeId": "store-mullae",
+      "offeringId": "offering-mullae",
+      "title": "지난달 디저트 쿠폰",
+      "requiredUnits": 50,
+      "validFrom": "2026-09-01",
+      "validUntil": "2026-09-30",
+      "maxClaims": 100,
+      "maxPerPersona": 1,
+      "synthetic": true
+    },
+    {
+      "id": "yeonnam-upcoming",
+      "storeId": "store-yeonnam",
+      "offeringId": "offering-yeonnam",
+      "title": "오픈 주간 사이드 메뉴",
+      "requiredUnits": 0,
+      "validFrom": "2026-11-01",
+      "validUntil": "2026-11-30",
+      "maxClaims": 100,
+      "maxPerPersona": 1,
+      "synthetic": true
+    },
+    {
+      "id": "mangwon-soldout",
+      "storeId": "store-mangwon",
+      "offeringId": "offering-mangwon",
+      "title": "한정 베이커리 세트",
+      "requiredUnits": 0,
+      "validFrom": "2026-10-01",
+      "validUntil": "2026-11-30",
+      "maxClaims": 2,
+      "maxPerPersona": 1,
+      "synthetic": true
+    }
+  ],
+  "claims": [
+    {
+      "id": "claim-1",
+      "benefitId": "hapjeong-discount",
+      "personaId": "investor-active",
+      "status": "CLAIMED_SAMPLE",
+      "claimedOn": "2026-10-12",
+      "code": "DEMO-NOT-VALID-1",
+      "synthetic": true
+    },
+    {
+      "id": "claim-2",
+      "benefitId": "seochon-tea",
+      "personaId": "investor-active",
+      "status": "USED_SAMPLE",
+      "claimedOn": "2026-10-20",
+      "code": "DEMO-NOT-VALID-2",
+      "synthetic": true
+    },
+    {
+      "id": "claim-3",
+      "benefitId": "mullae-expired",
+      "personaId": "investor-active",
+      "status": "CLAIMED_SAMPLE",
+      "claimedOn": "2026-09-12",
+      "code": "DEMO-NOT-VALID-3",
+      "synthetic": true
+    },
+    {
+      "id": "claim-4",
+      "benefitId": "first-visit",
+      "personaId": "customer-only",
+      "status": "USED_SAMPLE",
+      "claimedOn": "2026-10-19",
+      "code": "DEMO-NOT-VALID-4",
+      "synthetic": true
+    },
+    {
+      "id": "claim-5",
+      "benefitId": "mangwon-soldout",
+      "personaId": "investor-active",
+      "status": "USED_SAMPLE",
+      "claimedOn": "2026-10-11",
+      "code": "DEMO-NOT-VALID-5",
+      "synthetic": true
+    },
+    {
+      "id": "claim-6",
+      "benefitId": "mangwon-soldout",
+      "personaId": "merchant-seongsu",
+      "status": "CLAIMED_SAMPLE",
+      "claimedOn": "2026-10-12",
+      "code": "DEMO-NOT-VALID-6",
+      "synthetic": true
+    }
+  ],
+  "benefitStates": [
+    {
+      "personaId": "investor-new",
+      "benefitId": "first-visit",
+      "status": "AVAILABLE_SAMPLE",
+      "heldUnits": 0,
+      "synthetic": true
+    },
+    {
+      "personaId": "investor-new",
+      "benefitId": "eulji-side",
+      "status": "LOCKED_SAMPLE",
+      "heldUnits": 0,
+      "synthetic": true
+    },
+    {
+      "personaId": "investor-new",
+      "benefitId": "hapjeong-discount",
+      "status": "LOCKED_SAMPLE",
+      "heldUnits": 0,
+      "synthetic": true
+    },
+    {
+      "personaId": "investor-new",
+      "benefitId": "seochon-tea",
+      "status": "LOCKED_SAMPLE",
+      "heldUnits": 0,
+      "synthetic": true
+    },
+    {
+      "personaId": "investor-new",
+      "benefitId": "seochon-tier",
+      "status": "LOCKED_SAMPLE",
+      "heldUnits": 0,
+      "synthetic": true
+    },
+    {
+      "personaId": "investor-new",
+      "benefitId": "mullae-expired",
+      "status": "EXPIRED_SAMPLE",
+      "heldUnits": 0,
+      "synthetic": true
+    },
+    {
+      "personaId": "investor-new",
+      "benefitId": "yeonnam-upcoming",
+      "status": "UPCOMING_SAMPLE",
+      "heldUnits": 0,
+      "synthetic": true
+    },
+    {
+      "personaId": "investor-new",
+      "benefitId": "mangwon-soldout",
+      "status": "SOLD_OUT_SAMPLE",
+      "heldUnits": 0,
+      "synthetic": true
+    },
+    {
+      "personaId": "investor-active",
+      "benefitId": "first-visit",
+      "status": "AVAILABLE_SAMPLE",
+      "heldUnits": 0,
+      "synthetic": true
+    },
+    {
+      "personaId": "investor-active",
+      "benefitId": "eulji-side",
+      "status": "AVAILABLE_SAMPLE",
+      "heldUnits": 100,
+      "synthetic": true
+    },
+    {
+      "personaId": "investor-active",
+      "benefitId": "hapjeong-discount",
+      "status": "CLAIMED_SAMPLE",
+      "heldUnits": 200,
+      "synthetic": true
+    },
+    {
+      "personaId": "investor-active",
+      "benefitId": "seochon-tea",
+      "status": "USED_SAMPLE",
+      "heldUnits": 50,
+      "synthetic": true
+    },
+    {
+      "personaId": "investor-active",
+      "benefitId": "seochon-tier",
+      "status": "LOCKED_SAMPLE",
+      "heldUnits": 50,
+      "synthetic": true
+    },
+    {
+      "personaId": "investor-active",
+      "benefitId": "mullae-expired",
+      "status": "EXPIRED_SAMPLE",
+      "heldUnits": 100,
+      "synthetic": true
+    },
+    {
+      "personaId": "investor-active",
+      "benefitId": "yeonnam-upcoming",
+      "status": "UPCOMING_SAMPLE",
+      "heldUnits": 0,
+      "synthetic": true
+    },
+    {
+      "personaId": "investor-active",
+      "benefitId": "mangwon-soldout",
+      "status": "USED_SAMPLE",
+      "heldUnits": 0,
+      "synthetic": true
+    },
+    {
+      "personaId": "merchant-seongsu",
+      "benefitId": "first-visit",
+      "status": "AVAILABLE_SAMPLE",
+      "heldUnits": 0,
+      "synthetic": true
+    },
+    {
+      "personaId": "merchant-seongsu",
+      "benefitId": "eulji-side",
+      "status": "LOCKED_SAMPLE",
+      "heldUnits": 0,
+      "synthetic": true
+    },
+    {
+      "personaId": "merchant-seongsu",
+      "benefitId": "hapjeong-discount",
+      "status": "LOCKED_SAMPLE",
+      "heldUnits": 0,
+      "synthetic": true
+    },
+    {
+      "personaId": "merchant-seongsu",
+      "benefitId": "seochon-tea",
+      "status": "AVAILABLE_SAMPLE",
+      "heldUnits": 30,
+      "synthetic": true
+    },
+    {
+      "personaId": "merchant-seongsu",
+      "benefitId": "seochon-tier",
+      "status": "LOCKED_SAMPLE",
+      "heldUnits": 30,
+      "synthetic": true
+    },
+    {
+      "personaId": "merchant-seongsu",
+      "benefitId": "mullae-expired",
+      "status": "EXPIRED_SAMPLE",
+      "heldUnits": 0,
+      "synthetic": true
+    },
+    {
+      "personaId": "merchant-seongsu",
+      "benefitId": "yeonnam-upcoming",
+      "status": "UPCOMING_SAMPLE",
+      "heldUnits": 0,
+      "synthetic": true
+    },
+    {
+      "personaId": "merchant-seongsu",
+      "benefitId": "mangwon-soldout",
+      "status": "CLAIMED_SAMPLE",
+      "heldUnits": 0,
+      "synthetic": true
+    },
+    {
+      "personaId": "merchant-group",
+      "benefitId": "first-visit",
+      "status": "AVAILABLE_SAMPLE",
+      "heldUnits": 0,
+      "synthetic": true
+    },
+    {
+      "personaId": "merchant-group",
+      "benefitId": "eulji-side",
+      "status": "LOCKED_SAMPLE",
+      "heldUnits": 0,
+      "synthetic": true
+    },
+    {
+      "personaId": "merchant-group",
+      "benefitId": "hapjeong-discount",
+      "status": "LOCKED_SAMPLE",
+      "heldUnits": 0,
+      "synthetic": true
+    },
+    {
+      "personaId": "merchant-group",
+      "benefitId": "seochon-tea",
+      "status": "LOCKED_SAMPLE",
+      "heldUnits": 0,
+      "synthetic": true
+    },
+    {
+      "personaId": "merchant-group",
+      "benefitId": "seochon-tier",
+      "status": "LOCKED_SAMPLE",
+      "heldUnits": 0,
+      "synthetic": true
+    },
+    {
+      "personaId": "merchant-group",
+      "benefitId": "mullae-expired",
+      "status": "EXPIRED_SAMPLE",
+      "heldUnits": 0,
+      "synthetic": true
+    },
+    {
+      "personaId": "merchant-group",
+      "benefitId": "yeonnam-upcoming",
+      "status": "UPCOMING_SAMPLE",
+      "heldUnits": 0,
+      "synthetic": true
+    },
+    {
+      "personaId": "merchant-group",
+      "benefitId": "mangwon-soldout",
+      "status": "SOLD_OUT_SAMPLE",
+      "heldUnits": 0,
+      "synthetic": true
+    },
+    {
+      "personaId": "customer-only",
+      "benefitId": "first-visit",
+      "status": "USED_SAMPLE",
+      "heldUnits": 0,
+      "synthetic": true
+    },
+    {
+      "personaId": "customer-only",
+      "benefitId": "eulji-side",
+      "status": "LOCKED_SAMPLE",
+      "heldUnits": 0,
+      "synthetic": true
+    },
+    {
+      "personaId": "customer-only",
+      "benefitId": "hapjeong-discount",
+      "status": "LOCKED_SAMPLE",
+      "heldUnits": 0,
+      "synthetic": true
+    },
+    {
+      "personaId": "customer-only",
+      "benefitId": "seochon-tea",
+      "status": "LOCKED_SAMPLE",
+      "heldUnits": 0,
+      "synthetic": true
+    },
+    {
+      "personaId": "customer-only",
+      "benefitId": "seochon-tier",
+      "status": "LOCKED_SAMPLE",
+      "heldUnits": 0,
+      "synthetic": true
+    },
+    {
+      "personaId": "customer-only",
+      "benefitId": "mullae-expired",
+      "status": "EXPIRED_SAMPLE",
+      "heldUnits": 0,
+      "synthetic": true
+    },
+    {
+      "personaId": "customer-only",
+      "benefitId": "yeonnam-upcoming",
+      "status": "UPCOMING_SAMPLE",
+      "heldUnits": 0,
+      "synthetic": true
+    },
+    {
+      "personaId": "customer-only",
+      "benefitId": "mangwon-soldout",
+      "status": "SOLD_OUT_SAMPLE",
+      "heldUnits": 0,
+      "synthetic": true
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "discover-invest",
+      "personaId": "investor-new",
+      "path": [
+        "LOGIN",
+        "STORE_LIST",
+        "OFFERING_DETAIL",
+        "SUBSCRIBE"
+      ],
+      "expected": "로그인 후 가게 목록에서 모집 중 상품 선택. 접수는 보유와 다름."
+    },
+    {
+      "id": "portfolio",
+      "personaId": "investor-active",
+      "path": [
+        "LOGIN",
+        "PORTFOLIO",
+        "HOLDING",
+        "SETTLEMENT"
+      ],
+      "expected": "여러 가게 보유와 완납/미지급/부분 지급/정정/만기 잔액 확인."
+    },
+    {
+      "id": "merchant",
+      "personaId": "merchant-seongsu",
+      "path": [
+        "LOGIN",
+        "STORE_MANAGEMENT",
+        "REVENUE",
+        "EVIDENCE"
+      ],
+      "expected": "본인 가게 관리만 노출. 같은 사람의 투자/혜택 화면도 존재."
+    },
+    {
+      "id": "multi-store-merchant",
+      "personaId": "merchant-group",
+      "path": [
+        "LOGIN",
+        "STORE_MANAGEMENT",
+        "STORE_SELECTOR"
+      ],
+      "expected": "여러 담당 가게를 선택. 다른 관리자 가게는 수정 범위에 없음."
+    },
+    {
+      "id": "customer-benefits",
+      "personaId": "customer-only",
+      "path": [
+        "LOGIN",
+        "BENEFITS",
+        "BENEFIT_DETAIL"
+      ],
+      "expected": "투자 내역 없는 고객도 일반 혜택 조회. 투자 수량 조건 혜택은 잠김."
+    },
+    {
+      "id": "review-queue",
+      "personaId": "reviewer",
+      "path": [
+        "LOGIN",
+        "REVIEW_QUEUE",
+        "EVIDENCE"
+      ],
+      "expected": "검토 대기/보완 필요/마감 자료를 구분. 제출자와 검토자 분리."
+    },
+    {
+      "id": "operator-approval",
+      "personaId": "operator",
+      "path": [
+        "LOGIN",
+        "OPERATIONS",
+        "APPROVAL"
+      ],
+      "expected": "산정자와 승인자 분리. 샘플 행위가 실제 권한을 부여하지 않음."
+    }
+  ]
+}

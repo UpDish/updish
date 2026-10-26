@@ -80,3 +80,5 @@ Java에는 PostgreSQL이 필요합니다. smoke:auth는 자금 없는 임시 서
 [남은 승인·실제 연결 확인](docs/remaining-work.md)을 완료 판정에 포함합니다.
 
 [시연 CSV 9개·기대 대조 결과](fixtures/README.md)를 준비했습니다. 공개 차트에서 다운로드하거나 운영자/가게 담당자가 매출관리에서 불러올 수 있습니다.
+
+[전체 UX용 가게·투자·혜택 더미 데이터](fixtures/ux/README.md)를 별도로 준비했습니다. `pnpm generate:ux-demo`, `pnpm check:ux-demo`, `pnpm smoke:ux-demo`로 재현합니다. 이번 단계는 데이터와 읽기 API이며 로그인 이후 화면 흐름 개편은 다음 단계입니다.

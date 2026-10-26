@@ -1,0 +1,28 @@
+{
+  "status": "Success",
+  "commandId": "dddefe5a-6df7-4a44-93c6-502ce6a81560",
+  "backupCommandId": "e275fc9c-352c-442e-90ad-bb6aabee14ee",
+  "backupSha256": "8e0070e6e40270831b4f9e78892f2abcbdecc3b4371b9f9ed60eae61f076909c",
+  "fixture": {
+    "datasetId": "updish-ux-v1",
+    "version": 1,
+    "sha256": "a56b47a71c926108638cb5c7fd11ae39757df2f888c1d847c560ecb8d18f247c",
+    "mode": "SIMULATION",
+    "source": "SYNTHETIC_UX_FIXTURE",
+    "stores": 8,
+    "offerings": 8,
+    "personas": 8,
+    "revenues": 48,
+    "holdings": 9,
+    "benefits": 8,
+    "claims": 6
+  },
+  "flywayVersion": 6,
+  "existingBusinessRowCountsAndActiveRun": "UNCHANGED",
+  "coreHealth": "UP",
+  "image": "sha256:1695d940305b6772584624f4c8f78eb7a5c539db74a5e55c2872ac1595e5160d",
+  "archiveSha256": "e35144f6b523ca73da3836c37f0db0f8fc3c2559a408a5a719fb7b512b2ffcdb",
+  "uiChanged": false,
+  "vercelRedeployed": false,
+  "note": "Core deployment and DB seed inspected over SSM. Operator 200 reads were verified in isolated local SIWE/DB; production anonymous/regular-user guards are separately tested. No actual operator user signature was used."
+}

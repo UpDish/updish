@@ -167,5 +167,19 @@
     "sampleApprovalsCreated": false,
     "userWalletTransactionsSent": 0,
     "sourceCatalog": "fixtures/catalog.json"
+  },
+  "uxDataFoundation": {
+    "scope": "Data-only phase; current login/tabs/UI explicitly not redesigned",
+    "datasetId": "updish-ux-v1",
+    "sourceSha256": "a56b47a71c926108638cb5c7fd11ae39757df2f888c1d847c560ecb8d18f247c",
+    "fullJavaTests": 49,
+    "finalTargetedTests": 4,
+    "localHttpChecks": 11,
+    "productionAuthChecks": 14,
+    "flywayVersion": 6,
+    "productionSeed": "PASS",
+    "actualBusinessRowsAndActiveRun": "PRESERVED",
+    "nextUxIssue": "https://github.com/UpDish/updish/issues/7",
+    "frontendJourneyQa": "PENDING_USER_REQUESTED_REDESIGN"
   }
 }

@@ -25,6 +25,7 @@ async function post(path: string, body: unknown, token?: string, requestOrigin =
 }
 const checks: string[] = [];
 assert.equal((await request('/api/me/dojang')).status, 401); checks.push('protected Dojang requires session');
+assert.equal((await request('/api/workbench/demo-data')).status,401); checks.push('UX fixture accounts require an authenticated operator');
 assert.equal((await post('/api/auth/challenge', { address: account.address })).status, 403); checks.push('CSRF required');
 let token = await csrf();
 assert.equal((await post('/api/auth/challenge', { address: account.address }, token, 'https://evil.example')).status, 403);
@@ -59,6 +60,9 @@ const dashboard=await request('/api/workbench/dashboard');
 assert.equal(dashboard.status,200);assert.equal(dashboard.body.user.address,account.address.toLowerCase());
 assert.equal(dashboard.body.user.role,'INVESTOR');assert.equal(dashboard.body.all_lines,undefined);
 checks.push('authenticated dashboard returns own wallet scope without operator statements');
+assert.equal((await request('/api/workbench/demo-data')).status,403);
+assert.equal((await request('/api/workbench/demo-data/personas/operator')).status,403);
+checks.push('regular signed account cannot read fixture personas or select operator preview');
 // Direct Core has a separate public route; the deployed BFF uses /api/offering.
 if(!directCore) {const offering=await request('/api/offering');assert.equal(offering.status,200);assert.equal(offering.body.mode,'SIMULATION');checks.push('public offering is backed by live Core business data');}
 assert.equal((await post('/api/auth/logout', {}, token)).status, 200);

@@ -144,6 +144,162 @@
         }
       }
     },
+    "/api/v1/workbench/demo-data": {
+      "get": {
+        "operationId": "uxDemoDataset",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UxDemoDataset"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Role, ownership, Origin or CSRF rejected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "State conflict or Dojang required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Dependency unavailable; never interpreted as success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/workbench/demo-data/personas/{personaId}": {
+      "get": {
+        "operationId": "uxDemoPersona",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "personaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-z0-9-]{1,80}$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UxPersonaView"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Role, ownership, Origin or CSRF rejected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "State conflict or Dojang required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Dependency unavailable; never interpreted as success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/workbench/dashboard": {
       "get": {
         "operationId": "dashboard",
@@ -2907,6 +3063,994 @@
       }
     },
     "schemas": {
+      "UxPersona": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "participation": {
+            "type": "string"
+          },
+          "selectable": {
+            "type": "boolean"
+          },
+          "synthetic": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "roles",
+          "participation",
+          "selectable",
+          "synthetic"
+        ]
+      },
+      "UxStore": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "district": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "ownerPersonaId": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "synthetic": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "district",
+          "category",
+          "ownerPersonaId",
+          "description",
+          "synthetic"
+        ]
+      },
+      "UxOffering": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "storeId": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "targetUnits": {
+            "type": "integer"
+          },
+          "unitPriceWon": {
+            "type": "string",
+            "pattern": "^-?[0-9]+$",
+            "description": "Integer KRW, decimal string; SIMULATION only"
+          },
+          "targetWon": {
+            "type": "string",
+            "pattern": "^-?[0-9]+$",
+            "description": "Integer KRW, decimal string; SIMULATION only"
+          },
+          "rateBps": {
+            "type": "integer"
+          },
+          "months": {
+            "type": "integer"
+          },
+          "startsOn": {
+            "type": "string"
+          },
+          "principalRedemption": {
+            "type": "string"
+          },
+          "acceptedUnits": {
+            "type": "integer"
+          },
+          "synthetic": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "storeId",
+          "title",
+          "status",
+          "targetUnits",
+          "unitPriceWon",
+          "targetWon",
+          "rateBps",
+          "months",
+          "startsOn",
+          "principalRedemption",
+          "acceptedUnits",
+          "synthetic"
+        ]
+      },
+      "UxSubscription": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "offeringId": {
+            "type": "string"
+          },
+          "personaId": {
+            "type": "string"
+          },
+          "units": {
+            "type": "integer"
+          },
+          "allocatedUnits": {
+            "type": "integer"
+          },
+          "refundedUnits": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string"
+          },
+          "synthetic": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "offeringId",
+          "personaId",
+          "units",
+          "allocatedUnits",
+          "refundedUnits",
+          "status",
+          "synthetic"
+        ]
+      },
+      "UxHolding": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "offeringId": {
+            "type": "string"
+          },
+          "personaId": {
+            "type": "string"
+          },
+          "units": {
+            "type": "integer"
+          },
+          "chainUnits": {
+            "type": "integer"
+          },
+          "chainStatus": {
+            "type": "string"
+          },
+          "synthetic": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "offeringId",
+          "personaId",
+          "units",
+          "chainUnits",
+          "chainStatus",
+          "synthetic"
+        ]
+      },
+      "UxRevenue": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "storeId": {
+            "type": "string"
+          },
+          "period": {
+            "type": "string"
+          },
+          "sourceCsv": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string"
+          },
+          "netSalesWon": {
+            "type": "string",
+            "pattern": "^-?[0-9]+$",
+            "description": "Integer KRW, decimal string; SIMULATION only"
+          },
+          "reconciled": {
+            "type": "boolean"
+          },
+          "synthetic": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "storeId",
+          "period",
+          "sourceCsv",
+          "sha256",
+          "netSalesWon",
+          "reconciled",
+          "synthetic"
+        ]
+      },
+      "UxEvidence": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "storeId": {
+            "type": "string"
+          },
+          "offeringId": {
+            "type": "string"
+          },
+          "period": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "sourceId": {
+            "type": "string"
+          },
+          "submittedBy": {
+            "type": "string"
+          },
+          "reviewedBy": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "synthetic": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "storeId",
+          "offeringId",
+          "period",
+          "status",
+          "sourceId",
+          "submittedBy",
+          "reviewedBy",
+          "synthetic"
+        ]
+      },
+      "UxSettlement": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "offeringId": {
+            "type": "string"
+          },
+          "storeId": {
+            "type": "string"
+          },
+          "period": {
+            "type": "string"
+          },
+          "version": {
+            "type": "integer"
+          },
+          "previousId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "type": "string"
+          },
+          "sourceId": {
+            "type": "string"
+          },
+          "netSalesWon": {
+            "type": "string",
+            "pattern": "^-?[0-9]+$",
+            "description": "Integer KRW, decimal string; SIMULATION only"
+          },
+          "poolWon": {
+            "type": "string",
+            "pattern": "^-?[0-9]+$",
+            "description": "Integer KRW, decimal string; SIMULATION only"
+          },
+          "cashAvailableWon": {
+            "type": "string",
+            "pattern": "^-?[0-9]+$",
+            "description": "Integer KRW, decimal string; SIMULATION only"
+          },
+          "calculatedBy": {
+            "type": "string"
+          },
+          "approvedBy": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "chainStatus": {
+            "type": "string"
+          },
+          "synthetic": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "offeringId",
+          "storeId",
+          "period",
+          "version",
+          "previousId",
+          "status",
+          "sourceId",
+          "netSalesWon",
+          "poolWon",
+          "cashAvailableWon",
+          "calculatedBy",
+          "approvedBy",
+          "chainStatus",
+          "synthetic"
+        ]
+      },
+      "UxLine": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "settlementId": {
+            "type": "string"
+          },
+          "holdingId": {
+            "type": "string"
+          },
+          "personaId": {
+            "type": "string"
+          },
+          "units": {
+            "type": "integer"
+          },
+          "amountWon": {
+            "type": "string",
+            "pattern": "^-?[0-9]+$",
+            "description": "Integer KRW, decimal string; SIMULATION only"
+          },
+          "paidWon": {
+            "type": "string",
+            "pattern": "^-?[0-9]+$",
+            "description": "Integer KRW, decimal string; SIMULATION only"
+          },
+          "priorPaidWon": {
+            "type": "string",
+            "pattern": "^-?[0-9]+$",
+            "description": "Integer KRW, decimal string; SIMULATION only"
+          },
+          "deltaWon": {
+            "type": "string",
+            "pattern": "^-?[0-9]+$",
+            "description": "Integer KRW, decimal string; SIMULATION only"
+          },
+          "unpaidWon": {
+            "type": "string",
+            "pattern": "^-?[0-9]+$",
+            "description": "Integer KRW, decimal string; SIMULATION only"
+          },
+          "overpaidWon": {
+            "type": "string",
+            "pattern": "^-?[0-9]+$",
+            "description": "Integer KRW, decimal string; SIMULATION only"
+          },
+          "synthetic": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "settlementId",
+          "holdingId",
+          "personaId",
+          "units",
+          "amountWon",
+          "paidWon",
+          "priorPaidWon",
+          "deltaWon",
+          "unpaidWon",
+          "overpaidWon",
+          "synthetic"
+        ]
+      },
+      "UxPayment": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "lineId": {
+            "type": "string"
+          },
+          "personaId": {
+            "type": "string"
+          },
+          "requestedWon": {
+            "type": "string",
+            "pattern": "^-?[0-9]+$",
+            "description": "Integer KRW, decimal string; SIMULATION only"
+          },
+          "paidWon": {
+            "type": "string",
+            "pattern": "^-?[0-9]+$",
+            "description": "Integer KRW, decimal string; SIMULATION only"
+          },
+          "outcome": {
+            "type": "string"
+          },
+          "synthetic": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "lineId",
+          "personaId",
+          "requestedWon",
+          "paidWon",
+          "outcome",
+          "synthetic"
+        ]
+      },
+      "UxBenefit": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "storeId": {
+            "type": "string"
+          },
+          "offeringId": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "requiredUnits": {
+            "type": "integer"
+          },
+          "validFrom": {
+            "type": "string"
+          },
+          "validUntil": {
+            "type": "string"
+          },
+          "maxClaims": {
+            "type": "integer"
+          },
+          "maxPerPersona": {
+            "type": "integer"
+          },
+          "synthetic": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "storeId",
+          "offeringId",
+          "title",
+          "requiredUnits",
+          "validFrom",
+          "validUntil",
+          "maxClaims",
+          "maxPerPersona",
+          "synthetic"
+        ]
+      },
+      "UxClaim": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "benefitId": {
+            "type": "string"
+          },
+          "personaId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "claimedOn": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "synthetic": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "benefitId",
+          "personaId",
+          "status",
+          "claimedOn",
+          "code",
+          "synthetic"
+        ]
+      },
+      "UxBenefitState": {
+        "type": "object",
+        "properties": {
+          "personaId": {
+            "type": "string"
+          },
+          "benefitId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "heldUnits": {
+            "type": "integer"
+          },
+          "synthetic": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "personaId",
+          "benefitId",
+          "status",
+          "heldUnits",
+          "synthetic"
+        ]
+      },
+      "UxScenario": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "personaId": {
+            "type": "string"
+          },
+          "path": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "expected": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "personaId",
+          "path",
+          "expected"
+        ]
+      },
+      "UxDemoDataset": {
+        "type": "object",
+        "properties": {
+          "datasetId": {
+            "type": "string"
+          },
+          "version": {
+            "type": "integer"
+          },
+          "asOf": {
+            "type": "string"
+          },
+          "mode": {
+            "const": "SIMULATION",
+            "type": "string"
+          },
+          "source": {
+            "const": "SYNTHETIC_UX_FIXTURE",
+            "type": "string"
+          },
+          "disclaimer": {
+            "type": "string"
+          },
+          "sourceSha256": {
+            "type": "string"
+          },
+          "personas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UxPersona"
+            }
+          },
+          "stores": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UxStore"
+            }
+          },
+          "offerings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UxOffering"
+            }
+          },
+          "subscriptions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UxSubscription"
+            }
+          },
+          "holdings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UxHolding"
+            }
+          },
+          "revenues": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UxRevenue"
+            }
+          },
+          "exceptionSources": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UxRevenue"
+            }
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UxEvidence"
+            }
+          },
+          "settlements": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UxSettlement"
+            }
+          },
+          "settlementLines": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UxLine"
+            }
+          },
+          "payments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UxPayment"
+            }
+          },
+          "benefits": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UxBenefit"
+            }
+          },
+          "claims": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UxClaim"
+            }
+          },
+          "benefitStates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UxBenefitState"
+            }
+          },
+          "scenarios": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UxScenario"
+            }
+          }
+        },
+        "required": [
+          "datasetId",
+          "version",
+          "asOf",
+          "mode",
+          "source",
+          "disclaimer",
+          "sourceSha256",
+          "personas",
+          "stores",
+          "offerings",
+          "subscriptions",
+          "holdings",
+          "revenues",
+          "exceptionSources",
+          "evidence",
+          "settlements",
+          "settlementLines",
+          "payments",
+          "benefits",
+          "claims",
+          "benefitStates",
+          "scenarios"
+        ]
+      },
+      "UxPersonaView": {
+        "type": "object",
+        "properties": {
+          "datasetId": {
+            "type": "string"
+          },
+          "version": {
+            "type": "integer"
+          },
+          "asOf": {
+            "type": "string"
+          },
+          "mode": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "disclaimer": {
+            "type": "string"
+          },
+          "sourceSha256": {
+            "type": "string"
+          },
+          "persona": {
+            "$ref": "#/components/schemas/UxPersona"
+          },
+          "market": {
+            "type": "object",
+            "properties": {
+              "stores": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/UxStore"
+                }
+              },
+              "offerings": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/UxOffering"
+                }
+              },
+              "revenues": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/UxRevenue"
+                }
+              }
+            },
+            "required": [
+              "stores",
+              "offerings",
+              "revenues"
+            ]
+          },
+          "portfolio": {
+            "type": "object",
+            "properties": {
+              "subscriptions": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/UxSubscription"
+                }
+              },
+              "holdings": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/UxHolding"
+                }
+              },
+              "settlements": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/UxSettlement"
+                }
+              },
+              "lines": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/UxLine"
+                }
+              },
+              "payments": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/UxPayment"
+                }
+              }
+            },
+            "required": [
+              "subscriptions",
+              "holdings",
+              "settlements",
+              "lines",
+              "payments"
+            ]
+          },
+          "storeManagement": {
+            "type": "object",
+            "properties": {
+              "stores": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/UxStore"
+                }
+              },
+              "offerings": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/UxOffering"
+                }
+              },
+              "evidence": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/UxEvidence"
+                }
+              },
+              "revenues": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/UxRevenue"
+                }
+              },
+              "exceptionSources": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/UxRevenue"
+                }
+              },
+              "settlements": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/UxSettlement"
+                }
+              },
+              "benefits": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/UxBenefit"
+                }
+              }
+            },
+            "required": [
+              "stores",
+              "offerings",
+              "evidence",
+              "revenues",
+              "exceptionSources",
+              "settlements",
+              "benefits"
+            ]
+          },
+          "customerBenefits": {
+            "type": "object",
+            "properties": {
+              "definitions": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/UxBenefit"
+                }
+              },
+              "states": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/UxBenefitState"
+                }
+              },
+              "claims": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/UxClaim"
+                }
+              }
+            },
+            "required": [
+              "definitions",
+              "states",
+              "claims"
+            ]
+          },
+          "reviewQueue": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UxEvidence"
+            }
+          },
+          "operations": {
+            "type": "object",
+            "properties": {
+              "settlements": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/UxSettlement"
+                }
+              },
+              "offerings": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/UxOffering"
+                }
+              }
+            },
+            "required": [
+              "settlements",
+              "offerings"
+            ]
+          },
+          "availableSections": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "datasetId",
+          "version",
+          "asOf",
+          "mode",
+          "source",
+          "disclaimer",
+          "sourceSha256",
+          "persona",
+          "market",
+          "portfolio",
+          "storeManagement",
+          "customerBenefits",
+          "reviewQueue",
+          "operations",
+          "availableSections"
+        ]
+      },
       "PerformancePoint": {
         "type": "object",
         "properties": {

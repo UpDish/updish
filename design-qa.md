@@ -1,6 +1,9 @@
 # Upbit-informed UI/UX and service-flow verification
 
-final result: passed
+final result: blocked
+
+**Latest acceptance scope (2026-10-26):** The user rejected the current overall journey and requested login first, a store-discovery/investment first tab, an investment-history second tab, followed by merchant/customer/reviewer/operator sections. Earlier component and screenshot checks below are historical evidence, not acceptance of that new journey. The user asked for connected dummy data first; that data phase is now prepared. The next UI release remains pending [UX issue #7](https://github.com/UpDish/updish/issues/7). No frontend/layout/navigation change or Vercel redeployment was made in the data-only phase.
+
 
 2026-10-26 KST. This result applies to the local production build prepared for the current release. Public deployment evidence is recorded separately in `docs/evidence/service-flow/` and the deployment runbook.
 

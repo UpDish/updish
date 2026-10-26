@@ -1,0 +1,176 @@
+{
+  "datasetId": "updish-ux-v1",
+  "version": 1,
+  "asOf": "2026-10-26",
+  "mode": "SIMULATION",
+  "stores": [
+    {
+      "key": "seongsu",
+      "name": "성수 모퉁이 식당",
+      "district": "성동구 성수동",
+      "category": "한식",
+      "status": "OPEN",
+      "targetUnits": 3600,
+      "unitPriceWon": 10000,
+      "rateBps": 300,
+      "months": 60,
+      "startsOn": "2026-10-01",
+      "monthlyNetWon": [
+        22000000,
+        24000000,
+        27000000,
+        25000000,
+        28000000,
+        30000000
+      ],
+      "ownerPersonaId": "merchant-seongsu"
+    },
+    {
+      "key": "yeonnam",
+      "name": "연남 온기 파스타",
+      "district": "마포구 연남동",
+      "category": "양식",
+      "status": "OPEN",
+      "targetUnits": 4000,
+      "unitPriceWon": 10000,
+      "rateBps": 250,
+      "months": 36,
+      "startsOn": "2026-11-01",
+      "monthlyNetWon": [
+        26000000,
+        28000000,
+        29000000,
+        31000000,
+        33000000,
+        35000000
+      ],
+      "ownerPersonaId": "merchant-group"
+    },
+    {
+      "key": "mangwon",
+      "name": "망원 작은 베이커리",
+      "district": "마포구 망원동",
+      "category": "베이커리",
+      "status": "OPEN",
+      "targetUnits": 6000,
+      "unitPriceWon": 5000,
+      "rateBps": 400,
+      "months": 24,
+      "startsOn": "2026-11-01",
+      "monthlyNetWon": [
+        18000000,
+        20000000,
+        21000000,
+        23000000,
+        24000000,
+        26000000
+      ],
+      "ownerPersonaId": "merchant-group"
+    },
+    {
+      "key": "eulji",
+      "name": "을지로 잔술집",
+      "district": "중구 을지로",
+      "category": "주점",
+      "status": "FUNDED",
+      "targetUnits": 3000,
+      "unitPriceWon": 20000,
+      "rateBps": 300,
+      "months": 36,
+      "startsOn": "2026-05-01",
+      "monthlyNetWon": [
+        24000000,
+        26000000,
+        27000000,
+        28000000,
+        30000000,
+        32000000
+      ],
+      "ownerPersonaId": "merchant-group"
+    },
+    {
+      "key": "hapjeong",
+      "name": "합정 화로 식탁",
+      "district": "마포구 합정동",
+      "category": "한식",
+      "status": "FUNDED",
+      "targetUnits": 5000,
+      "unitPriceWon": 10000,
+      "rateBps": 350,
+      "months": 48,
+      "startsOn": "2026-06-01",
+      "monthlyNetWon": [
+        42000000,
+        44000000,
+        46000000,
+        45000000,
+        48000000,
+        24000000
+      ],
+      "ownerPersonaId": "merchant-group"
+    },
+    {
+      "key": "seochon",
+      "name": "서촌 낮은 찻집",
+      "district": "종로구 서촌",
+      "category": "카페",
+      "status": "FUNDED",
+      "targetUnits": 2400,
+      "unitPriceWon": 10000,
+      "rateBps": 400,
+      "months": 24,
+      "startsOn": "2026-07-01",
+      "monthlyNetWon": [
+        22000000,
+        24000000,
+        25000000,
+        26000000,
+        27000000,
+        28000000
+      ],
+      "ownerPersonaId": "merchant-group"
+    },
+    {
+      "key": "songri",
+      "name": "송리 오븐 피자",
+      "district": "송파구 송파동",
+      "category": "양식",
+      "status": "REFUNDED",
+      "targetUnits": 3000,
+      "unitPriceWon": 20000,
+      "rateBps": 300,
+      "months": 36,
+      "startsOn": "2026-10-01",
+      "monthlyNetWon": [
+        30000000,
+        32000000,
+        28000000,
+        29000000,
+        31000000,
+        27000000
+      ],
+      "ownerPersonaId": "merchant-group"
+    },
+    {
+      "key": "mullae",
+      "name": "문래 골목 카레",
+      "district": "영등포구 문래동",
+      "category": "일식",
+      "status": "MATURED",
+      "targetUnits": 3600,
+      "unitPriceWon": 10000,
+      "rateBps": 500,
+      "months": 6,
+      "startsOn": "2026-04-01",
+      "monthlyNetWon": [
+        22000000,
+        24000000,
+        25000000,
+        28000000,
+        30000000,
+        27000000
+      ],
+      "ownerPersonaId": "merchant-group"
+    }
+  ]
+}

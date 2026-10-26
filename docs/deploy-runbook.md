@@ -75,3 +75,14 @@ S3 CORS는 실제 Web Origin과 presigned 업로드 헤더를 허용하도록 �
 공개 저장소는 https://github.com/UpDish/updish (`main`)입니다. [팀원 시작 이슈 #1](https://github.com/UpDish/updish/issues/1)을 먼저 읽고 각 후속 이슈의 완료 기준에 따라 작업합니다. 저장소 생성만으로 Vercel Git 자동 배포를 연결한 것은 아닙니다. 현재 릴리스는 승인된 Vercel 연결을 통한 소스 배포입니다.
 
 QR 연결에는 공개 Reown ID를 Web 환경에 설정한 뒤 재빌드해야 합니다. 현재는 ID가 없어 비활성 상태이며 브라우저 지갑 선택/로그인은 동작합니다.
+
+
+## 전체 UX용 더미 데이터 준비 — 2026-10-26
+
+프론트는 위 `84d0725` 배포를 유지합니다. 사용자 요청에 따라 UI 개편보다 먼저 Core/Flyway V6의 별도 `ux_demo_dataset`에 `updish-ux-v1`을 등록했습니다. 가게/상품 각 8개, 월 매출 48건, 보유 9건, 혜택 8개/쿠폰 6건이며 시연 계정 7개와 배경 계정 1개입니다. 기존 실제 계정/업무 원장/active run/체인 작업은 변경하지 않았고 SSM 전후 행 수 비교도 일치했습니다. 실제 지갑 권한이나 승인/쿠폰을 발급한 것이 아닙니다.
+
+배포 전 백업 SSM `e275fc9c-352c-442e-90ad-bb6aabee14ee` Success, 백업 SHA-256 `8e0070e6e40270831b4f9e78892f2abcbdecc3b4371b9f9ed60eae61f076909c`. Core 교체 SSM `dddefe5a-6df7-4a44-93c6-502ce6a81560` Success, health UP, V6와 source SHA-256 `a56b47a71c926108638cb5c7fd11ae39757df2f888c1d847c560ecb8d18f247c`를 실제 서버에서 확인했습니다. 이전 이미지는 `updish/core-api:before-ux-20261026`입니다. V6는 추가 테이블이므로 이전 Core로 롤백할 때 테이블이나 기존 이력을 임의 삭제하지 않습니다.
+
+[생성/시연 데이터 안내](../fixtures/ux/README.md), [배포 seed 근거](evidence/ux-demo/production-seed.json), [공개 로그인·fixture 권한 검사 14개](evidence/ux-demo/production-auth.json). OPERATOR의 전체/시나리오별 200 응답은 로컬 실제 SIWE/BFF/별도 DB로 검증했고, 클라우드에서는 seed/메타데이터/일반 사용자 접근 차단을 확인했습니다. 사용자 운영 지갑의 서명을 대신하지 않았습니다.
+
+현재 FastAPI Agent health는 정상, 내부 토큰은 있으나 `/capabilities`의 `model_calls`는 `NOT_CONFIGURED`입니다. 실제 AI 설명은 아직 미연결이고 정산 근거 화면만 모델 없이 동작합니다. 새 키 생성/저장을 승인 없이 재개하지 않습니다.

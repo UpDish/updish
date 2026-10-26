@@ -1,0 +1,31 @@
+{
+  "checkedAt": "2026-10-26T05:13:41.828Z",
+  "scope": "LOCAL_ANVIL_ONLY: signed SIWE -> Web BFF -> Core -> dedicated PostgreSQL fixture table. No wallet transaction, cloud data modification, model call or UX/tab changes.",
+  "datasetId": "updish-ux-v1",
+  "sourceSha256": "a56b47a71c926108638cb5c7fd11ae39757df2f888c1d847c560ecb8d18f247c",
+  "checks": [
+    "Anonymous request cannot access the fixture account data",
+    "Regular signed user cannot select synthetic operator/personas",
+    "Operator reads the seeded PostgreSQL snapshot with eight stores and 48 monthly sales records",
+    "All seven selectable personas receive scoped portfolio, claims and store-management data",
+    "New investor/customer empty states and existing multi-store portfolio are distinct",
+    "Single-store and multi-store merchants retain separate ownership scopes",
+    "Correction overpayment and partially unpaid/matured claims remain visible",
+    "Reviewer and operator example sections have different datasets",
+    "Background participant and unknown IDs cannot be selected as login personas",
+    "Preview reads do not change active offering, real ledger, jobs or actual account role",
+    "Synthetic holdings do not claim real GIWA balances or transactions"
+  ],
+  "counts": {
+    "stores": 8,
+    "offerings": 8,
+    "personas": 7,
+    "subscriptions": 17,
+    "holdings": 9,
+    "revenues": 48,
+    "settlements": 7,
+    "benefits": 8,
+    "claims": 6
+  },
+  "transactionsSent": 0
+}

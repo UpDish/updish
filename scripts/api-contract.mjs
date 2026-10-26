@@ -8,6 +8,22 @@ const ref=name=>({$ref:`#/components/schemas/${name}`});
 const array=name=>({type:'array',items:typeof name==='string'?ref(name):name});
 const object=(properties,optional=[])=>({type:'object',properties,required:Object.keys(properties).filter(k=>!optional.includes(k))});
 const schemas={
+  UxPersona:object({id:str,name:str,roles:array(str),participation:str,selectable:bool,synthetic:bool}),
+  UxStore:object({id:str,name:str,district:str,category:str,ownerPersonaId:str,description:str,synthetic:bool}),
+  UxOffering:object({id:str,storeId:str,title:str,status:str,targetUnits:integer,unitPriceWon:money,targetWon:money,rateBps:integer,months:integer,startsOn:str,principalRedemption:str,acceptedUnits:integer,synthetic:bool}),
+  UxSubscription:object({id:str,offeringId:str,personaId:str,units:integer,allocatedUnits:integer,refundedUnits:integer,status:str,synthetic:bool}),
+  UxHolding:object({id:str,offeringId:str,personaId:str,units:integer,chainUnits:integer,chainStatus:str,synthetic:bool}),
+  UxRevenue:object({id:str,storeId:str,period:str,sourceCsv:str,sha256:str,netSalesWon:money,reconciled:bool,synthetic:bool}),
+  UxEvidence:object({id:str,storeId:str,offeringId:str,period:str,status:str,sourceId:str,submittedBy:str,reviewedBy:nullable,synthetic:bool}),
+  UxSettlement:object({id:str,offeringId:str,storeId:str,period:str,version:integer,previousId:nullable,status:str,sourceId:str,netSalesWon:money,poolWon:money,cashAvailableWon:money,calculatedBy:str,approvedBy:nullable,chainStatus:str,synthetic:bool}),
+  UxLine:object({id:str,settlementId:str,holdingId:str,personaId:str,units:integer,amountWon:money,paidWon:money,priorPaidWon:money,deltaWon:money,unpaidWon:money,overpaidWon:money,synthetic:bool}),
+  UxPayment:object({id:str,lineId:str,personaId:str,requestedWon:money,paidWon:money,outcome:str,synthetic:bool}),
+  UxBenefit:object({id:str,storeId:str,offeringId:str,title:str,requiredUnits:integer,validFrom:str,validUntil:str,maxClaims:integer,maxPerPersona:integer,synthetic:bool}),
+  UxClaim:object({id:str,benefitId:str,personaId:str,status:str,claimedOn:str,code:str,synthetic:bool}),
+  UxBenefitState:object({personaId:str,benefitId:str,status:str,heldUnits:integer,synthetic:bool}),
+  UxScenario:object({id:str,personaId:str,path:array(str),expected:str}),
+  UxDemoDataset:object({datasetId:str,version:integer,asOf:str,mode:{const:'SIMULATION',type:'string'},source:{const:'SYNTHETIC_UX_FIXTURE',type:'string'},disclaimer:str,sourceSha256:str,personas:array('UxPersona'),stores:array('UxStore'),offerings:array('UxOffering'),subscriptions:array('UxSubscription'),holdings:array('UxHolding'),revenues:array('UxRevenue'),exceptionSources:array('UxRevenue'),evidence:array('UxEvidence'),settlements:array('UxSettlement'),settlementLines:array('UxLine'),payments:array('UxPayment'),benefits:array('UxBenefit'),claims:array('UxClaim'),benefitStates:array('UxBenefitState'),scenarios:array('UxScenario')}),
+  UxPersonaView:object({datasetId:str,version:integer,asOf:str,mode:str,source:str,disclaimer:str,sourceSha256:str,persona:ref('UxPersona'),market:object({stores:array('UxStore'),offerings:array('UxOffering'),revenues:array('UxRevenue')}),portfolio:object({subscriptions:array('UxSubscription'),holdings:array('UxHolding'),settlements:array('UxSettlement'),lines:array('UxLine'),payments:array('UxPayment')}),storeManagement:object({stores:array('UxStore'),offerings:array('UxOffering'),evidence:array('UxEvidence'),revenues:array('UxRevenue'),exceptionSources:array('UxRevenue'),settlements:array('UxSettlement'),benefits:array('UxBenefit')}),customerBenefits:object({definitions:array('UxBenefit'),states:array('UxBenefitState'),claims:array('UxClaim')}),reviewQueue:array('UxEvidence'),operations:object({settlements:array('UxSettlement'),offerings:array('UxOffering')}),availableSections:array(str)}),
   PerformancePoint:object({period:str,version:integer,netSalesWon:money,poolWon:money}),
   Performance:object({offeringId:uuid,points:array('PerformancePoint'),mode:{const:'SIMULATION',type:'string'}}),
   Error:object({code:str,message:str},['message']),
@@ -36,7 +52,7 @@ const schemas={
 const paths={};
 const json=schema=>({'application/json':{schema}});
 function route(path,method,name,response={type:'object',additionalProperties:true},body,publicRead=false) {
-  const parameters=[...path.matchAll(/\{(\w+)\}/g)].map(m=>({name:m[1],in:'path',required:true,schema:m[1]==='address'?address:uuid}));
+  const parameters=[...path.matchAll(/\{(\w+)\}/g)].map(m=>({name:m[1],in:'path',required:true,schema:m[1]==='address'?address:m[1]==='personaId'?{type:'string',pattern:'^[a-z0-9-]{1,80}$'}:uuid}));
   const operation={operationId:name,security:publicRead?[]:[{session:[]}],parameters,responses:{200:{description:'Success',content:json(typeof response==='string'?ref(response):response)},400:{description:'Invalid input',content:json(ref('Error'))},401:{description:'Session required',content:json(ref('Error'))},403:{description:'Role, ownership, Origin or CSRF rejected',content:json(ref('Error'))},409:{description:'State conflict or Dojang required',content:json(ref('Error'))},503:{description:'Dependency unavailable; never interpreted as success',content:json(ref('Error'))}}};
   if(method==='post') {
     operation.parameters.push({name:'X-CSRF-TOKEN',in:'header',required:true,schema:str});
@@ -47,6 +63,8 @@ function route(path,method,name,response={type:'object',additionalProperties:tru
 route('/api/v1/offerings/current','get','currentOffering','Offering',undefined,true);
 route('/api/v1/offerings/current/performance','get','offeringPerformance','Performance',undefined,true);
 const p='/api/v1/workbench';
+route(p+'/demo-data','get','uxDemoDataset','UxDemoDataset');
+route(p+'/demo-data/personas/{personaId}','get','uxDemoPersona','UxPersonaView');
 route(p+'/dashboard','get','dashboard','Dashboard');
 route(p+'/members','post','assignRole',undefined,object({address,role:{type:'string',enum:['INVESTOR','MERCHANT','REVIEWER']},ownStore:bool}));
 route(p+'/evidence','post','submitEvidence','Evidence',object({offeringId:uuid,period:str,filename:str,csv:{type:'string',maxLength:1000000}}));

@@ -32,6 +32,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/workbench/demo-data": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["uxDemoDataset"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/workbench/demo-data/personas/{personaId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["uxDemoPersona"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/workbench/dashboard": {
         parameters: {
             query?: never;
@@ -500,6 +532,234 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        UxPersona: {
+            id: string;
+            name: string;
+            roles: string[];
+            participation: string;
+            selectable: boolean;
+            synthetic: boolean;
+        };
+        UxStore: {
+            id: string;
+            name: string;
+            district: string;
+            category: string;
+            ownerPersonaId: string;
+            description: string;
+            synthetic: boolean;
+        };
+        UxOffering: {
+            id: string;
+            storeId: string;
+            title: string;
+            status: string;
+            targetUnits: number;
+            /** @description Integer KRW, decimal string; SIMULATION only */
+            unitPriceWon: string;
+            /** @description Integer KRW, decimal string; SIMULATION only */
+            targetWon: string;
+            rateBps: number;
+            months: number;
+            startsOn: string;
+            principalRedemption: string;
+            acceptedUnits: number;
+            synthetic: boolean;
+        };
+        UxSubscription: {
+            id: string;
+            offeringId: string;
+            personaId: string;
+            units: number;
+            allocatedUnits: number;
+            refundedUnits: number;
+            status: string;
+            synthetic: boolean;
+        };
+        UxHolding: {
+            id: string;
+            offeringId: string;
+            personaId: string;
+            units: number;
+            chainUnits: number;
+            chainStatus: string;
+            synthetic: boolean;
+        };
+        UxRevenue: {
+            id: string;
+            storeId: string;
+            period: string;
+            sourceCsv: string;
+            sha256: string;
+            /** @description Integer KRW, decimal string; SIMULATION only */
+            netSalesWon: string;
+            reconciled: boolean;
+            synthetic: boolean;
+        };
+        UxEvidence: {
+            id: string;
+            storeId: string;
+            offeringId: string;
+            period: string;
+            status: string;
+            sourceId: string;
+            submittedBy: string;
+            reviewedBy: string | null;
+            synthetic: boolean;
+        };
+        UxSettlement: {
+            id: string;
+            offeringId: string;
+            storeId: string;
+            period: string;
+            version: number;
+            previousId: string | null;
+            status: string;
+            sourceId: string;
+            /** @description Integer KRW, decimal string; SIMULATION only */
+            netSalesWon: string;
+            /** @description Integer KRW, decimal string; SIMULATION only */
+            poolWon: string;
+            /** @description Integer KRW, decimal string; SIMULATION only */
+            cashAvailableWon: string;
+            calculatedBy: string;
+            approvedBy: string | null;
+            chainStatus: string;
+            synthetic: boolean;
+        };
+        UxLine: {
+            id: string;
+            settlementId: string;
+            holdingId: string;
+            personaId: string;
+            units: number;
+            /** @description Integer KRW, decimal string; SIMULATION only */
+            amountWon: string;
+            /** @description Integer KRW, decimal string; SIMULATION only */
+            paidWon: string;
+            /** @description Integer KRW, decimal string; SIMULATION only */
+            priorPaidWon: string;
+            /** @description Integer KRW, decimal string; SIMULATION only */
+            deltaWon: string;
+            /** @description Integer KRW, decimal string; SIMULATION only */
+            unpaidWon: string;
+            /** @description Integer KRW, decimal string; SIMULATION only */
+            overpaidWon: string;
+            synthetic: boolean;
+        };
+        UxPayment: {
+            id: string;
+            lineId: string;
+            personaId: string;
+            /** @description Integer KRW, decimal string; SIMULATION only */
+            requestedWon: string;
+            /** @description Integer KRW, decimal string; SIMULATION only */
+            paidWon: string;
+            outcome: string;
+            synthetic: boolean;
+        };
+        UxBenefit: {
+            id: string;
+            storeId: string;
+            offeringId: string;
+            title: string;
+            requiredUnits: number;
+            validFrom: string;
+            validUntil: string;
+            maxClaims: number;
+            maxPerPersona: number;
+            synthetic: boolean;
+        };
+        UxClaim: {
+            id: string;
+            benefitId: string;
+            personaId: string;
+            status: string;
+            claimedOn: string;
+            code: string;
+            synthetic: boolean;
+        };
+        UxBenefitState: {
+            personaId: string;
+            benefitId: string;
+            status: string;
+            heldUnits: number;
+            synthetic: boolean;
+        };
+        UxScenario: {
+            id: string;
+            personaId: string;
+            path: string[];
+            expected: string;
+        };
+        UxDemoDataset: {
+            datasetId: string;
+            version: number;
+            asOf: string;
+            /** @constant */
+            mode: "SIMULATION";
+            /** @constant */
+            source: "SYNTHETIC_UX_FIXTURE";
+            disclaimer: string;
+            sourceSha256: string;
+            personas: components["schemas"]["UxPersona"][];
+            stores: components["schemas"]["UxStore"][];
+            offerings: components["schemas"]["UxOffering"][];
+            subscriptions: components["schemas"]["UxSubscription"][];
+            holdings: components["schemas"]["UxHolding"][];
+            revenues: components["schemas"]["UxRevenue"][];
+            exceptionSources: components["schemas"]["UxRevenue"][];
+            evidence: components["schemas"]["UxEvidence"][];
+            settlements: components["schemas"]["UxSettlement"][];
+            settlementLines: components["schemas"]["UxLine"][];
+            payments: components["schemas"]["UxPayment"][];
+            benefits: components["schemas"]["UxBenefit"][];
+            claims: components["schemas"]["UxClaim"][];
+            benefitStates: components["schemas"]["UxBenefitState"][];
+            scenarios: components["schemas"]["UxScenario"][];
+        };
+        UxPersonaView: {
+            datasetId: string;
+            version: number;
+            asOf: string;
+            mode: string;
+            source: string;
+            disclaimer: string;
+            sourceSha256: string;
+            persona: components["schemas"]["UxPersona"];
+            market: {
+                stores: components["schemas"]["UxStore"][];
+                offerings: components["schemas"]["UxOffering"][];
+                revenues: components["schemas"]["UxRevenue"][];
+            };
+            portfolio: {
+                subscriptions: components["schemas"]["UxSubscription"][];
+                holdings: components["schemas"]["UxHolding"][];
+                settlements: components["schemas"]["UxSettlement"][];
+                lines: components["schemas"]["UxLine"][];
+                payments: components["schemas"]["UxPayment"][];
+            };
+            storeManagement: {
+                stores: components["schemas"]["UxStore"][];
+                offerings: components["schemas"]["UxOffering"][];
+                evidence: components["schemas"]["UxEvidence"][];
+                revenues: components["schemas"]["UxRevenue"][];
+                exceptionSources: components["schemas"]["UxRevenue"][];
+                settlements: components["schemas"]["UxSettlement"][];
+                benefits: components["schemas"]["UxBenefit"][];
+            };
+            customerBenefits: {
+                definitions: components["schemas"]["UxBenefit"][];
+                states: components["schemas"]["UxBenefitState"][];
+                claims: components["schemas"]["UxClaim"][];
+            };
+            reviewQueue: components["schemas"]["UxEvidence"][];
+            operations: {
+                settlements: components["schemas"]["UxSettlement"][];
+                offerings: components["schemas"]["UxOffering"][];
+            };
+            availableSections: string[];
+        };
         PerformancePoint: {
             period: string;
             version: number;
@@ -845,6 +1105,138 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Performance"];
+                };
+            };
+            /** @description Invalid input */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Session required */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Role, ownership, Origin or CSRF rejected */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description State conflict or Dojang required */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Dependency unavailable; never interpreted as success */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    uxDemoDataset: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UxDemoDataset"];
+                };
+            };
+            /** @description Invalid input */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Session required */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Role, ownership, Origin or CSRF rejected */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description State conflict or Dojang required */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Dependency unavailable; never interpreted as success */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    uxDemoPersona: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                personaId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UxPersonaView"];
                 };
             };
             /** @description Invalid input */

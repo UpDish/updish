@@ -1,0 +1,10 @@
+{
+  "checkedAt": "2026-10-26T05:21:18.883994Z",
+  "scope": "Actual EC2 Agent /health and /capabilities read over SSM; no live model request or key provisioning",
+  "ssmCommand": "6c38c2c5-8ec6-439e-9a25-0e66b33311d0",
+  "agentHealth": "ok",
+  "coreInternalTokenPresent": true,
+  "modelCalls": "NOT_CONFIGURED",
+  "transactionSigning": false,
+  "keyCreatedOrWritten": false
+}
