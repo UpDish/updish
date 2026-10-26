@@ -29,14 +29,14 @@ const before=await op.get<any>('/api/workbench/dashboard');
 const data=await op.get<components['schemas']['UxDemoDataset']>(endpoint);
 assert.equal(data.source,'SYNTHETIC_UX_FIXTURE');assert.equal(data.mode,'SIMULATION');assert.equal(data.stores.length,8);assert.equal(data.offerings.length,8);assert.equal(data.revenues.length,48);assert.equal(data.benefits.length,8);checks.push('Operator reads the seeded PostgreSQL snapshot with eight stores and 48 monthly sales records');
 const views:Record<string,components['schemas']['UxPersonaView']>={};
-for(const p of data.personas.filter(p=>p.selectable)){
+for(const p of data.personas.filter(p=>p.selectable&&p.id!=='customer-only')){
   const v=await op.get<components['schemas']['UxPersonaView']>(endpoint+'/personas/'+p.id);views[p.id]=v;
   assert.deepEqual(v.availableSections.slice(0,2),['MARKET','INVESTMENTS']);assert.equal(v.market.stores.length,8);
   for(const key of ['subscriptions','holdings','lines','payments'] as const)assert.ok(v.portfolio[key].every(row=>row.personaId===p.id));
-  assert.ok(v.customerBenefits.claims.every(c=>c.personaId===p.id));
+  assert.equal('customerBenefits' in v,false);assert.ok(!v.persona.roles.includes('CUSTOMER'));assert.ok(v.availableSections.includes('TRANSPARENCY'));
   assert.ok(v.storeManagement.stores.every(s=>s.ownerPersonaId===p.id));
-}checks.push('All seven selectable personas receive scoped portfolio, claims and store-management data');
-assert.equal(views['investor-new'].portfolio.holdings.length,0);assert.equal(views['investor-active'].portfolio.holdings.length,4);assert.equal(views['customer-only'].portfolio.subscriptions.length,0);checks.push('New investor/customer empty states and existing multi-store portfolio are distinct');
+}checks.push('All six active personas receive scoped portfolio and store-management data');
+assert.equal(views['investor-new'].portfolio.holdings.length,0);assert.equal(views['investor-active'].portfolio.holdings.length,4);assert.equal((await op.request(endpoint+'/personas/customer-only')).status,404);checks.push('New investor empty state and existing multi-store portfolio are distinct');
 assert.equal(views['merchant-seongsu'].storeManagement.stores.length,1);assert.equal(views['merchant-group'].storeManagement.stores.length,7);checks.push('Single-store and multi-store merchants retain separate ownership scopes');
 assert.ok(views['investor-active'].portfolio.lines.some(l=>BigInt(l.overpaidWon)>0n));assert.ok(views['investor-active'].portfolio.lines.some(l=>BigInt(l.unpaidWon)>0n));checks.push('Correction overpayment and partially unpaid/matured claims remain visible');
 assert.equal(views['reviewer'].reviewQueue.length,5);assert.equal(views['reviewer'].operations.settlements.length,0);assert.equal(views['operator'].operations.settlements.length,7);checks.push('Reviewer and operator example sections have different datasets');
@@ -45,6 +45,6 @@ const after=await op.get<any>('/api/workbench/dashboard');assert.equal(after.off
 for(const key of ['all_subscriptions','all_holdings','all_settlements','all_jobs','events'])assert.deepEqual(after[key],before[key]);
 assert.equal((await op.get<any>('/api/auth/session')).user.role,'OPERATOR');checks.push('Preview reads do not change active offering, real ledger, jobs or actual account role');
 assert.ok(data.holdings.every(h=>h.chainUnits===0&&h.chainStatus==='NOT_SUBMITTED'));checks.push('Synthetic holdings do not claim real GIWA balances or transactions');
-const report={checkedAt:new Date().toISOString(),scope:'LOCAL_ANVIL_ONLY: signed SIWE -> Web BFF -> Core -> dedicated PostgreSQL fixture table. No wallet transaction, cloud data modification, model call or UX/tab changes.',datasetId:data.datasetId,sourceSha256:data.sourceSha256,checks,counts:{stores:data.stores.length,offerings:data.offerings.length,personas:data.personas.filter(p=>p.selectable).length,subscriptions:data.subscriptions.length,holdings:data.holdings.length,revenues:data.revenues.length,settlements:data.settlements.length,benefits:data.benefits.length,claims:data.claims.length},transactionsSent:0};
+const report={checkedAt:new Date().toISOString(),scope:'LOCAL_ANVIL_ONLY: signed SIWE -> Web BFF -> Core -> dedicated PostgreSQL fixture table. No wallet transaction, cloud data modification, model call or UX/tab changes.',datasetId:data.datasetId,sourceSha256:data.sourceSha256,checks,counts:{stores:data.stores.length,offerings:data.offerings.length,personas:data.personas.filter(p=>p.selectable&&p.id!=='customer-only').length,subscriptions:data.subscriptions.length,holdings:data.holdings.length,revenues:data.revenues.length,settlements:data.settlements.length,benefits:data.benefits.length,claims:data.claims.length},transactionsSent:0};
 if(process.argv[2])await writeFile(process.argv[2],JSON.stringify(report,null,2)+'\n');
 console.log(JSON.stringify(report,null,2));

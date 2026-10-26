@@ -80,14 +80,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/workbench/benefits": {
+    "/api/v1/workbench/transparency/{storeId}": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["customerBenefits"];
+        get: operations["storeTransparency"];
         put?: never;
         post?: never;
         delete?: never;
@@ -96,7 +96,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/workbench/benefits/{benefitId}/claim": {
+    "/api/v1/workbench/agent/chat": {
         parameters: {
             query?: never;
             header?: never;
@@ -105,7 +105,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["claimDemoBenefit"];
+        post: operations["chatWithAgent"];
         delete?: never;
         options?: never;
         head?: never;
@@ -612,6 +612,71 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        PublicReconciliation: {
+            /** @description Integer KRW, decimal string; SIMULATION only */
+            grossWon: string;
+            /** @description Integer KRW, decimal string; SIMULATION only */
+            discountWon: string;
+            /** @description Integer KRW, decimal string; SIMULATION only */
+            refundWon: string;
+            /** @description Integer KRW, decimal string; SIMULATION only */
+            netWon: string;
+            pgWon: string | null;
+            bankWon: string | null;
+            pgGapWon: string | null;
+            bankGapWon: string | null;
+            rowCount: number;
+            acceptedCount: number;
+            ready: boolean;
+            duplicateIgnored: number;
+            blockingCount: number;
+            issueCounts: {
+                code: string;
+                count: number;
+                blocking: boolean;
+            }[];
+            sources: {
+                name: string;
+                available: boolean;
+            }[];
+        };
+        TransparencyCase: {
+            id: string;
+            period: string;
+            label: string;
+            /** @enum {string} */
+            basis: "SYNTHETIC_CSV" | "APPROVED_LEDGER";
+            status: string;
+            reconciliation: components["schemas"]["PublicReconciliation"];
+            version: number | null;
+            settlementId: string | null;
+            digest: string | null;
+            chainStatus: string;
+            chainTxHash: string | null;
+            sourceHash: string;
+        };
+        Transparency: {
+            store: {
+                id: string;
+                name: string;
+                district: string;
+                category: string;
+            };
+            approved: components["schemas"]["TransparencyCase"][];
+            submissions: {
+                period: string;
+                status: string;
+                blockingCount: number;
+                issueCounts: {
+                    code: string;
+                    count: number;
+                    blocking: boolean;
+                }[];
+            }[];
+            samples: components["schemas"]["TransparencyCase"][];
+            mode: string;
+            asOf: string;
+        };
         AgentStatus: {
             /** @enum {string} */
             modelCalls: "CONFIGURED" | "NOT_CONFIGURED" | "UNAVAILABLE";
@@ -672,21 +737,6 @@ export interface components {
             subscriptions: components["schemas"]["InvestmentSubscription"][];
             holdings: components["schemas"]["InvestmentHolding"][];
             settlements: components["schemas"]["InvestmentSettlement"][];
-            mode: string;
-        };
-        BenefitClaim: {
-            /** Format: uuid */
-            id: string;
-            code: string;
-            claimed_at: string;
-        };
-        CustomerBenefit: components["schemas"]["UxBenefit"] & {
-            heldUnits: number;
-            status: string;
-            claim: components["schemas"]["BenefitClaim"] | null;
-        };
-        CustomerBenefits: {
-            benefits: components["schemas"]["CustomerBenefit"][];
             mode: string;
         };
         UxPersona: {
@@ -903,12 +953,6 @@ export interface components {
                 revenues: components["schemas"]["UxRevenue"][];
                 exceptionSources: components["schemas"]["UxRevenue"][];
                 settlements: components["schemas"]["UxSettlement"][];
-                benefits: components["schemas"]["UxBenefit"][];
-            };
-            customerBenefits: {
-                definitions: components["schemas"]["UxBenefit"][];
-                states: components["schemas"]["UxBenefitState"][];
-                claims: components["schemas"]["UxClaim"][];
             };
             reviewQueue: components["schemas"]["UxEvidence"][];
             operations: {
@@ -1506,11 +1550,13 @@ export interface operations {
             };
         };
     };
-    customerBenefits: {
+    storeTransparency: {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                storeId: string;
+            };
             cookie?: never;
         };
         requestBody?: never;
@@ -1521,7 +1567,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CustomerBenefits"];
+                    "application/json": components["schemas"]["Transparency"];
                 };
             };
             /** @description Invalid input */
@@ -1571,18 +1617,23 @@ export interface operations {
             };
         };
     };
-    claimDemoBenefit: {
+    chatWithAgent: {
         parameters: {
             query?: never;
             header: {
                 "X-CSRF-TOKEN": string;
             };
-            path: {
-                benefitId: string;
-            };
+            path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": {
+                    question: string;
+                    storeId?: string;
+                };
+            };
+        };
         responses: {
             /** @description Success */
             200: {
@@ -1590,7 +1641,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CustomerBenefit"];
+                    "application/json": components["schemas"]["Explanation"];
                 };
             };
             /** @description Invalid input */

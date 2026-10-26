@@ -1,7 +1,7 @@
 'use client';
 
-export type DemoView='operator'|'merchant'|'customer'|'investor';
-export const demoViews:{id:DemoView;label:string}[]=[{id:'operator',label:'운영자'},{id:'merchant',label:'가게'},{id:'customer',label:'고객'},{id:'investor',label:'투자자'}];
+export type DemoView='operator'|'merchant'|'investor';
+export const demoViews:{id:DemoView;label:string}[]=[{id:'operator',label:'운영자'},{id:'merchant',label:'가게'},{id:'investor',label:'투자자'}];
 export function DemoViewSwitcher({view,onChange}:{view:DemoView;onChange:(view:DemoView)=>void}) {
   return <details className="demo-view-switcher" onKeyDown={event=>{if(event.key==='Escape'){event.currentTarget.open=false;event.currentTarget.querySelector('summary')?.focus();}}}>
     <summary>{demoViews.find(v=>v.id===view)!.label} 모드 <span aria-hidden="true">▾</span></summary>

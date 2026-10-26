@@ -31,7 +31,7 @@ export async function coreRequest(path: string, request?: Request): Promise<Resp
     const body = method === 'GET' ? undefined : await request!.text();
     if (body && body.length > bodyLimit) return Response.json({ code: 'BODY_TOO_LARGE' }, { status: 413 });
     const response = await fetch(new URL(path, process.env.CORE_API_URL ?? 'http://127.0.0.1:8080'), {
-      method, headers, body, cache: 'no-store', redirect: 'error', signal: AbortSignal.timeout(path.endsWith('/explain') ? 55_000 : 30_000),
+      method, headers, body, cache: 'no-store', redirect: 'error', signal: AbortSignal.timeout((path.endsWith('/explain') || path.endsWith('/agent/chat')) ? 55_000 : 30_000),
     });
     if (!response.headers.get('content-type')?.includes('application/json')) {
       return Response.json({ code: 'INVALID_UPSTREAM_RESPONSE', message: '서버 응답을 확인하지 못했습니다.' }, { status: 502 });

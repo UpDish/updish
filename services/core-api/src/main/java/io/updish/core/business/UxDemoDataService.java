@@ -39,9 +39,10 @@ public class UxDemoDataService implements ApplicationRunner {
     private static List<Map<String,Object>> own(Map<String,Object> d,String key,String id){return list(d,key).stream().filter(r->id.equals(r.get("personaId"))).toList();}
     @Transactional(readOnly=true) public Map<String,Object> persona(WalletPrincipal actor,String personaId){
         // Choosing a fixture persona never changes the authenticated account or its role.
-        work.requireOperator(actor);var d=read();
+        work.requireOperator(actor);if("customer-only".equals(personaId))throw BusinessFailure.missing();var d=read();
         var p=list(d,"personas").stream().filter(r->personaId.equals(r.get("id"))&&Boolean.TRUE.equals(r.get("selectable"))).findFirst().orElseThrow(BusinessFailure::missing);
-        @SuppressWarnings("unchecked") var roles=(List<String>)p.get("roles");
+        @SuppressWarnings("unchecked") var roles=((List<String>)p.get("roles")).stream().filter(role->!"CUSTOMER".equals(role)).toList();
+        p=new LinkedHashMap<>(p);p.put("roles",roles);
         var managed=list(d,"stores").stream().filter(s->personaId.equals(s.get("ownerPersonaId"))).toList();var managedIds=ids(managed);
         var approved=list(d,"settlements").stream().filter(s->"APPROVED_SAMPLE".equals(s.get("status"))).toList();var approvedIds=ids(approved);
         var lines=own(d,"settlementLines",personaId).stream().filter(l->approvedIds.contains(l.get("settlementId"))).toList();
@@ -49,12 +50,11 @@ public class UxDemoDataService implements ApplicationRunner {
         var result=new LinkedHashMap<String,Object>();for(var key:List.of("datasetId","version","asOf","mode","source","disclaimer","sourceSha256"))result.put(key,d.get(key));
         result.put("persona",p);result.put("market",Map.of("stores",d.get("stores"),"offerings",d.get("offerings"),"revenues",d.get("revenues")));
         result.put("portfolio",Map.of("subscriptions",own(d,"subscriptions",personaId),"holdings",own(d,"holdings",personaId),"settlements",approved.stream().filter(s->lineSettlementIds.contains(s.get("id"))).toList(),"lines",lines,"payments",own(d,"payments",personaId)));
-        result.put("storeManagement",Map.of("stores",managed,"offerings",list(d,"offerings").stream().filter(e->managedIds.contains(e.get("storeId"))).toList(),"evidence",list(d,"evidence").stream().filter(e->managedIds.contains(e.get("storeId"))).toList(),"revenues",list(d,"revenues").stream().filter(e->managedIds.contains(e.get("storeId"))).toList(),"exceptionSources",list(d,"exceptionSources").stream().filter(e->managedIds.contains(e.get("storeId"))).toList(),"settlements",list(d,"settlements").stream().filter(e->managedIds.contains(e.get("storeId"))).toList(),"benefits",list(d,"benefits").stream().filter(e->managedIds.contains(e.get("storeId"))).toList()));
-        result.put("customerBenefits",Map.of("definitions",roles.contains("CUSTOMER")?d.get("benefits"):List.of(),"states",own(d,"benefitStates",personaId),"claims",own(d,"claims",personaId)));
+        result.put("storeManagement",Map.of("stores",managed,"offerings",list(d,"offerings").stream().filter(e->managedIds.contains(e.get("storeId"))).toList(),"evidence",list(d,"evidence").stream().filter(e->managedIds.contains(e.get("storeId"))).toList(),"revenues",list(d,"revenues").stream().filter(e->managedIds.contains(e.get("storeId"))).toList(),"exceptionSources",list(d,"exceptionSources").stream().filter(e->managedIds.contains(e.get("storeId"))).toList(),"settlements",list(d,"settlements").stream().filter(e->managedIds.contains(e.get("storeId"))).toList()));
         result.put("reviewQueue",roles.contains("REVIEWER")||roles.contains("OPERATOR")?d.get("evidence"):List.of());
         result.put("operations",Map.of("settlements",roles.contains("OPERATOR")?d.get("settlements"):List.of(),"offerings",roles.contains("OPERATOR")?d.get("offerings"):List.of()));
-        var sections=new LinkedHashSet<>(List.of("MARKET","INVESTMENTS"));
-        for(var role:roles)switch(role){case "CUSTOMER"->sections.add("BENEFITS");case "MERCHANT"->sections.add("STORE_MANAGEMENT");case "REVIEWER"->sections.add("REVIEW");case "OPERATOR"->{sections.add("OPERATIONS");sections.add("REVIEW");}default->{}}
+        var sections=new LinkedHashSet<>(List.of("MARKET","INVESTMENTS","TRANSPARENCY"));
+        for(var role:roles)switch(role){case "MERCHANT"->sections.add("STORE_MANAGEMENT");case "REVIEWER"->sections.add("REVIEW");case "OPERATOR"->{sections.add("OPERATIONS");sections.add("REVIEW");}default->{}}
         result.put("availableSections",List.copyOf(sections));
         return result;
     }

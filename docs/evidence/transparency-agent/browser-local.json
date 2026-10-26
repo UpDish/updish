@@ -1,0 +1,36 @@
+{
+  "checkedAt": "2026-10-26T07:05:45.523Z",
+  "scope": "LOCAL ANVIL ONLY for wallet and business ledger; one real bounded OpenAI generation through the complete browser/BFF/Core/Agent flow. No GIWA transaction or user private input.",
+  "checks": [
+    "Discovery and investments remain first; shared transparency replaces customer benefits",
+    "No customer benefits tab",
+    "Approved ledger transparency is read from actual rehearsal database",
+    "Missing bank amount is unknown instead of zero",
+    "PG mismatch blocks approval",
+    "Refund correction uses its own canonical CSV",
+    "Source hashes are in a separate detail dialog",
+    "Desktop chat is a non-modal right sidebar",
+    "Chat has no amount cards, connection panel or suggestion dashboard",
+    "Browser -> BFF -> Spring -> FastAPI -> real OpenAI returns source-backed answer",
+    "Model response matches the server context version",
+    "Closing no screen or normal tab navigation loses the active chat",
+    "Closing and reopening sidebar retains current conversation",
+    "Mobile chat traps focus",
+    "Mobile has no document overflow",
+    "Escape closes mobile chat and restores scrolling",
+    "Transparency fits mobile",
+    "No browser runtime errors"
+  ],
+  "errors": [],
+  "model": {
+    "mode": "SIMULATION",
+    "dataVersion": "0xe39edb7c588581b04d9598d0a5f7a3f3f72a41da6695f5573e692d07a7f49e0a",
+    "sourceIds": [
+      "revenue-eulji-2026-10",
+      "source-eulji-correction",
+      "store-eulji",
+      "updish-demo-guide-v1"
+    ],
+    "explanation": "을지로 잔술집의 환불 정정은 두 건 샘플에서 비교됩니다. 원래 2026-10 대조(revenue-eulji-2026-10)는 환불 20,000원으로 순매출 32,000,000원으로 정리되었고, 추가 환불 정정(source-eulji-correction)은 환불을 620,000원으로 반영해 순매출을 31,400,000원으로 수정했습니다. 두 건 모두 POS·PG·은행 자료가 가용하고 대조(ready) 상태이며, PG·은행 간 미스매치는 없습니다. 이 자료는 SYNTHETIC_CSV(가상 예시)이며 APPROVED_LEDGER와 구분됩니다."
+  }
+}

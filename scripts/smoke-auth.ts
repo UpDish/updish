@@ -65,7 +65,9 @@ assert.equal((await request('/api/workbench/demo-data/personas/operator')).statu
 checks.push('regular signed account cannot read fixture personas or select operator preview');
 const market=await request('/api/workbench/market');assert.equal(market.status,200);assert.equal(market.body.listings.length,8);assert.ok(market.body.listings.every((l:any)=>!l.persona&&!l.claims));checks.push('ordinary signed wallet reads eight store listings without fixture account data');
 const investments=await request('/api/workbench/investments');assert.equal(investments.status,200);assert.equal(investments.body.subscriptions.length,0);assert.equal(investments.body.holdings.length,0);assert.equal(investments.body.settlements.length,0);checks.push('new wallet has its own empty cross-store investment history');
-const benefits=await request('/api/workbench/benefits');assert.equal(benefits.status,200);assert.equal(benefits.body.benefits.length,8);assert.ok(benefits.body.benefits.every((b:any)=>b.claim===null));checks.push('benefits expose eligibility without another wallet coupon');
+const transparency=await request('/api/workbench/transparency/store-mangwon');assert.equal(transparency.status,200);assert.ok(transparency.body.samples.some((s:any)=>s.reconciliation.bankWon===null));checks.push('ordinary user sees aggregate transparency and missing bank remains unknown');
+assert.equal((await request('/api/workbench/benefits')).status,410);checks.push('retired benefits endpoint cannot issue coupons');
+assert.equal((await request('/api/workbench/agent/status')).status,200);checks.push('authenticated Agent status is reachable');
 // Direct Core has a separate public route; the deployed BFF uses /api/offering.
 if(!directCore) {const offering=await request('/api/offering');assert.equal(offering.status,200);assert.equal(offering.body.mode,'SIMULATION');checks.push('public offering is backed by live Core business data');}
 assert.equal((await post('/api/auth/logout', {}, token)).status, 200);

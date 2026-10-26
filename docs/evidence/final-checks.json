@@ -206,5 +206,25 @@
     "agent": "IDE_RIGHT_SIDEBAR",
     "modelCalls": "NOT_CONFIGURED",
     "evidence": "docs/evidence/presentation-flow/"
+  },
+  "transparencyAgent": {
+    "checkedAt": "2026-10-26T07:13:40.239481+00:00",
+    "java": {
+      "tests": 58,
+      "failures": 0
+    },
+    "python": {
+      "tests": 4,
+      "scope": "FAKE_SDK"
+    },
+    "webBuild": "PASS",
+    "typescript": "PASS",
+    "localBusiness": 12,
+    "personaHttp": 11,
+    "localBrowser": 18,
+    "realModelLocalPublic": "PASS",
+    "realModelLocalOwnStatement": "PASS",
+    "userGiwaTransactions": 0,
+    "evidence": "docs/evidence/transparency-agent/"
   }
 }

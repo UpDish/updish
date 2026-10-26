@@ -1,0 +1,22 @@
+{
+  "checkedAt": "2026-10-26T07:10:41.950Z",
+  "origin": "http://127.0.0.1:3001",
+  "scope": "Real model, own approved statement in isolated Anvil/PostgreSQL rehearsal; no GIWA transaction.",
+  "status": "PASS",
+  "transactionsSent": 0,
+  "answer": {
+    "explanation": "정산 의무액: Spring 계산에 따르면 귀하(지분 100단위)에게 배분된 금액은 25,000원이며, 이미 25,000원이 지급된 것으로 표기되어 실제 지급 상태는 '지급 완료'입니다. 모의 지급 여부: 현재 모드는 SIMULATION이며 총 현금 가능액은 3,000,000원, 풀 배분액은 900,000원입니다. 세금과 수수료는 세전으로 설정되어 있고 원금 상환 의무는 별도 없음이 명시되어 있습니다.",
+    "sourceIds": [
+      "794c5e4e-0ad4-46f4-9993-dffdb859daa7",
+      "e94ee102-a522-49a9-96b0-09a5f1ff819f"
+    ],
+    "uncertainties": [
+      "세금·수수료 금액은 설정돼 있지 않아 세후 지급액은 확인 불가",
+      "동일 외부 ID의 중복 거래는 무시되었으나 그 영향(최종 집계 반영 여부)은 추가 확인 가능"
+    ],
+    "model": "gpt-5-mini",
+    "mode": "SIMULATION",
+    "toolCalls": 1,
+    "dataVersion": "0x0b31373b2176ec741745c18aa3c2f58e6678275dd3d5754e0c223657202d1d27"
+  }
+}

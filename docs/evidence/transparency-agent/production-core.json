@@ -1,0 +1,10 @@
+{
+  "commandId": "a0a837b3-9b9b-4eba-8d69-22a24a1a6ac5",
+  "status": "Success",
+  "output": "9ef18dc8720a683ff22661cb810dcc0da81c7f6e418691dc9b23952b11373d29  backups/updish-before-transparency-20261026T070909Z.dump\nimages-transparency.tar.gz: OK\nLoaded image: updish/core-api:demo\nLoaded image: updish/agent-api:demo\nAGENT_KEY_SAVED_WITHOUT_OUTPUT\n{\"groups\":[\"liveness\",\"readiness\"],\"status\":\"UP\"}{'model_calls': 'CONFIGURED', 'settlement_explanation': 'READ_ONLY_TOOL_CALLING', 'transaction_signing': False}\nEXISTING_BUSINESS_ROWS_PRESERVED\n8\nENV_PERMISSIONS=600\n",
+  "temporaryCredentialTransferObjectDeleted": true,
+  "keyValueLogged": false,
+  "databaseChanged": "Flyway V8 only: nullable agent_run.settlement_id; business rows preserved",
+  "databaseEngine": "EC2 PostgreSQL 18.6",
+  "supabaseMigration": false
+}

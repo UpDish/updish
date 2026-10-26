@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-26T06:21:43.430Z",
+  "checkedAt": "2026-10-26T07:02:19.347Z",
   "scope": "LOCAL_ANVIL_ONLY: direct Core HTTP, dedicated database, test wallets, mock Dojang, real UpDish contracts and database. No GIWA transactions.",
   "checks": [
     "8 simultaneous subscriptions: 4 accepted, cap 3,600, 20 units refunded after partial allocation",
@@ -12,18 +12,18 @@
     "wallet transaction -> receipt -> safe state -> DB/onchain balance 100; settlement record",
     "canonical salted digest and altered candidate mismatch",
     "payment idempotency and unpaid-balance bound",
-    "unconfigured model is unavailable, never a fake answer",
+    "Live model verification is separate; routine business smoke makes no paid model calls",
     "revocation preserves previously minted holdings"
   ],
   "receipts": [
     {
       "kind": "MINT",
-      "hash": "0xcdb1051904024dbaf833b3c63365c288ff65871a87770a390db4c91e4c1dd502",
+      "hash": "0x67f23ebd6c26d8559ea8519f24edc421d4a823f349dfe1a1e58db81d80596bcc",
       "status": "SAFE"
     },
     {
       "kind": "SETTLEMENT",
-      "hash": "0xf6effd55ad2c1c3a1ef83a21e11266d782fce4f8a9589d656f9fcb5903f634f8",
+      "hash": "0x808f352f6ab3e8f8d40b8733c7a5ebb41f43da2f351777e42698a1faed3f8b44",
       "status": "SAFE"
     }
   ],

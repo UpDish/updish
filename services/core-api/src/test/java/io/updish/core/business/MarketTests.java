@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest @Transactional
 class MarketTests {
-    @Autowired MarketService market;@Autowired WorkbenchService work;@Autowired JdbcTemplate db;@MockitoBean GiwaService giwa;
+    @Autowired TransparencyService transparency;@Autowired MarketService market;@Autowired WorkbenchService work;@Autowired JdbcTemplate db;@MockitoBean GiwaService giwa;
     @Autowired org.springframework.transaction.PlatformTransactionManager transactions;
     WalletPrincipal actor(){var id=UUID.randomUUID();var address="0x"+id.toString().replace("-","")+"00000000";db.update("INSERT INTO wallet_user(id,address,role) VALUES (?,?,'INVESTOR')",id,address);return new WalletPrincipal(id,address,"INVESTOR");}
     @SuppressWarnings("unchecked") List<Map<String,Object>> rows(Map<String,Object> d,String key){return (List<Map<String,Object>>)d.get(key);}
@@ -23,7 +23,7 @@ class MarketTests {
     void verified(){when(giwa.verify(anyString())).thenAnswer(i->new GiwaService.Verification(i.getArgument(0),"VERIFIED_TESTNET",true,"TESTNET FAUCET",DojangCodec.FAUCET,"0x"+"11".repeat(32),"123","2026-10-26T00:00:00Z","SIMULATION","mock-local","safe"));}
     @Test @Transactional(propagation=org.springframework.transaction.annotation.Propagation.NOT_SUPPORTED)
     void getEndpointsWorkInRealReadOnlyPostgresTransactions(){
-        var user=actor();try{var tx=new org.springframework.transaction.support.TransactionTemplate(transactions);tx.setReadOnly(true);tx.execute(status->{assertEquals(8,rows(market.catalog(user),"listings").size());assertEquals(8,rows(market.benefits(user),"benefits").size());return null;});}finally{db.update("DELETE FROM wallet_user WHERE id=?",user.id());}
+        var user=actor();try{var tx=new org.springframework.transaction.support.TransactionTemplate(transactions);tx.setReadOnly(true);tx.execute(status->{assertEquals(8,rows(market.catalog(user),"listings").size());assertFalse(rows(transparency.read(user,"store-seongsu"),"samples").isEmpty());return null;});}finally{db.update("DELETE FROM wallet_user WHERE id=?",user.id());}
     }
     @Test void catalogIsAvailableToOrdinaryUsersAndPreservesActiveRunAndLedger(){
         var user=actor();var id=work.offering().get("id");var run=work.runId();var subs=db.queryForObject("SELECT count(*) FROM subscription",Long.class);
@@ -45,11 +45,9 @@ class MarketTests {
         when(giwa.verify(user.address())).thenThrow(new ChainFailure("RPC_UNAVAILABLE"));assertThrows(ChainFailure.class,()->work.subscribe(user,id,1,UUID.randomUUID(),true));assertTrue(rows(market.portfolio(user),"subscriptions").isEmpty());
         assertThrows(BusinessFailure.class,()->work.subscribe(user,UUID.randomUUID(),1,UUID.randomUUID(),true));
     }
-    @Test void claimsAreIdempotentPrivateAndDoNotCountPendingSubscriptionsAsHoldings(){
-        var user=actor();var other=actor();var benefits=rows(market.benefits(user),"benefits");var general=benefits.stream().filter(b->number(b,"requiredUnits")==0&&"AVAILABLE".equals(b.get("status"))).findFirst().orElseThrow();
-        var id=general.get("id").toString();var first=market.claim(user,id);assertEquals("CLAIMED",first.get("status"));assertEquals(first.get("claim"),market.claim(user,id).get("claim"));
-        assertTrue(first.get("claim").toString().contains("DEMO-NOT-VALID"));assertNull(rows(market.benefits(other),"benefits").stream().filter(b->id.equals(b.get("id"))).findFirst().orElseThrow().get("claim"));
-        var locked=benefits.stream().filter(b->"LOCKED".equals(b.get("status"))).findFirst().orElseThrow();assertThrows(BusinessFailure.class,()->market.claim(user,locked.get("id").toString()));assertThrows(BusinessFailure.class,()->market.claim(user,"not-a-benefit"));
-        assertEquals(1,db.queryForObject("SELECT count(*) FROM benefit_claim WHERE address=?",Integer.class,user.address()));
+    @Test void removedCustomerEndpointsCannotIssueCoupons(){
+        var c=new MarketController(market);var before=db.queryForObject("SELECT count(*) FROM benefit_claim",Long.class);
+        assertEquals(410,assertThrows(BusinessFailure.class,c::removedBenefits).status());assertEquals(410,assertThrows(BusinessFailure.class,c::removedClaim).status());
+        assertEquals(before,db.queryForObject("SELECT count(*) FROM benefit_claim",Long.class));
     }
 }

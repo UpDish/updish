@@ -20,6 +20,6 @@ export function short(address:string) {return address.slice(0,6)+'…'+address.s
 export function due(line:Pick<Line,'amount_won'|'paid_won'|'prior_paid_won'>) {const n=BigInt(line.amount_won)-BigInt(line.paid_won)-BigInt(line.prior_paid_won);return n>0?n:0n;}
 export async function command<T=unknown>(path:string,body:object={}) {
   const csrf=await api<{token:string;headerName:string}>('/api/auth/csrf');
-  return api<T>(`/api/workbench/${path}`,{method:'POST',headers:{'Content-Type':'application/json',[csrf.headerName]:csrf.token},body:JSON.stringify(body),signal:AbortSignal.timeout(path.endsWith('/explain')?60_000:35_000)});
+  return api<T>(`/api/workbench/${path}`,{method:'POST',headers:{'Content-Type':'application/json',[csrf.headerName]:csrf.token},body:JSON.stringify(body),signal:AbortSignal.timeout((path.endsWith('/explain')||path==='agent/chat')?60_000:35_000)});
 }
 export const labels:Record<string,string>={OPEN:'모집 중',FUNDED:'배정 완료',REFUNDED:'모의 환불',MATURED:'만기',ACCEPTED:'접수 · 보유 미반영',ALLOCATED:'배정 완료',CANCELLED:'취소',BLOCKED:'보완 필요',REVIEW:'검토 대기',CLOSED:'마감',APPROVED:'승인',AWAITING_DEPLOYMENT:'계약 등록 대기',AWAITING_SIGNATURE:'지갑 승인 대기',SUBMITTED:'거래 제출',INCLUDED:'블록 포함',SAFE:'safe 확인',FAILED:'실패',CHECK_PENDING:'확인 대기',PENDING:'업로드 대기',READY:'업로드 검증 완료'};

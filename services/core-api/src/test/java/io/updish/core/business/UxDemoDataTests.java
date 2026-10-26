@@ -24,19 +24,19 @@ class UxDemoDataTests {
         var investor=actor("INVESTOR");assertThrows(BusinessFailure.class,()->service.dataset(investor));assertThrows(BusinessFailure.class,()->service.persona(investor,"operator"));
         assertThrows(BusinessFailure.class,()->service.dataset(new WalletPrincipal(investor.id(),investor.address(),"OPERATOR")));
     }
-    @Test void investorAndCustomerViewsExposeOnlyTheirOwnPrivateExamples(){
-        var op=actor("OPERATOR");var active=service.persona(op,"investor-active");var empty=service.persona(op,"investor-new");var customer=service.persona(op,"customer-only");
-        assertEquals(4,rows(section(active,"portfolio"),"holdings").size());assertTrue(rows(section(empty,"portfolio"),"holdings").isEmpty());assertTrue(rows(section(customer,"portfolio"),"subscriptions").isEmpty());
+    @Test void investorViewsExcludeRetiredCustomerPersona(){
+        var op=actor("OPERATOR");var active=service.persona(op,"investor-active");var empty=service.persona(op,"investor-new");assertThrows(BusinessFailure.class,()->service.persona(op,"customer-only"));
+        assertEquals(4,rows(section(active,"portfolio"),"holdings").size());assertTrue(rows(section(empty,"portfolio"),"holdings").isEmpty());assertFalse(active.containsKey("customerBenefits"));
         for(var key:List.of("subscriptions","holdings","lines","payments"))for(var row:rows(section(active,"portfolio"),key))assertEquals("investor-active",row.get("personaId"));
         assertTrue(rows(section(active,"portfolio"),"settlements").stream().allMatch(s->"APPROVED_SAMPLE".equals(s.get("status"))));
-        assertTrue(rows(section(customer,"storeManagement"),"stores").isEmpty());assertTrue(rows(section(customer,"customerBenefits"),"claims").stream().allMatch(c->"customer-only".equals(c.get("personaId"))));
-        assertEquals(List.of("MARKET","INVESTMENTS","BENEFITS"),customer.get("availableSections"));
+        assertEquals(List.of("MARKET","INVESTMENTS","TRANSPARENCY"),empty.get("availableSections"));
+        assertFalse(section(active,"persona").get("roles").toString().contains("CUSTOMER"));
         assertEquals("OPERATOR",db.queryForObject("SELECT role FROM wallet_user WHERE id=?",String.class,op.id()));
     }
     @Test void merchantOwnershipAndReviewOperationsRemainDistinct(){
         var op=actor("OPERATOR");var owner=service.persona(op,"merchant-seongsu");var group=service.persona(op,"merchant-group");var review=service.persona(op,"reviewer");var admin=service.persona(op,"operator");
         assertEquals(1,rows(section(owner,"storeManagement"),"stores").size());assertEquals(7,rows(section(group,"storeManagement"),"stores").size());
-        for(var key:List.of("offerings","evidence","revenues","exceptionSources","settlements","benefits"))for(var row:rows(section(owner,"storeManagement"),key))assertEquals("store-seongsu",row.get("storeId"));
+        for(var key:List.of("offerings","evidence","revenues","exceptionSources","settlements"))for(var row:rows(section(owner,"storeManagement"),key))assertEquals("store-seongsu",row.get("storeId"));
         assertTrue(rows(owner,"reviewQueue").isEmpty());assertEquals(5,rows(review,"reviewQueue").size());assertTrue(rows(section(review,"operations"),"settlements").isEmpty());assertEquals(7,rows(section(admin,"operations"),"settlements").size());
         assertThrows(BusinessFailure.class,()->service.persona(op,"background"));assertThrows(BusinessFailure.class,()->service.persona(op,"unknown"));
     }

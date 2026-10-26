@@ -6,7 +6,9 @@
 
 음식점 매출 증빙 → 모의 청약·배정 → 보유 → 정산·모의 지급을 연결하는 해커톤 데모입니다. Spring이 업무 원장을 계산하고 지갑은 SIWE 로그인과 GIWA 테스트 거래를 서명합니다. 실제 금전 수취·지급은 수행하지 않습니다.
 
-지갑 선택은 Web3-Onboard 공통 팝업, 로그인 검증은 Spring의 SIWE를 사용합니다. 월 매출·전체 배분금·내 정산액 차트의 승인 기록은 최신 승인 버전만 표시합니다. 승인 내역이 없으면 별도 표시한 6개월 샘플 CSV 차트로 시연할 수 있습니다. 운영자는 상단 모드에서 가게·고객·투자자 화면을 시연할 수 있으며 실제 지갑과 권한은 유지됩니다.
+지갑 선택은 Web3-Onboard 공통 팝업, 로그인 검증은 Spring의 SIWE를 사용합니다. 월 매출·전체 배분금·내 정산액 차트의 승인 기록은 최신 승인 버전만 표시합니다. 승인 내역이 없으면 별도 표시한 6개월 샘플 CSV 차트로 시연할 수 있습니다. 운영자는 상단 모드에서 가게·투자자 화면을 시연할 수 있으며 실제 지갑과 권한은 유지됩니다.
+
+로그인 후 가게 목록 → 투자 내역 → 운영 투명성 → 역할별 관리 메뉴로 이동합니다. 고객 전용 화면과 쿠폰 발급은 제거했습니다. 운영 투명성은 POS 결제·PG 정산·은행 입금과 누락/불일치/환불 정정을 보여줍니다. 오른쪽 Agent는 가게 공개 근거와 본인의 승인 정산을 실제 모델로 설명합니다. [현재 시연 순서](docs/demo-runbook.md)를 따르세요.
 
 현재 상태는 [개발 결과](docs/development-status.md), 실제 지갑 사용 순서는 [시연 안내](docs/demo-guide.md), 클라우드 자원·중지 방법은 [배포 안내](docs/deploy-runbook.md)를 기준으로 합니다. bootstrap/wallet 상태 문서는 과거 이력입니다.
 
@@ -20,7 +22,7 @@
 | Agent | FastAPI 0.162.0 · Python 3.13 · openai 3.37.0 · uv.lock |
 | Web | Next.js 16.4.3 · React 19.3.1 · TypeScript 5.9.3 · Tailwind 4.3.3 |
 | Node | Node 24 · pnpm 10.23.0 · pnpm-lock.yaml |
-| DB | PostgreSQL 18.6 · Flyway V1–V5 |
+| DB | PostgreSQL 18.6 · Flyway V1–V8 |
 | Chain | GIWA Sepolia 91342 · Solidity 0.8.38 · Cancun · OpenZeppelin 5.6.1 |
 | Wallet | wagmi 3.7.9 · viem 2.57.11 |
 | Cloud | Vercel + 서울 EC2 t4g.medium ARM64 · Ubuntu 24.04 · private S3 |
@@ -81,7 +83,7 @@ Java에는 PostgreSQL이 필요합니다. smoke:auth는 자금 없는 임시 서
 
 [시연 CSV 9개·기대 대조 결과](fixtures/README.md)를 준비했습니다. 공개 차트에서 다운로드하거나 운영자/가게 담당자가 매출관리에서 불러올 수 있습니다.
 
-[전체 UX용 가게·투자·혜택 더미 데이터](fixtures/ux/README.md)를 별도로 준비했습니다. `pnpm generate:ux-demo`, `pnpm check:ux-demo`, `pnpm smoke:ux-demo`로 재현합니다. 로그인 → 가게 목록/선택/청약 → 투자 내역과 역할별 탭에 연결했습니다. [새 UX 동선과 실제/예시 데이터 구분](docs/ux-flow.md)을 확인하세요.
+[가게·투자·매출 시연 데이터와 역사 fixture](fixtures/ux/README.md)를 별도로 준비했습니다. `pnpm generate:ux-demo`, `pnpm check:ux-demo`, `pnpm smoke:ux-demo`로 재현합니다. 로그인 → 가게 목록/선택/청약 → 투자 내역과 역할별 탭에 연결했습니다. [새 UX 동선과 실제/예시 데이터 구분](docs/ux-flow.md)을 확인하세요.
 
 
 [Demo 시연 동선](docs/demo-runbook.md): 청약·CSV·정산 작업을 팝업으로 나누고 Agent는 IDE처럼 오른쪽 사이드바에 배치했습니다. 현재 개편본은 로컬 검토 중이며 모델 답변은 키 미설정 상태입니다.

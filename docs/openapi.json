@@ -363,22 +363,32 @@
         }
       }
     },
-    "/api/v1/workbench/benefits": {
+    "/api/v1/workbench/transparency/{storeId}": {
       "get": {
-        "operationId": "customerBenefits",
+        "operationId": "storeTransparency",
         "security": [
           {
             "session": []
           }
         ],
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-z0-9-]{1,80}$"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Success",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CustomerBenefits"
+                  "$ref": "#/components/schemas/Transparency"
                 }
               }
             }
@@ -436,24 +446,15 @@
         }
       }
     },
-    "/api/v1/workbench/benefits/{benefitId}/claim": {
+    "/api/v1/workbench/agent/chat": {
       "post": {
-        "operationId": "claimDemoBenefit",
+        "operationId": "chatWithAgent",
         "security": [
           {
             "session": []
           }
         ],
         "parameters": [
-          {
-            "name": "benefitId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "pattern": "^[a-z0-9-]{1,80}$"
-            }
-          },
           {
             "name": "X-CSRF-TOKEN",
             "in": "header",
@@ -469,7 +470,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CustomerBenefit"
+                  "$ref": "#/components/schemas/Explanation"
                 }
               }
             }
@@ -521,6 +522,29 @@
                 "schema": {
                   "$ref": "#/components/schemas/Error"
                 }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "question": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 500
+                  },
+                  "storeId": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "question"
+                ]
               }
             }
           }
@@ -3446,6 +3470,297 @@
       }
     },
     "schemas": {
+      "PublicReconciliation": {
+        "type": "object",
+        "properties": {
+          "grossWon": {
+            "type": "string",
+            "pattern": "^-?[0-9]+$",
+            "description": "Integer KRW, decimal string; SIMULATION only"
+          },
+          "discountWon": {
+            "type": "string",
+            "pattern": "^-?[0-9]+$",
+            "description": "Integer KRW, decimal string; SIMULATION only"
+          },
+          "refundWon": {
+            "type": "string",
+            "pattern": "^-?[0-9]+$",
+            "description": "Integer KRW, decimal string; SIMULATION only"
+          },
+          "netWon": {
+            "type": "string",
+            "pattern": "^-?[0-9]+$",
+            "description": "Integer KRW, decimal string; SIMULATION only"
+          },
+          "pgWon": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "bankWon": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pgGapWon": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "bankGapWon": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "rowCount": {
+            "type": "integer"
+          },
+          "acceptedCount": {
+            "type": "integer"
+          },
+          "ready": {
+            "type": "boolean"
+          },
+          "duplicateIgnored": {
+            "type": "integer"
+          },
+          "blockingCount": {
+            "type": "integer"
+          },
+          "issueCounts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "count": {
+                  "type": "integer"
+                },
+                "blocking": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "code",
+                "count",
+                "blocking"
+              ]
+            }
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "available": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "name",
+                "available"
+              ]
+            }
+          }
+        },
+        "required": [
+          "grossWon",
+          "discountWon",
+          "refundWon",
+          "netWon",
+          "pgWon",
+          "bankWon",
+          "pgGapWon",
+          "bankGapWon",
+          "rowCount",
+          "acceptedCount",
+          "ready",
+          "duplicateIgnored",
+          "blockingCount",
+          "issueCounts",
+          "sources"
+        ]
+      },
+      "TransparencyCase": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "period": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "basis": {
+            "type": "string",
+            "enum": [
+              "SYNTHETIC_CSV",
+              "APPROVED_LEDGER"
+            ]
+          },
+          "status": {
+            "type": "string"
+          },
+          "reconciliation": {
+            "$ref": "#/components/schemas/PublicReconciliation"
+          },
+          "version": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "settlementId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "digest": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "chainStatus": {
+            "type": "string"
+          },
+          "chainTxHash": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "sourceHash": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "period",
+          "label",
+          "basis",
+          "status",
+          "reconciliation",
+          "version",
+          "settlementId",
+          "digest",
+          "chainStatus",
+          "chainTxHash",
+          "sourceHash"
+        ]
+      },
+      "Transparency": {
+        "type": "object",
+        "properties": {
+          "store": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "district": {
+                "type": "string"
+              },
+              "category": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "district",
+              "category"
+            ]
+          },
+          "approved": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TransparencyCase"
+            }
+          },
+          "submissions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "period": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "blockingCount": {
+                  "type": "integer"
+                },
+                "issueCounts": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string"
+                      },
+                      "count": {
+                        "type": "integer"
+                      },
+                      "blocking": {
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "count",
+                      "blocking"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "period",
+                "status",
+                "blockingCount",
+                "issueCounts"
+              ]
+            }
+          },
+          "samples": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TransparencyCase"
+            }
+          },
+          "mode": {
+            "type": "string"
+          },
+          "asOf": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "store",
+          "approved",
+          "submissions",
+          "samples",
+          "mode",
+          "asOf"
+        ]
+      },
       "AgentStatus": {
         "type": "object",
         "properties": {
@@ -3694,77 +4009,6 @@
           "subscriptions",
           "holdings",
           "settlements",
-          "mode"
-        ]
-      },
-      "BenefitClaim": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "code": {
-            "type": "string"
-          },
-          "claimed_at": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "code",
-          "claimed_at"
-        ]
-      },
-      "CustomerBenefit": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/UxBenefit"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "heldUnits": {
-                "type": "integer"
-              },
-              "status": {
-                "type": "string"
-              },
-              "claim": {
-                "anyOf": [
-                  {
-                    "$ref": "#/components/schemas/BenefitClaim"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              }
-            },
-            "required": [
-              "heldUnits",
-              "status",
-              "claim"
-            ]
-          }
-        ]
-      },
-      "CustomerBenefits": {
-        "type": "object",
-        "properties": {
-          "benefits": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/CustomerBenefit"
-            }
-          },
-          "mode": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "benefits",
           "mode"
         ]
       },
@@ -4658,12 +4902,6 @@
                 "items": {
                   "$ref": "#/components/schemas/UxSettlement"
                 }
-              },
-              "benefits": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/UxBenefit"
-                }
               }
             },
             "required": [
@@ -4672,36 +4910,7 @@
               "evidence",
               "revenues",
               "exceptionSources",
-              "settlements",
-              "benefits"
-            ]
-          },
-          "customerBenefits": {
-            "type": "object",
-            "properties": {
-              "definitions": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/UxBenefit"
-                }
-              },
-              "states": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/UxBenefitState"
-                }
-              },
-              "claims": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/UxClaim"
-                }
-              }
-            },
-            "required": [
-              "definitions",
-              "states",
-              "claims"
+              "settlements"
             ]
           },
           "reviewQueue": {
@@ -4750,7 +4959,6 @@
           "market",
           "portfolio",
           "storeManagement",
-          "customerBenefits",
           "reviewQueue",
           "operations",
           "availableSections"
