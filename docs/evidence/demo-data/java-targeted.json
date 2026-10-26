@@ -1,0 +1,7 @@
+{
+  "tests": 6,
+  "failures": 0,
+  "errors": 0,
+  "scope": "Targeted DemoCatalogTests (2) and CsvReconciliationTests (4); actual Core reconciliation + math, no API/model/chain calls",
+  "latestSuiteAt": "2026-10-26T04:53:00.476Z"
+}

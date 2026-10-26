@@ -8,6 +8,8 @@
     "node": ">=24 <25"
   },
   "scripts": {
+    "generate:demo": "node scripts/demo-fixtures.mjs",
+    "check:demo": "node scripts/demo-fixtures.mjs --check",
     "generate:api": "node scripts/api-contract.mjs",
     "smoke:business": "tsx scripts/smoke-business.ts",
     "smoke:auth": "tsx scripts/smoke-auth.ts",

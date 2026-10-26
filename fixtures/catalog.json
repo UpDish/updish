@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "mode": "SIMULATION",
+  "storeName": "성수 모퉁이 식당",
+  "description": "가상 시연 자료입니다. 승인된 업무 원장·실매출·실제 지급을 뜻하지 않습니다.",
+  "scenarios": [
+    {
+      "id": "normal",
+      "label": "정상 · 중복 포함",
+      "period": "2026-10",
+      "filename": "normal.csv",
+      "description": "동일 거래 중복을 제외하고 매출 3,000만원을 대조합니다.",
+      "expectedNetWon": "30000000",
+      "ready": true,
+      "expectedIssueCodes": [
+        "DUPLICATE_IGNORED"
+      ],
+      "history": true,
+      "workflow": true,
+      "sha256": "22609fdbdff24dda4163d5f8303ac71008256086f5e512738340d24cb350b5f8"
+    },
+    {
+      "id": "missing-bank",
+      "label": "은행 자료 누락",
+      "period": "2026-10",
+      "filename": "missing-bank.csv",
+      "description": "은행 입금 자료가 없어 보완 필요로 남습니다.",
+      "expectedNetWon": "30000000",
+      "ready": false,
+      "expectedIssueCodes": [
+        "MISSING_SOURCE",
+        "BANK_MISMATCH"
+      ],
+      "history": false,
+      "workflow": true,
+      "sha256": "be8bc6e2cb24cb28584a84e84f1d7813e9f90c937d1ca2c21ce78d148a2e47a9"
+    },
+    {
+      "id": "cash-shortage",
+      "label": "현금 부족",
+      "period": "2026-11",
+      "filename": "cash-shortage.csv",
+      "description": "정산대상 매출 2,400만원, 전체 배분 의무 72만원 대비 모형 현금 여력 30만원입니다.",
+      "expectedNetWon": "24000000",
+      "ready": true,
+      "expectedIssueCodes": [],
+      "history": false,
+      "workflow": true,
+      "sha256": "5acb4fbb49a3de2c47cbf23962ba919486a6e5033e020c44b72305e6f7ce4fa0"
+    },
+    {
+      "id": "correction",
+      "label": "정정 자료",
+      "period": "2026-10",
+      "filename": "correction.csv",
+      "description": "10월 최초 정산 승인 후 제출합니다. 추가 환불로 매출이 2,900만원으로 줄어듭니다.",
+      "expectedNetWon": "29000000",
+      "ready": true,
+      "expectedIssueCodes": [],
+      "history": false,
+      "workflow": true,
+      "sha256": "db71ecf472073e45f6ad81f93639bc92e561b4ca5d5d2e8038978bc64cbc5f6e"
+    },
+    {
+      "id": "history-2026-05",
+      "label": "2026-05 월 매출",
+      "period": "2026-05",
+      "filename": "history-2026-05.csv",
+      "description": "일별 POS·PG·은행 금액이 일치하는 가상 매출입니다.",
+      "expectedNetWon": "22000000",
+      "ready": true,
+      "expectedIssueCodes": [],
+      "history": true,
+      "workflow": false,
+      "sha256": "88687443bc078c0e6a1d1e82d78bf35a64a668574c6d9c04296d5d697a9a0bea"
+    },
+    {
+      "id": "history-2026-06",
+      "label": "2026-06 월 매출",
+      "period": "2026-06",
+      "filename": "history-2026-06.csv",
+      "description": "일별 POS·PG·은행 금액이 일치하는 가상 매출입니다.",
+      "expectedNetWon": "24000000",
+      "ready": true,
+      "expectedIssueCodes": [],
+      "history": true,
+      "workflow": false,
+      "sha256": "d0e9dd0a4610434f2556f69bd9475b4768deed7f3de52b8f02f85ce16321aeb7"
+    },
+    {
+      "id": "history-2026-07",
+      "label": "2026-07 월 매출",
+      "period": "2026-07",
+      "filename": "history-2026-07.csv",
+      "description": "일별 POS·PG·은행 금액이 일치하는 가상 매출입니다.",
+      "expectedNetWon": "27000000",
+      "ready": true,
+      "expectedIssueCodes": [],
+      "history": true,
+      "workflow": false,
+      "sha256": "3bc7971e3f358742af965b52571a4ad0cda78108489130339f63c68d7c2d45b8"
+    },
+    {
+      "id": "history-2026-08",
+      "label": "2026-08 월 매출",
+      "period": "2026-08",
+      "filename": "history-2026-08.csv",
+      "description": "일별 POS·PG·은행 금액이 일치하는 가상 매출입니다.",
+      "expectedNetWon": "25000000",
+      "ready": true,
+      "expectedIssueCodes": [],
+      "history": true,
+      "workflow": false,
+      "sha256": "19af19a4eee6430a3bb1b06b494d1ba525a5283997cbb824ff6c599d8815b321"
+    },
+    {
+      "id": "history-2026-09",
+      "label": "2026-09 월 매출",
+      "period": "2026-09",
+      "filename": "history-2026-09.csv",
+      "description": "일별 POS·PG·은행 금액이 일치하는 가상 매출입니다.",
+      "expectedNetWon": "28000000",
+      "ready": true,
+      "expectedIssueCodes": [],
+      "history": true,
+      "workflow": false,
+      "sha256": "c8747dd468ff17858581be0bf48bf7f1375a102733c4c81aa3a994566c2eba7f"
+    }
+  ]
+}

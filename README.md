@@ -6,7 +6,7 @@
 
 음식점 매출 증빙 → 모의 청약·배정 → 보유 → 정산·모의 지급을 연결하는 해커톤 데모입니다. Spring이 업무 원장을 계산하고 지갑은 SIWE 로그인과 GIWA 테스트 거래를 서명합니다. 실제 금전 수취·지급은 수행하지 않습니다.
 
-지갑 선택은 Web3-Onboard 공통 팝업, 로그인 검증은 Spring의 SIWE를 사용합니다. 월 매출·전체 배분금·내 정산액 차트는 최신 승인 자료만 표시합니다. 운영자는 상단 모드에서 가게·고객·투자자 화면을 시연할 수 있으며 실제 지갑과 권한은 유지됩니다.
+지갑 선택은 Web3-Onboard 공통 팝업, 로그인 검증은 Spring의 SIWE를 사용합니다. 월 매출·전체 배분금·내 정산액 차트의 승인 기록은 최신 승인 버전만 표시합니다. 승인 내역이 없으면 별도 표시한 6개월 샘플 CSV 차트로 시연할 수 있습니다. 운영자는 상단 모드에서 가게·고객·투자자 화면을 시연할 수 있으며 실제 지갑과 권한은 유지됩니다.
 
 현재 상태는 [개발 결과](docs/development-status.md), 실제 지갑 사용 순서는 [시연 안내](docs/demo-guide.md), 클라우드 자원·중지 방법은 [배포 안내](docs/deploy-runbook.md)를 기준으로 합니다. bootstrap/wallet 상태 문서는 과거 이력입니다.
 
@@ -63,6 +63,8 @@ apps/web은 화면/BFF, services/core-api는 인증/업무/체인/S3, services/a
 
 ```powershell
 pnpm generate:api
+pnpm generate:demo
+pnpm check:demo
 pnpm check:web
 pnpm check:chain
 pnpm test:chain
@@ -76,3 +78,5 @@ pnpm smoke:auth docs/evidence/siwe-smoke.json
 Java에는 PostgreSQL이 필요합니다. smoke:auth는 자금 없는 임시 서명자로 로그인→실제 GIWA 음성 조회→logout을 검사하고 거래를 보내지 않습니다. smoke:business는 **별도 Anvil 91342 + 별도 DB/Core 8081** 전용입니다. 공식 GIWA에 실행하지 마세요. [로컬 업무 결과](docs/evidence/business-local-e2e.json)는 mock Dojang을 사용하며 사용자 GIWA 성공을 증명하지 않습니다.
 
 [남은 승인·실제 연결 확인](docs/remaining-work.md)을 완료 판정에 포함합니다.
+
+[시연 CSV 9개·기대 대조 결과](fixtures/README.md)를 준비했습니다. 공개 차트에서 다운로드하거나 운영자/가게 담당자가 매출관리에서 불러올 수 있습니다.

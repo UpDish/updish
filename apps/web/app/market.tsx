@@ -55,7 +55,7 @@ export function MarketHome({offering:o,dashboard:data,customer=false,units,onUni
       <section className="exchange-panel information-panel">
         <div className="exchange-tabs" role="tablist" aria-label="상품 상세 정보">{views.map((item,index)=><button key={item.id} id={`product-tab-${item.id}`} role="tab" aria-selected={view===item.id} aria-controls="product-panel" tabIndex={view===item.id?0:-1} onClick={()=>setView(item.id)} onKeyDown={event=>moveTab(event,index)}>{item.label}</button>)}</div>
         <div id="product-panel" role="tabpanel" aria-labelledby={`product-tab-${view}`} className="information-content" tabIndex={0}>
-          {view==='performance'?<PerformancePanel key={o.id} offeringId={o.id} dashboard={data} onEvidence={onEvidence}/>:null}
+          {view==='performance'?<PerformancePanel key={o.id} offeringId={o.id} storeName={o.store_name} rateBps={o.rate_bps} dashboard={data} onEvidence={onEvidence}/>:null}
           {view==='overview'?<><div className="panel-heading"><h2>계약 주요 조건</h2><span>계약 기준 · 수익 보장 없음</span></div>
             <table className="terms-table"><tbody><tr><th scope="row">배분 기준</th><td>검토·승인된 월 정산대상 매출</td></tr><tr><th scope="row">약정 배분율</th><td>전체 매출의 {(o.rate_bps/100).toFixed(1)}%</td></tr><tr><th scope="row">배분 기간</th><td>{o.months}개월</td></tr><tr><th scope="row">참여 단위</th><td>1단위 · {won(o.unit_price)}</td></tr><tr><th scope="row">배정 방식</th><td>접수 순서로 배정 · 마지막 초과분은 부분 배정 및 모의 환불</td></tr><tr><th scope="row">원금 처리</th><td>만기 원금을 별도로 상환할 의무가 없습니다.</td></tr></tbody></table>
             <div className="information-note"><b>매출과 정산액은 어디에서 확인하나요?</b><p>가게의 POS·PG·은행 자료를 대조·승인한 뒤, 보유 수량을 기준으로 산정합니다. 본인의 승인된 정산액은 투자내역에서 확인할 수 있습니다.</p><button className="inline-button" onClick={onPortfolio}>내 정산 내역 보기</button></div>

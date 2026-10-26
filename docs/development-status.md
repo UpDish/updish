@@ -47,3 +47,10 @@ Web/체인 타입·production build·codec 결과는 [최종 검사](evidence/fi
 - [비로그인 화면 17개](evidence/service-flow/guest-browser.json), [역할별 화면 14개](evidence/service-flow/role-browser.json), [공통 팝업·차트·화면 전환 15개](evidence/service-flow/wallet-chart-browser.json) 통과. 역할 검사 중 가짜 AI 응답 한 건은 지갑 간 UI 격리 검증에만 사용했고 앱에는 포함하지 않았습니다.
 - 개인 근거 API의 트랜잭션/잠금 조합을 실제 HTTP 검사에서 수정했습니다. 공개 Vercel/EC2 API와 실제 사용자 Dojang 읽기까지 확인했습니다.
 - Organization [UpDish](https://github.com/UpDish)과 공개 저장소 [updish](https://github.com/UpDish/updish)를 만들고 기존 아이콘을 프로필에 적용했습니다. 비밀값/환경 파일/빌드 결과는 업로드 대상에서 제외합니다.
+
+
+## CSV 시연 자료 추가
+
+가상 음식점의 6개월 참고 매출과 정상/은행 누락/현금 부족/정정 CSV 총 9개를 공개 자산으로 준비했습니다. `fixtures/catalog.json`과 `pnpm generate:demo/check:demo`로 원본/공개 바이트를 맞춥니다. 승인 자료가 없으면 명시된 샘플 차트를 보여주며, 승인 기록·개인 정산액과 섞지 않습니다. 운영자/가게 담당자는 매출관리에서 샘플을 불러와 기존 제출·검토·정산 흐름을 실행할 수 있습니다. 계약 전 자료의 정산 차단도 유지합니다.
+
+검사: Java CSV/catalog 표적 6개(신규 2개 포함), 공개 브라우저 13개, 별도 DB/Anvil의 서명 브라우저 40개, 기존 업무 E2E 12개 통과. 상세 근거는 [demo-data](evidence/demo-data/)입니다. 기존 전체 Java 38개 실행 기록과 이번 표적 실행을 혼동하지 않습니다. 서버 런타임/DB 스키마/클라우드 데이터 변경 없이 Web 정적 자산과 UI를 배포합니다.

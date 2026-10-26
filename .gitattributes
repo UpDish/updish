@@ -3,3 +3,6 @@
 gradlew text eol=lf
 *.bat text eol=crlf
 *.jar binary
+*.csv text eol=lf
+fixtures/catalog.json text eol=lf
+apps/web/public/samples/catalog.json text eol=lf

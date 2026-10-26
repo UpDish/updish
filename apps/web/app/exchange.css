@@ -1,4 +1,22 @@
 /* Upbit research: compact navigation, flat panels, adjacent information and action. */
+.chart-source { display:flex; gap:0; margin:10px 0; border-bottom:1px solid var(--border); }
+.chart-source button { background:white; color:var(--muted); border:0; border-bottom:2px solid transparent; min-height:40px; padding:8px 16px; font-size:12px; }
+.chart-source button[aria-pressed=true] { border-bottom-color:var(--blue); color:var(--blue); font-weight:700; }
+.sample-chart-notice { padding:10px 12px; background:#f5f8fc; border-left:3px solid #91aace; font-size:11px; line-height:1.8; color:#58667b; }
+.demo-downloads { margin-top:14px; border-top:1px solid var(--border); padding-top:12px; font-size:12px; }
+.demo-downloads summary { cursor:pointer; font-weight:600; padding:6px 0; }
+.demo-downloads ul { padding-left:16px; }
+.demo-downloads li { margin:8px 0; line-height:1.7; }
+.demo-downloads li span { display:block; color:var(--muted); font-size:11px; }
+.demo-samples { margin:16px 0; padding:12px; border:1px solid var(--border); background:#f8fafd; }
+.demo-case-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.demo-case-grid article { padding:10px; background:white; border:1px solid var(--border); }
+.demo-case-grid p { font-size:11px; line-height:1.7; margin:7px 0; color:var(--muted); }
+.demo-case-grid a { font-size:11px; }
+.demo-month-loader { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-top:12px; }
+.demo-month-loader label { margin:0; }
+.demo-month-loader select { width:auto; margin:0; max-width:100%; }
+@media(max-width:600px) { .chart-source button { min-height:44px; } .demo-case-grid { grid-template-columns:1fr; } }
 :root { --onboard-modal-z-index:1000; }
 .demo-view-switcher { position:relative; font-size:12px; color:white; }
 .demo-view-switcher summary { cursor:pointer; padding:8px; list-style:none; border:1px solid #6b88bc; border-radius:2px; min-height:36px; display:flex; align-items:center; gap:8px; }

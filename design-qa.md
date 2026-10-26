@@ -36,3 +36,14 @@ No live OpenAI response, Bojagi protocol transaction, QR/mobile WalletConnect se
 ## Public release
 
 Deployment `dpl_Gcvt4eFXZqx2QFgQirHQUxUR88M7` reached READY from app commit `92fb4c9`. The canonical URL was opened and checked after deployment. Public auth 12, guest browser 17 and release API/modal/Dojang 6 checks passed. `production-home.png` was opened and visually inspected; it correctly shows no approved records. Current public Dojang read confirms the user's testnet proof is safe-valid. Public screenshots do not demonstrate another user's signed transaction.
+
+
+## CSV sample preview revision — 2026-10-26
+
+The user explicitly requested synthetic CSV data for the synthetic restaurant. Added nine canonical CSV scenarios: six monthly reference points (five new daily POS/PG/BANK files plus the existing normal October file), missing bank, cash shortage and correction. The sample chart is labelled CSV / approval pending, with an explicit data-source switch. It does not add approved DB records or private balances. Existing approved records take priority. Contract-period checks and separate-wallet approval remain intact.
+
+Local production captures at 1440×900, 768×900 and 390×844 were checked. `docs/evidence/demo-data/comparison-desktop.png` combines the existing actual Upbit 1440×900 source with the current actual app at native size; `comparison-header.png` combines equal native crops. Both were opened together, followed by focused mobile chart/merchant captures. Flat panels, numeric hierarchy, navigation, readable tables and scenario controls are retained. ResponsiveContainer needs a resize-observer frame after viewport changes; the test waits for measured stable width rather than capturing the transient old SVG width.
+
+Targeted Java CSV/catalog checks: 6 passed (two new catalog tests, four existing reconciliation tests). Read-only public sample browser checks: 13 passed, including all nine exact download hashes and an intentionally stubbed Core 503; errors are not silently replaced with sample success. Signed browser checks: 40 passed against dedicated PostgreSQL/Core/Anvil, covering all nine CSV submissions, missing-bank blocking, pre-contract settlement rejection, correction review/approval across wallets, approved-vs-sample separation and private-amount isolation. Business E2E 12 passed again. No app-side model/chain integration was mocked or changed; no cloud DB data was seeded or approved.
+
+Final result remains passed for this inspected local production revision. Public release identity and checks are recorded in `docs/evidence/demo-data/` after deployment.
