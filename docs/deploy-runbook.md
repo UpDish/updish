@@ -91,3 +91,6 @@ QR 연결에는 공개 Reown ID를 Web 환경에 설정한 뒤 재빌드해야 �
 ## 로그인·역할별 UX 릴리스 — 2026-10-26
 
 [UX 동선/권한/데이터 구분](ux-flow.md). V7 Core 배포 SSM `d457b764-c9c1-4099-8e07-6be47a8ecf5f` Success, health UP, catalog 상품 두 개 추가, 초기 쿠폰 0건. 기존 active run/기존 상품/청약/보유/정산/chain job 행 수가 보존됐습니다. 백업 SSM `df99dc6f-a4e7-40ce-a09b-0db53c8ce3bf`, SHA-256 `4f03b9261c618857d0eeae20cc17328346ff2640fc10b0a35aba00e5ceac8faf`. 롤백 이미지는 `updish/core-api:before-journey-20261026`; V7 테이블/이력은 임의 삭제하지 않습니다. [실제 배포 근거](evidence/ux-journey/production-core.json). 웹 배포 식별자는 아래 후속 기록에 추가합니다.
+
+
+웹 `dpl_HihA9BL52pzFKwtu8LmVXfTUQRZq`는 app commit `a91b6e2`에서 production READY입니다. 기존 canonical 주소에 반영됐습니다. Vercel의 루트는 `apps/web`, 외부 소스 포함은 true, install은 `cd ../.. && pnpm install --frozen-lockfile`, build는 `pnpm build`, output은 `.next`로 보정·저장했습니다. 최초 시도는 루트 lockfile 경로 오류로 실패했고 위 배포가 대체합니다. 공개 SIWE/BFF/Core/PG/GIWA 읽기 18개와 공개 비로그인 브라우저 7개 통과. [배포 기록](evidence/ux-journey/release.json).

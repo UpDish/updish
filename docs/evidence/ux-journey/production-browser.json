@@ -1,0 +1,15 @@
+{
+  "checkedAt": "2026-10-26T06:04:18.992Z",
+  "origin": "https://updish-hackathon-20261025-betaplayers-projects.vercel.app",
+  "scope": "Read-only guest browser checks on actual Vercel release. Signed public HTTP verification is recorded separately; no user wallet signature/transaction or model call.",
+  "checks": [
+    "Production starts at wallet login, with private role menus hidden",
+    "Anonymous market stays session protected",
+    "Anonymous investments stays session protected",
+    "Anonymous benefits stays session protected",
+    "Existing nine CSV samples remain available after the navigation release",
+    "Production mobile login fits viewport",
+    "Production login has no browser runtime errors"
+  ],
+  "errors": []
+}

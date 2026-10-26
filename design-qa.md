@@ -1,6 +1,6 @@
 # Upbit-informed UI/UX and service-flow verification
 
-final result: passed — local UX journey; public release evidence below
+final result: passed — UX journey and released production checks
 
 **Latest acceptance scope (2026-10-26):** Implemented login-first → eight-store discovery/detail/investment → investment-history second tab → merchant/customer/reviewer/operator sections. Real wallet data and read-only operator persona examples remain distinct. Current local production browser evidence: 25 journey checks + 9 real-role/error-recovery checks; Java/PostgreSQL 54 tests; business E2E 12 and persona HTTP 11. See `docs/ux-flow.md` and `docs/evidence/ux-journey/`. Earlier component checks below remain historical. Public deployment is recorded separately after release.
 
@@ -61,3 +61,6 @@ Inspected actual 1440×900 market/investment screens, 768×900 and 390×844 scre
 Browser 25 + 9 checks use actual local SIWE/BFF/Core/PG. The test wallet provider and Dojang are local Anvil only. The final role check deliberately injects one browser-side 503 and verifies error/retry; it does not fabricate an app-side success. Reading a sample persona does not grant its real role. New live-simulation offerings and claims are persisted separately from the immutable snapshot; historical sample offerings cannot be subscribed. Existing approved sales chart is preserved.
 
 React review: session-address keyed private state; no side effects during render; parallel independent queries; URL navigation and explicit error/loading states; native links/buttons/labels; dynamic chart/operations imports; no new dependency or application mock. Existing wallet-modal accessibility/QR, actual GIWA/model and Bojagi limits remain unchanged.
+
+
+UX public deployment `dpl_HihA9BL52pzFKwtu8LmVXfTUQRZq` reached READY from `a91b6e2`. Canonical login was captured and opened for visual inspection. Public guest browser 7 and actual signed HTTP 18 checks passed, including eight-store discovery, isolated empty portfolio, benefit eligibility and authenticated-only access. Signed operator/merchant/customer sample interactions were checked locally as above; the public guest screenshot does not claim a user MetaMask or GIWA transaction.

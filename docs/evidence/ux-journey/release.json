@@ -1,0 +1,28 @@
+{
+  "deploymentId": "dpl_HihA9BL52pzFKwtu8LmVXfTUQRZq",
+  "state": "READY",
+  "target": "production",
+  "project": "prj_y9Vo3fV8rL9FNNQnFITTU1Jclmby",
+  "team": "team_2POKBlIQ9ZehFz3iZk7ViXNy",
+  "appCommit": "a91b6e265005206c3f52181ba3a95f1faa09a345",
+  "canonicalUrl": "https://updish-hackathon-20261025-betaplayers-projects.vercel.app",
+  "buildSettings": {
+    "rootDirectory": "apps/web",
+    "sourceFilesOutsideRootDirectory": true,
+    "installCommand": "cd ../.. && pnpm install --frozen-lockfile",
+    "buildCommand": "pnpm build",
+    "outputDirectory": ".next"
+  },
+  "previousAttempt": {
+    "id": "dpl_FxJPwqWCUm7doxLZrRGfEConCGYE",
+    "state": "ERROR",
+    "reason": "Root install did not find monorepo lockfile; corrected root/install settings for successful deployment."
+  },
+  "publicAuthChecks": 18,
+  "publicGuestBrowserChecks": 7,
+  "limits": [
+    "User MetaMask signing not automated",
+    "No live model or Bojagi or QR claim",
+    "Additional per-store operator/chain management remains a follow-up"
+  ]
+}
