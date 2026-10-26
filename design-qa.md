@@ -1,6 +1,6 @@
 # Upbit-informed UI/UX and service-flow verification
 
-final result: passed — UX journey and released production checks
+final result: passed — local presentation revision; public release remains a91b6e2
 
 **Latest acceptance scope (2026-10-26):** Implemented login-first → eight-store discovery/detail/investment → investment-history second tab → merchant/customer/reviewer/operator sections. Real wallet data and read-only operator persona examples remain distinct. Current local production browser evidence: 25 journey checks + 9 real-role/error-recovery checks; Java/PostgreSQL 54 tests; business E2E 12 and persona HTTP 11. See `docs/ux-flow.md` and `docs/evidence/ux-journey/`. Earlier component checks below remain historical. Public deployment is recorded separately after release.
 
@@ -64,3 +64,12 @@ React review: session-address keyed private state; no side effects during render
 
 
 UX public deployment `dpl_HihA9BL52pzFKwtu8LmVXfTUQRZq` reached READY from `a91b6e2`. Canonical login was captured and opened for visual inspection. Public guest browser 7 and actual signed HTTP 18 checks passed, including eight-store discovery, isolated empty portfolio, benefit eligibility and authenticated-only access. Signed operator/merchant/customer sample interactions were checked locally as above; the public guest screenshot does not claim a user MetaMask or GIWA transaction.
+
+
+## Demo task dialogs and IDE Agent — local review
+
+The user requested a focused demonstration flow instead of stacked task forms, then explicitly chose an IDE-style right Agent sidebar. Current reference is the existing UpDish design system; no new visual branding or business pitch was introduced. The attached presentation's scenario/calculation informed the guide, not changes to approved stack or claims of implementation.
+
+Fresh public audit capture reached the login entry only (in-app browser has no user wallet); no complete before-change authenticated audit is claimed. User then explicitly approved local test-wallet browser automation. Current local captures and 25 actual browser/SIWE/BFF/Core/PG checks are in docs/evidence/presentation-flow. A first modal capture revealed a missing center margin; it was fixed and final bounding-box checks/recaptures passed. Final desktop dock/detail, centered subscription and mobile Agent captures were opened and inspected.
+
+React review: dynamic Agent loading, no new dependency, wallet/settlement keyed state, local chat only, bounded question context, native dialog focus trap/return, non-modal desktop dock, modal mobile dock, nested Escape isolation, no fake model reply. Existing API/permissions/four-eyes checks remain. Status API/55 Java tests and existing business E2E 12 passed. No public release of this revision or real model/GIWA transaction is claimed.

@@ -1,0 +1,5 @@
+{
+  "scope": "Java/PostgreSQL full suite. Agent capability endpoint uses local fake HTTP only; business Dojang is mocked, not GIWA.",
+  "tests": 55,
+  "failures": 0
+}

@@ -1,0 +1,10 @@
+{
+  "scope": "Final production-build rendering after modal alignment fix",
+  "dialogCenteredAt1440x900": true,
+  "agentDockAndMainInteractive": true,
+  "captures": [
+    "centered-subscription.png",
+    "agent-detail-desktop.png",
+    "agent-mobile.png"
+  ]
+}

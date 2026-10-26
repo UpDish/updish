@@ -8,6 +8,7 @@ const ref=name=>({$ref:`#/components/schemas/${name}`});
 const array=name=>({type:'array',items:typeof name==='string'?ref(name):name});
 const object=(properties,optional=[])=>({type:'object',properties,required:Object.keys(properties).filter(k=>!optional.includes(k))});
 const schemas={
+  AgentStatus:object({modelCalls:{type:'string',enum:['CONFIGURED','NOT_CONFIGURED','UNAVAILABLE']},status:{type:'string',enum:['REACHABLE','UNAVAILABLE']},mode:str}),
   MarketListing:object({store:ref('UxStore'),terms:ref('UxOffering'),offering:{anyOf:[ref('Offering'),{type:'null'}]},revenues:array('UxRevenue'),source:{type:'string',enum:['SIMULATION_LEDGER','SAMPLE_HISTORY']}}),
   MarketCatalog:object({listings:array('MarketListing'),mode:str,asOf:str}),
   InvestmentSubscription:{allOf:[ref('Subscription'),object({offering_id:uuid,store_name:str,unit_price:money,created_at:str})]},
@@ -72,6 +73,7 @@ function route(path,method,name,response={type:'object',additionalProperties:tru
 route('/api/v1/offerings/current','get','currentOffering','Offering',undefined,true);
 route('/api/v1/offerings/current/performance','get','offeringPerformance','Performance',undefined,true);
 const p='/api/v1/workbench';
+route(p+'/agent/status','get','agentConnectionStatus','AgentStatus');
 route(p+'/market','get','marketCatalog','MarketCatalog');
 route(p+'/investments','get','ownInvestments','Investments');
 route(p+'/benefits','get','customerBenefits','CustomerBenefits');

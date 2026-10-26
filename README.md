@@ -82,3 +82,6 @@ Java에는 PostgreSQL이 필요합니다. smoke:auth는 자금 없는 임시 서
 [시연 CSV 9개·기대 대조 결과](fixtures/README.md)를 준비했습니다. 공개 차트에서 다운로드하거나 운영자/가게 담당자가 매출관리에서 불러올 수 있습니다.
 
 [전체 UX용 가게·투자·혜택 더미 데이터](fixtures/ux/README.md)를 별도로 준비했습니다. `pnpm generate:ux-demo`, `pnpm check:ux-demo`, `pnpm smoke:ux-demo`로 재현합니다. 로그인 → 가게 목록/선택/청약 → 투자 내역과 역할별 탭에 연결했습니다. [새 UX 동선과 실제/예시 데이터 구분](docs/ux-flow.md)을 확인하세요.
+
+
+[Demo 시연 동선](docs/demo-runbook.md): 청약·CSV·정산 작업을 팝업으로 나누고 Agent는 IDE처럼 오른쪽 사이드바에 배치했습니다. 현재 개편본은 로컬 검토 중이며 모델 답변은 키 미설정 상태입니다.

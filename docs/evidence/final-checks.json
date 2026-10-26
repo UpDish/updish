@@ -196,5 +196,15 @@
     "productionState": "READY",
     "publicAuthPassed": 18,
     "publicGuestBrowserPassed": 7
+  },
+  "presentationFlow": {
+    "state": "LOCAL_REVIEW",
+    "javaPassed": 55,
+    "browserPassed": 25,
+    "businessE2ePassed": 12,
+    "build": "passed",
+    "agent": "IDE_RIGHT_SIDEBAR",
+    "modelCalls": "NOT_CONFIGURED",
+    "evidence": "docs/evidence/presentation-flow/"
   }
 }

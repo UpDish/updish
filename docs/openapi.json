@@ -144,6 +144,79 @@
         }
       }
     },
+    "/api/v1/workbench/agent/status": {
+      "get": {
+        "operationId": "agentConnectionStatus",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentStatus"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Role, ownership, Origin or CSRF rejected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "State conflict or Dojang required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Dependency unavailable; never interpreted as success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/workbench/market": {
       "get": {
         "operationId": "marketCatalog",
@@ -3373,6 +3446,34 @@
       }
     },
     "schemas": {
+      "AgentStatus": {
+        "type": "object",
+        "properties": {
+          "modelCalls": {
+            "type": "string",
+            "enum": [
+              "CONFIGURED",
+              "NOT_CONFIGURED",
+              "UNAVAILABLE"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "REACHABLE",
+              "UNAVAILABLE"
+            ]
+          },
+          "mode": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "modelCalls",
+          "status",
+          "mode"
+        ]
+      },
       "MarketListing": {
         "type": "object",
         "properties": {

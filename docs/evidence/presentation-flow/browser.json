@@ -1,0 +1,32 @@
+{
+  "checkedAt": "2026-10-26T06:24:18.565Z",
+  "scope": "LOCAL ANVIL ONLY: real browser SIWE/BFF/Core/PG, local mock Dojang and test wallets. No user GIWA transaction, no live model call, no fabricated chat answer.",
+  "checks": [
+    "Actual local SIWE login opens market",
+    "Store detail contains a compact CTA instead of an expanded subscription form",
+    "Native subscription dialog traps keyboard focus",
+    "Escape closes subscription dialog and restores its trigger focus",
+    "Popup submits selected-store quantity to real Core/Dojang/PG",
+    "Cancellation has its own confirmation and persists the cancelled status",
+    "Desktop Agent is a non-modal IDE dock",
+    "Main workspace remains interactive while Agent stays open",
+    "Desktop dock and main workspace fit together",
+    "25,000 KRW private statement opens as a popup from actual approved 30M KRW sales",
+    "Actual missing model key disables chat submission instead of fabricating an answer",
+    "Question entry selects the relevant wallet-owned settlement",
+    "Closing a nested evidence popup leaves the Agent dock open",
+    "Mobile Agent becomes a modal full-screen chat drawer",
+    "Mobile Agent traps focus",
+    "Closing mobile Agent restores document scrolling",
+    "Merchant starts with a compact evidence list rather than upload/editor controls",
+    "CSV upload dialog uses real server reconciliation",
+    "Missing bank evidence is shown as blocked in its detail popup",
+    "Operations shows one task group instead of simultaneous allocation, payment and deployment forms",
+    "Settlement approval/payment controls are scoped to selected settlement popup",
+    "Chain configuration form is hidden by default",
+    "Contract configuration opens separately without submitting a transaction",
+    "Demo guide follows contract, subscription, benefits, reconciliation, settlement, exceptions and Agent steps",
+    "No browser runtime errors"
+  ],
+  "errors": []
+}

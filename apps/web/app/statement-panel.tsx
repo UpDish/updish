@@ -6,13 +6,13 @@ import {api} from '../lib/auth';
 import {labels,won,type Statement} from '../lib/workbench';
 const paymentLabels:Record<string,string>={FAILED:'실패',SIMULATED_SUCCESS:'모의 성공',SIMULATED_PARTIAL:'모의 부분 지급'};
 
-export function StatementPanel({id,address,onClose}:{id:string;address:string;onClose:()=>void}) {
+export function StatementPanel({id,address,onClose,embedded=false}:{id:string;address:string;onClose:()=>void;embedded?:boolean}) {
   const panel=useRef<HTMLElement>(null);
-  useEffect(()=>{panel.current?.focus({preventScroll:true});panel.current?.scrollIntoView({block:'start'});},[id]);
+  useEffect(()=>{if(!embedded){panel.current?.focus({preventScroll:true});panel.current?.scrollIntoView({block:'start'});}},[id,embedded]);
   const query=useQuery({queryKey:['statement',address,id],queryFn:()=>api<Statement>(`/api/workbench/settlements/${id}/statement`),retry:false});
   const s=query.data;
   return <section ref={panel} tabIndex={-1} className="card statement-panel" aria-labelledby="statement-heading" aria-busy={query.isFetching}>
-    <div className="card-title"><h2 id="statement-heading">내 정산 근거</h2><button className="small secondary" onClick={onClose}>닫기</button></div>
+    <div className="card-title"><h2 id="statement-heading">내 정산 근거</h2>{!embedded?<button className="small secondary" onClick={onClose}>닫기</button>:null}</div>
     {query.isPending?<p role="status">원장의 계산 근거와 지급 이력을 조회 중입니다.</p>:query.error?<div role="alert"><p className="error">{query.error.message}</p><button className="small secondary" onClick={()=>void query.refetch()}>다시 조회</button></div>:s?<>
       <div className="section-row"><b>{s.period} · v{s.version}</b><span className="badge">{labels[s.status]??s.status}</span></div>
       {!s.latest?<p className="notice">이후 정정 버전이 있습니다. 지급 가능 잔액은 최신 승인 명세를 확인해 주세요.</p>:null}
