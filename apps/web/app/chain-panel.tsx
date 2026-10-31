@@ -14,10 +14,11 @@ export function ChainPanel({offering:o,jobs,contracts,onRefresh,onNotice}:Props)
   const [settings,setSettings]=useState(false);
   const wallet=useConnection();const {data:client}=useWalletClient();const publicClient=usePublicClient({chainId:91342});
   const [unitsAddress,setUnitsAddress]=useState('');const [registryAddress,setRegistryAddress]=useState('');const [busy,setBusy]=useState('');const [pending,setPending]=useState<Record<string,string>>({});
+  const [deploymentHashes,setDeploymentHashes]=useState<{units?:string;registry?:string}>({});
   const distributionTx=useDistributionTransactions(o,onRefresh,onNotice);
   const storageKey=`updish.deployment.v1.${o.id}`;
   useEffect(()=>{
-    try {const saved=JSON.parse(localStorage.getItem(storageKey)??'{}');setUnitsAddress(contracts[0]?.units_address??saved.units??'');setRegistryAddress(contracts[0]?.registry_address??saved.registry??'');setPending(JSON.parse(localStorage.getItem(`updish.jobs.v1.${o.run_id}`)??'{}'));} catch {onNotice('이전 거래 정보를 읽지 못했습니다. 탐색기에서 거래를 확인해 주세요.');}
+    try {const saved=JSON.parse(localStorage.getItem(storageKey)??'{}');setUnitsAddress(contracts[0]?.units_address??saved.units??'');setRegistryAddress(contracts[0]?.registry_address??saved.registry??'');setPending(JSON.parse(localStorage.getItem(`updish.jobs.v1.${o.run_id}`)??'{}'));setDeploymentHashes({units:localStorage.getItem(`${storageKey}.units.transaction`)??undefined,registry:localStorage.getItem(`${storageKey}.registry.transaction`)??undefined});} catch {onNotice('이전 거래 정보를 읽지 못했습니다. 탐색기에서 거래를 확인해 주세요.');}
   },[storageKey,o.run_id,contracts,onNotice]);
   function saveAddresses(units:string,registry:string) {localStorage.setItem(storageKey,JSON.stringify({units,registry}));}
   async function deploy(kind:'units'|'registry') {
@@ -27,7 +28,7 @@ export function ChainPanel({offering:o,jobs,contracts,onRefresh,onNotice}:Props)
       const build=kind==='units'?builds.UpDishDemoUnits:builds.SettlementRegistry;
       const args=kind==='units'?[wallet.address,dojang.scroll,dojang.faucetAttester,BigInt(o.token_id),BigInt(o.target_units)]:[wallet.address];
       const hash=await client.deployContract({abi:build.abi as Abi,bytecode:build.bytecode as Hex,args,account:wallet.address,chain:giwaSepolia});
-      localStorage.setItem(`${storageKey}.${kind}.transaction`,hash);onNotice(`배포 거래를 제출했습니다: ${hash}. 응답 지연 시 다시 배포하지 말고 거래를 확인해 주세요.`);
+      localStorage.setItem(`${storageKey}.${kind}.transaction`,hash);setDeploymentHashes(previous=>({...previous,[kind]:hash}));onNotice(`배포 거래를 제출했습니다: ${hash}. 응답 지연 시 다시 배포하지 말고 거래를 확인해 주세요.`);
       const receipt=await publicClient.waitForTransactionReceipt({hash,timeout:120_000});
       if(receipt.status!=='success'||!receipt.contractAddress) throw new Error('배포 거래가 성공하지 않았습니다.');
       if(kind==='units') {setUnitsAddress(receipt.contractAddress);saveAddresses(receipt.contractAddress,registryAddress);} else {setRegistryAddress(receipt.contractAddress);saveAddresses(unitsAddress,receipt.contractAddress);}
@@ -62,6 +63,7 @@ export function ChainPanel({offering:o,jobs,contracts,onRefresh,onNotice}:Props)
     <div className="actions"><span className="badge">{contracts.length?'계약 등록됨':'계약 등록 필요'}</span><button className="secondary small" onClick={()=>setSettings(true)}>계약 설정</button></div>
     {settings?<Modal title="GIWA 계약 설정" wide busy={!!busy} onClose={()=>setSettings(false)}>    <div className="actions"><button className="small" disabled={!!busy} onClick={()=>void deploy('units')}>이 상품의 토큰 계약 배포</button><button className="small secondary" disabled={!!busy} onClick={()=>void recover('units')}>토큰 배포 영수증 복구</button><button className="small" disabled={!!busy} onClick={()=>void deploy('registry')}>정산 기록 계약 배포</button><button className="small secondary" disabled={!!busy} onClick={()=>void recover('registry')}>기록 계약 영수증 복구</button></div>
     <label htmlFor="units-contract">토큰 계약 주소</label><input id="units-contract" value={unitsAddress} onChange={e=>setUnitsAddress(e.target.value)} placeholder="0x…"/><label htmlFor="registry-contract">정산 기록 계약 주소</label><input id="registry-contract" value={registryAddress} onChange={e=>setRegistryAddress(e.target.value)} placeholder="0x…"/><button className="small secondary" disabled={!!busy||!/^0x[0-9a-fA-F]{40}$/.test(unitsAddress)||!/^0x[0-9a-fA-F]{40}$/.test(registryAddress)} onClick={()=>void register()}>두 계약을 서버에서 검증 · 등록</button>
+    <div className="actions">{deploymentHashes.units?<a href={`https://sepolia-explorer.giwa.io/tx/${deploymentHashes.units}`} target="_blank" rel="noreferrer">수량 계약 배포 영수증 ↗</a>:null}{deploymentHashes.registry?<a href={`https://sepolia-explorer.giwa.io/tx/${deploymentHashes.registry}`} target="_blank" rel="noreferrer">정산 기록 배포 영수증 ↗</a>:null}</div>
     <p className="hint">배포 응답이 지연되면 복구 버튼을 사용하세요. 거래 해시와 배포 주소만 이 브라우저에 보관합니다. 새 시연은 새 상품 ID이므로 토큰 계약도 새 상품에 맞아야 합니다.</p>
 </Modal>:null}
     <DistributionSettings offering={o} contracts={contracts} onRefresh={onRefresh} onNotice={onNotice}/>
