@@ -1,4 +1,5 @@
 import asyncio
+import json
 import os
 import unittest
 from types import SimpleNamespace
@@ -66,12 +67,23 @@ class AgentTests(unittest.TestCase):
         class PublicResponses(FakeResponses):
             async def parse(self, **kwargs):
                 self.instructions = kwargs["instructions"]
+                tool_context = json.loads(kwargs["input"][-1]["output"])
+                assert "netWon" not in tool_context["samples"][0]["reconciliation"]
+                assert tool_context["samples"][0]["reconciliation"]["ready"] is False
                 return SimpleNamespace(status="completed", output_parsed=Explanation(explanation="현재 승인된 매출 원장은 없습니다. 가상 CSV에서 은행 입금 자료가 누락돼 승인을 진행할 수 없는 예시입니다.", sourceIds=["settlement1"], uncertainties=[]))
         client = SimpleNamespace(responses=PublicResponses())
-        body = ExplainRequest(question="매출 승인 여부", context={"sourceIds": ["settlement1"], "dataVersion": "v3", "approved": [], "samples": [{"id": "settlement1", "source": "SYNTHETIC_CSV"}]})
+        body = ExplainRequest(question="매출 승인 여부", context={"sourceIds": ["settlement1"], "dataVersion": "v3", "approved": [], "samples": [{"id": "settlement1", "basis": "SYNTHETIC_CSV", "reconciliation": {"netWon": "30000000", "ready": False}}]})
         result = asyncio.run(explain_with_client(client, body))
         self.assertTrue(result["explanation"].startswith("현재 승인된 매출 원장은 없습니다."))
         self.assertIn("검토 준비 조건", client.responses.instructions)
+
+    def test_public_unapproved_chat_rejects_invented_obligation_amount(self):
+        class AmountResponses(FakeResponses):
+            async def parse(self, **kwargs):
+                return SimpleNamespace(status="completed", output_parsed=Explanation(explanation="현재 승인된 매출 원장은 없습니다. 원화 의무액은 30000000원입니다.", sourceIds=["settlement1"], uncertainties=[]))
+        body = ExplainRequest(question="매출 승인 여부", context={"sourceIds": ["settlement1"], "dataVersion": "v3", "approved": [], "samples": []})
+        with self.assertRaisesRegex(Exception, "금액을 단정"):
+            asyncio.run(explain_with_client(SimpleNamespace(responses=AmountResponses()), body))
 
 
 if __name__ == "__main__":
