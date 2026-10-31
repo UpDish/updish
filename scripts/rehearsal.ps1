@@ -69,11 +69,25 @@ try {
     $env:UPDISH_ALLOWED_ORIGINS='http://127.0.0.1:3001'
     $env:SESSION_COOKIE_SECURE='false'
     if(Test-Path -LiteralPath '.env.local') {foreach($line in [IO.File]::ReadAllLines((Join-Path $project '.env.local'))){if($line -match '^AGENT_SHARED_TOKEN=(.*)$'){$env:AGENT_SHARED_TOKEN=$Matches[1].Trim()}}}
+    if(Get-NetTCPConnection -LocalPort 8000 -State Listen -ErrorAction SilentlyContinue) {
+        $agentHealth=Invoke-RestMethod -Uri 'http://127.0.0.1:8000/health'
+        if($agentHealth.service -ne 'agent-api'){throw '8000 포트를 사용하는 다른 서비스는 덮어쓰지 않습니다.'}
+    } else {
+        $previousKey=$env:OPENAI_API_KEY
+        $previousModel=$env:OPENAI_MODEL
+        try {
+            if(Test-Path -LiteralPath '.env.local') {foreach($line in [IO.File]::ReadAllLines((Join-Path $project '.env.local'))){if($line -match '^(OPENAI_API_KEY|OPENAI_MODEL)=(.*)$'){[Environment]::SetEnvironmentVariable($Matches[1],$Matches[2].Trim().Trim('"').Trim("'"),'Process')}}}
+            Launch 'agent' "$project/services/agent-api/.venv/Scripts/python.exe" @('-m','uvicorn','app.main:app','--app-dir',('"'+$project+'/services/agent-api"'),'--host','127.0.0.1','--port','8000') "$project/services/agent-api" 8000
+        } finally {
+            $env:OPENAI_API_KEY=$previousKey
+            $env:OPENAI_MODEL=$previousModel
+        }
+    }
     Launch 'core' (Get-Command java.exe).Source @('-Xmx384m','-jar',('"'+(CoreSnapshot)+'"'),'--server.port=8081') "$project/services/core-api" 8081
     $env:CORE_API_URL='http://127.0.0.1:8081'
     $next=(Resolve-Path -LiteralPath 'apps/web/node_modules/next/dist/bin/next').Path
     Launch 'web' (Get-Command node.exe).Source @(('"'+$next+'"'),'start','--hostname','127.0.0.1','--port','3001') "$project/apps/web" 3001
-    Write-Output "LOCAL ANVIL ONLY · 별도 DB $dbName · Web 3001 / Core 8081 / RPC 8545. GIWA 거래가 아닙니다."
+    Write-Output "LOCAL ANVIL ONLY · 별도 DB $dbName · Web 3001 / Core 8081 / Agent 8000 / RPC 8545. GIWA 거래가 아닙니다."
 } catch {
     Write-Output '부분 기동 상태는 .runtime/rehearsal.json에 보관했습니다. -Action Stop으로 이 리허설만 중지할 수 있습니다.'
     throw

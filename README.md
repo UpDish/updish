@@ -89,4 +89,4 @@ Java에는 PostgreSQL이 필요합니다. smoke:auth는 자금 없는 임시 서
 [가게·투자·매출 시연 데이터와 역사 fixture](fixtures/ux/README.md)를 별도로 준비했습니다. `pnpm generate:ux-demo`, `pnpm check:ux-demo`, `pnpm smoke:ux-demo`로 재현합니다. 로그인 → 가게 목록/선택/청약 → 투자 내역과 역할별 탭에 연결했습니다. [새 UX 동선과 실제/예시 데이터 구분](docs/ux-flow.md)을 확인하세요.
 
 
-[Demo 시연 동선](docs/demo-runbook.md): 청약·CSV·정산 작업을 팝업으로 나누고 Agent는 IDE처럼 오른쪽 사이드바에 배치했습니다. 현재 개편본은 로컬 검토 중이며 모델 답변은 키 미설정 상태입니다.
+[Demo 시연 동선](docs/demo-runbook.md): 청약·CSV·정산 작업은 팝업, Agent는 오른쪽 채팅 사이드바입니다. 공개 Vercel/EC2와 기존 승인 모델 키를 연결했습니다. [최신 전체 흐름 점검](docs/full-flow-check-20261031.md)은 로컬 실제 HTTP·계약·브라우저 검사와 사용자 GIWA 서명을 구분해 기록합니다. 리허설 스크립트는 Web·Core·Agent·별도 DB/Anvil을 준비합니다.

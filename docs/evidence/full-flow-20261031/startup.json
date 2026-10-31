@@ -1,0 +1,10 @@
+{
+  "newModelCalls": 0,
+  "agent": "CONFIGURED",
+  "apiKeyReused": true,
+  "webSessionEndpoint": true,
+  "checkedAt": "2026-10-31T14:28:55.2282381+00:00",
+  "database": "updish_rehearsal_20261031142338",
+  "scope": "LOCAL STARTUP ONLY",
+  "core": "UP"
+}

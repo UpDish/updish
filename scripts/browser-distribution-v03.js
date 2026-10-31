@@ -6,7 +6,16 @@ async(page)=>{
   // Only this isolated browser's public-client reads are redirected to the local chain.
   await page.route('https://sepolia-rpc.giwa.io/**',async route=>{const r=await page.request.post('http://127.0.0.1:8545',{data:route.request().postData(),headers:{'Content-Type':'application/json'}});await route.fulfill({response:r});});
   async function capture(name){await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));await page.screenshot({path:`output/playwright/integration-v03/${name}.png`});}
-  async function switchTo(index){const previous=await page.evaluate(()=>Number(sessionStorage.getItem('updish-rehearsal-index')??1));if(previous===index)return;await page.evaluate(i=>window.updishRehearsalSwitch(i),index);await page.getByRole('button',{name:'UpDish 열기',exact:true}).click();const d=page.getByRole('dialog',{name:'UpDish에 로그인',exact:true});await d.getByRole('button',{name:'서명하고 로그인',exact:true}).click();await page.getByRole('heading',{name:'가게 탐색',exact:true}).waitFor();}
+  async function switchTo(index){
+    const previous=await page.evaluate(()=>Number(sessionStorage.getItem('updish-rehearsal-index')??1));
+    if(previous===index&&await page.locator('.account-menu').isVisible())return;
+    if(previous!==index)await page.evaluate(i=>window.updishRehearsalSwitch(i),index);
+    await page.getByRole('button',{name:'UpDish 열기',exact:true}).waitFor();
+    const d=page.getByRole('dialog',{name:'UpDish에 로그인',exact:true});
+    if(!await d.isVisible())await page.getByRole('button',{name:'UpDish 열기',exact:true}).click();
+    await d.getByRole('button',{name:'서명하고 로그인',exact:true}).click();
+    await page.getByRole('heading',{name:'가게 탐색',exact:true}).waitFor();
+  }
   async function consoleTab(name){if(!await page.getByRole('navigation',{name:'업무 콘솔 메뉴'}).count()){await page.locator('.account-menu>summary').click();await page.getByRole('link',{name:'검토·정산 콘솔',exact:true}).click();}await page.getByRole('navigation',{name:'업무 콘솔 메뉴'}).getByRole('link',{name,exact:true}).click();}
   async function confirm(name){const d=page.getByRole('dialog',{name,exact:true});await d.getByRole('button',{name,exact:true}).click();await d.waitFor({state:'hidden'});}
   await page.setViewportSize({width:1440,height:900});if(await page.locator('dialog:modal').count())await page.keyboard.press('Escape');await switchTo(0);await consoleTab('정산·분배');await page.getByRole('heading',{name:'정산·분배',exact:true}).waitFor();
