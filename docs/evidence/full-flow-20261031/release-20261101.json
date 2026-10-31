@@ -1,0 +1,37 @@
+{
+  "checkedAt": "2026-10-31T15:21:41.7240584Z",
+  "sourceCommit": "d758a727f62d5bec73521db96aee4f1b9d1d3a07",
+  "web": {
+    "deploymentId": "dpl_G5UbFYhb2AM65T3h7ZuK2Jq6z53s",
+    "status": "READY",
+    "target": "production",
+    "url": "https://updish-hackathon-20261025-betaplayers-projects.vercel.app/"
+  },
+  "server": {
+    "ssmCommandId": "9ae0af8a-2d6f-4ef1-8b5a-0d9df7bdc992",
+    "status": "Success",
+    "backupSha256": "1ae7d7807fa2c1ade32c1a88f0180c710253128a2c4247d835e75d34550cfc8b",
+    "jarSha256": "96b491e488e034f503986be587e5248be656ecef174706d49d2d92c750b89c47",
+    "modelCalls": "CONFIGURED",
+    "businessCountsAndActiveRun": "PRESERVED",
+    "schemaVersion": 9,
+    "rollbackTag": "before-facts-20261101",
+    "agentSourceSha256": "2ba2106e8ae30e3b45248cd8412b8a9a01241eb667af5ff625e61454aeafee99",
+    "envPermissions": "0600",
+    "health": "UP"
+  },
+  "currentGiwa": {
+    "mintedUnits": 100,
+    "transactions": 8,
+    "allSafe": true,
+    "paidDemo": 0,
+    "remainingAllowance": 0,
+    "fundedDemo": 3000000,
+    "pending": "User signature for 30000 DEMO distribution. No payout hash yet."
+  },
+  "limits": [
+    "DEMO is a valueless test asset; no real KRW transfer",
+    "Bojagi remains NOT_CONNECTED",
+    "Do not represent locally simulated correction as a GIWA transaction"
+  ]
+}

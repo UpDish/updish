@@ -4,7 +4,9 @@
 
 [발표 반영 기준](presentation-v03.md)과 [시연 순서](demo-runbook.md)를 우선합니다. 스택은 v0.2 고정을 유지하고 새 active run에 1억원·10,000단위·10% 조건을 적용했습니다. 기존 실행과 CSV는 보존했습니다. 가게 탐색·내 투자, 별도 콘솔, 금액→조건 확인 청약, 2호점 승인 매출, 실제 테스트 ERC-20 예치·분배·수령과 근거 채팅을 연결했습니다.
 
-로컬 Core/PostgreSQL 62, 계약 15, Agent 9, codec 1 검사와 24개 실제 production-browser 검사가 통과했습니다. 직접 HTTP/계약 검사는 하향 정정·중복 차단·개인 수령 접근을 확인했습니다. 실제 모델은 원화 의무와 DEMO 수령을 구분하며 근거 없는 수치 누락 답변을 거부합니다. GIWA Dojang은 safe 읽기만 확인했고 실제 사용자 지갑 배포·분배 서명은 별도 최종 리허설 항목입니다. [검증 자료](evidence/presentation-v03/validation.json).
+로컬 Core/PostgreSQL 62, 계약 15, Agent 9, codec 1 검사와 24개 실제 production-browser 검사가 통과했습니다. 직접 HTTP/계약 검사는 하향 정정·중복 차단·개인 수령 접근을 확인했습니다. [해당 검증 자료](evidence/presentation-v03/validation.json).
+
+후속 전체 흐름 검사와 2026-11-01 KST 실제 사용자 서명 결과는 [최신 흐름 점검](full-flow-check-20261031.md)을 따릅니다. 공개 DEMO에서 두 지갑의 업무 분리, 네 계약 배포·등록, 100단위 발행, 승인 정산 기록, 정확한 3,000,000 DEMO 승인·예치까지 거래 8개가 safe입니다. 마지막 30,000 DEMO 분배는 사용자 서명 대기입니다. Agent의 같은 숫자/다른 단위 누락을 수정해 Agent 11개·관련 Core 4개·실제 모델 가상 근거 두 응답과 배포 후 공개 상담을 확인했습니다. 코드 `d758a72`, Vercel READY와 EC2 배포·기존 원장 보존을 [별도 기록](evidence/full-flow-20261031/release-20261101.json)합니다.
 
 아래는 이전 버전의 기록입니다. 현재 공개 배포의 커밋·배포 ID·서버 결과는 `evidence/presentation-v03/release.json`에 별도 기록합니다.
 
