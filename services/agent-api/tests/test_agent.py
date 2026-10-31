@@ -57,6 +57,22 @@ class AgentTests(unittest.TestCase):
         result = asyncio.run(explain_with_client(SimpleNamespace(responses=CorrectResponses()), body))
         self.assertIn("30,000 DEMO", result["explanation"])
 
+    def test_public_sample_cannot_be_described_as_approved_ledger(self):
+        body = ExplainRequest(question="이 매출이 승인됐나요?", context={"sourceIds": ["settlement1"], "dataVersion": "v3", "approved": [], "samples": [{"id": "settlement1", "source": "SYNTHETIC_CSV"}]})
+        with self.assertRaisesRegex(Exception, "승인 원장"):
+            asyncio.run(explain_with_client(SimpleNamespace(responses=FakeResponses()), body))
+
+    def test_public_empty_ledger_explanation_is_explicit(self):
+        class PublicResponses(FakeResponses):
+            async def parse(self, **kwargs):
+                self.instructions = kwargs["instructions"]
+                return SimpleNamespace(status="completed", output_parsed=Explanation(explanation="현재 승인된 매출 원장은 없습니다. 가상 CSV에서 은행 입금 자료가 누락돼 승인을 진행할 수 없는 예시입니다.", sourceIds=["settlement1"], uncertainties=[]))
+        client = SimpleNamespace(responses=PublicResponses())
+        body = ExplainRequest(question="매출 승인 여부", context={"sourceIds": ["settlement1"], "dataVersion": "v3", "approved": [], "samples": [{"id": "settlement1", "source": "SYNTHETIC_CSV"}]})
+        result = asyncio.run(explain_with_client(client, body))
+        self.assertTrue(result["explanation"].startswith("현재 승인된 매출 원장은 없습니다."))
+        self.assertIn("검토 준비 조건", client.responses.instructions)
+
 
 if __name__ == "__main__":
     unittest.main()

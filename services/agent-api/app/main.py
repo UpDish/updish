@@ -63,6 +63,13 @@ async def explain_with_client(client: Any, body: ExplainRequest) -> dict[str, An
         "distributionSummary가 있으면 원화 의무액, 확인된 DEMO 수령, 추가 DEMO 수량을 각각 그 값대로 반드시 설명한다. 수치는 만원 등의 축약 없이 정수와 단위로 쓴다. "
         "principal에 만기 원금 별도 상환 의무 없음이 명시되면 미설정이라고 바꾸지 않는다. 세전·원금 미상환·현금 부족·미확인 상태를 감추지 않는다. 근거 ID는 제공된 sourceIds에서만 선택한다."
     )
+    public_without_approval = isinstance(context.get("approved"), list) and not context["approved"]
+    if public_without_approval:
+        instructions += (
+            " 현재 공개 근거의 approved 목록은 비어 있다. 첫 문장을 정확히 '현재 승인된 매출 원장은 없습니다.'로 시작한다. "
+            "samples는 모두 가상 CSV 예시다. ready 또는 대조 일치는 검토 준비 조건일 뿐 승인 상태가 아니다. "
+            "가상 예시라고 명시하고, 실제 승인된 매출이나 실제 지급으로 단정하지 않는다."
+        )
     tools = [{"type": "function", "name": "get_settlement_evidence", "description": "현재 사용자에게 허용된 가게 공개 대조 자료·사용 안내 또는 본인의 개인 정산 근거를 읽는다.",
               "parameters": {"type": "object", "properties": {}, "required": [], "additionalProperties": False}, "strict": True}]
     items: list[Any] = [{"role": "user", "content": body.question}]
@@ -80,6 +87,8 @@ async def explain_with_client(client: Any, body: ExplainRequest) -> dict[str, An
     parsed = result.output_parsed
     if result.status != "completed" or parsed is None or not parsed.sourceIds or not set(parsed.sourceIds).issubset(set(sources)):
         raise HTTPException(502, "근거가 확인된 설명을 생성하지 못했습니다.")
+    if public_without_approval and not parsed.explanation.startswith("현재 승인된 매출 원장은 없습니다."):
+        raise HTTPException(502, "승인 원장과 가상 예시를 구분한 설명을 생성하지 못했습니다.")
     summary = context.get("distributionSummary")
     if isinstance(summary, dict):
         mentioned = {value.replace(",", "") for value in re.findall(r"(?<!\d)\d[\d,]*", parsed.explanation)}
