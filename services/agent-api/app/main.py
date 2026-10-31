@@ -40,16 +40,39 @@ class Explanation(BaseModel):
     uncertainties: list[str] = Field(max_length=6)
 
 
+def ledger_integer(values: dict[str, Any], key: str) -> int:
+    value = str(values.get(key, ""))
+    if not re.fullmatch(r"[0-9]+", value):
+        raise HTTPException(422, "정산 수치 형식이 다릅니다.")
+    return int(value)
+
+
 def distribution_sentence(summary: dict[str, Any]) -> str:
-    values = []
-    for key in ("obligationWon", "confirmedDemoReceivedUnits", "additionalDemoDueUnits"):
-        value = str(summary.get(key, ""))
-        if not re.fullmatch(r"[0-9]+", value):
-            raise HTTPException(422, "정산 수치 형식이 다릅니다.")
-        values.append(int(value))
-    obligation, received, additional = values
+    obligation, received, additional = (ledger_integer(summary, key) for key in
+        ("obligationWon", "confirmedDemoReceivedUnits", "additionalDemoDueUnits"))
     return (f"세전 정산 의무액은 {obligation:,}원이며, safe로 확인된 수령은 "
             f"{received:,} DEMO, 추가 분배 대상은 {additional:,} DEMO입니다.")
+
+
+def private_ledger_facts(context: dict[str, Any]) -> str | None:
+    summary = context.get("distributionSummary")
+    if not isinstance(summary, dict):
+        return None
+    facts = distribution_sentence(summary)
+    report, contract, lines = (context.get(key) for key in ("reconciliation", "contract", "ownLines"))
+    if isinstance(report, dict) and isinstance(contract, dict) and isinstance(lines, list) and len(lines) == 1:
+        gross, discount, refund, net = (ledger_integer(report, key) for key in
+            ("grossWon", "discountWon", "refundWon", "netWon"))
+        pool = ledger_integer(context, "poolWon")
+        total, held = ledger_integer(contract, "target_units"), ledger_integer(lines[0], "units")
+        facts += (f" 총매출 {gross:,}원에서 할인 {discount:,}원과 환불 {refund:,}원을 반영한 "
+                  f"정산대상 매출은 {net:,}원, 전체 배분금은 {pool:,}원입니다. "
+                  f"총 {total:,}단위 중 본인 보유 {held:,}단위를 기준으로 산정했습니다.")
+    return facts
+
+
+def contains_numeric_claim(text: str) -> bool:
+    return bool(re.search(r"\d|(?<![가-힣])[일이삼사오육칠팔구십백천만억조]+\s*(?:원|DEMO|단위|개|퍼센트|%)", text, re.IGNORECASE))
 
 
 _lock = asyncio.Lock()
@@ -75,11 +98,14 @@ async def explain_with_client(client: Any, body: ExplainRequest) -> dict[str, An
         "질문을 되풀이하거나 앞으로 설명하겠다는 예고로 답변하지 말고, 조회한 근거로 즉시 답한다. "
         "principal에 만기 원금 별도 상환 의무 없음이 명시되면 미설정이라고 바꾸지 않는다. 세전·원금 미상환·현금 부족·미확인 상태를 감추지 않는다. 근거 ID는 제공된 sourceIds에서만 선택한다."
     )
-    summary = context.get("distributionSummary")
-    required_distribution_sentence = distribution_sentence(summary) if isinstance(summary, dict) else None
-    if required_distribution_sentence:
-        instructions += (f" 첫 문장을 정확히 '{required_distribution_sentence}'로 시작한다. "
-                         "같은 숫자라도 원화 의무액과 DEMO 수령·추가 분배는 서로 다른 항목이다. 0도 생략하지 않는다. 이후 문장에서 질문에 맞는 산식과 근거를 설명한다.")
+    ledger_facts = private_ledger_facts(context)
+    if ledger_facts:
+        instructions += (
+            " 개인 정산의 확정 수치 문장은 애플리케이션이 원장에서 직접 표시한다. "
+            "모델 응답과 uncertainties에는 아라비아 숫자·한글 수사로 금액·수량·비율·기간을 다시 쓰지 않는다. "
+            "질문의 기간과 금액도 반복하지 말고 '이번 정산'과 '해당 금액'으로 지칭한다. "
+            "질문에 맞는 의미·계산 원리·확정 대기 또는 정정 정책을 숫자 없이 한두 문장으로 설명한다."
+        )
     public_without_approval = isinstance(context.get("approved"), list) and not context["approved"]
     tool_context = context
     if public_without_approval:
@@ -95,6 +121,17 @@ async def explain_with_client(client: Any, body: ExplainRequest) -> dict[str, An
              "reconciliation": {key: row.get("reconciliation", {})[key] for key in ("ready", "sources", "issueCounts") if key in row.get("reconciliation", {})}}
             for row in context.get("samples", [])
         ]}
+    if ledger_facts:
+        tool_context = {
+            "calculationMethod": "총매출에 할인과 환불을 반영한 정산대상 매출에서 계약상 전체 배분금을 정하고 본인 보유 비율로 세전 의무액을 배분한다. 확정 수치는 애플리케이션이 원장에서 직접 표시한다.",
+            **{key: context[key] for key in ("principal", "tax", "testAssetPolicy", "sourceIds", "mode") if key in context},
+            "correctionPolicy": context["distributionSummary"].get("correctionPolicy"),
+            "pendingTestReceipt": any(row.get("status") not in ("SAFE", "FAILED") for row in context.get("testAssetReceipts", [])),
+            "confirmedTestReceipt": ledger_integer(context["distributionSummary"], "confirmedDemoReceivedUnits") > 0,
+            "additionalDistributionDue": ledger_integer(context["distributionSummary"], "additionalDemoDueUnits") > 0,
+            "cashShortfall": ledger_integer(context, "cashAvailableWon") < ledger_integer(context, "poolWon") if "cashAvailableWon" in context and "poolWon" in context else None,
+            "receivedAboveCorrectedObligation": ledger_integer(context["distributionSummary"], "demoAboveCorrectedObligationUnits") > 0 if "demoAboveCorrectedObligationUnits" in context["distributionSummary"] else None,
+        }
     tools = [{"type": "function", "name": "get_settlement_evidence", "description": "현재 사용자에게 허용된 가게 공개 대조 자료·사용 안내 또는 본인의 개인 정산 근거를 읽는다.",
               "parameters": {"type": "object", "properties": {}, "required": [], "additionalProperties": False}, "strict": True}]
     items: list[Any] = [{"role": "user", "content": body.question}]
@@ -116,9 +153,14 @@ async def explain_with_client(client: Any, body: ExplainRequest) -> dict[str, An
         raise HTTPException(502, "승인 원장과 가상 예시를 구분한 설명을 생성하지 못했습니다.")
     if public_without_approval and re.search(r"\d[\d,]*\s*(?:원|DEMO|ETH)", parsed.explanation, re.IGNORECASE):
         raise HTTPException(502, "미승인 공개 자료로 금액을 단정하는 답변은 표시하지 않습니다.")
-    if required_distribution_sentence and not parsed.explanation.startswith(required_distribution_sentence):
-        raise HTTPException(502, "정산 수치와 단위를 구분한 설명을 생성하지 못했습니다. 계산 명세는 계속 확인할 수 있습니다.")
-    return {**parsed.model_dump(), "model": model, "mode": "SIMULATION", "toolCalls": 1, "dataVersion": context["dataVersion"]}
+    if ledger_facts and contains_numeric_claim(" ".join([parsed.explanation, *parsed.uncertainties])):
+        raise HTTPException(502, "원장 수치를 모델이 다시 작성한 설명은 표시하지 않습니다. 계산 명세는 계속 확인할 수 있습니다.")
+    answer = parsed.model_dump()
+    if ledger_facts:
+        answer["explanation"] = ledger_facts + " " + parsed.explanation
+        if len(answer["explanation"]) > 3000:
+            raise HTTPException(502, "설명 길이를 초과했습니다.")
+    return {**answer, "model": model, "mode": "SIMULATION", "toolCalls": 1, "dataVersion": context["dataVersion"]}
 
 
 @app.post("/internal/explain")

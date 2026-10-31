@@ -1,0 +1,14 @@
+{
+  "checkedAt": "2026-10-31T15:30:55.5493134Z",
+  "scope": "PRIVATE LEDGER FACT RENDERING / ISOLATED LOCAL DB / REAL MODEL ON FIXTURE CONTEXTS",
+  "status": "PASS",
+  "pythonTests": 14,
+  "coreCacheTests": 1,
+  "coreBootJar": "PASS",
+  "realModelFixtureExplanations": 2,
+  "numericFacts": "Formatted directly from authorized Core ledger fields; model cannot rewrite numbers",
+  "guard": "Reject numeric or spelled-out amount claims in model prose and uncertainties",
+  "policies": "Preserve pending/safe, additional due, cash shortfall and correction state",
+  "schemaMigrations": "NONE",
+  "transactionsSent": 0
+}

@@ -1,0 +1,48 @@
+{
+  "checkedAt": "2026-10-31T15:30:03.294612+00:00",
+  "scope": "REAL OPENAI MODEL / LOCAL APPROVED FIXTURE CONTEXTS ONLY / NO GIWA TRANSACTIONS",
+  "status": "PASS",
+  "cases": [
+    {
+      "summary": {
+        "obligationWon": "30000",
+        "confirmedDemoReceivedUnits": "0",
+        "additionalDemoDueUnits": "30000"
+      },
+      "answer": {
+        "explanation": "세전 정산 의무액은 30,000원이며, safe로 확인된 수령은 0 DEMO, 추가 분배 대상은 30,000 DEMO입니다. 총매출 31,000,000원에서 할인 600,000원과 환불 400,000원을 반영한 정산대상 매출은 30,000,000원, 전체 배분금은 3,000,000원입니다. 총 10,000단위 중 본인 보유 100단위를 기준으로 산정했습니다. 이번 정산은 총매출에서 할인과 환불을 반영해 정산대상 매출을 정하고, 계약에 따른 전체 배분금에서 본인 보유 비율로 세전 의무액을 배분한 방식으로 계산되었습니다. 원장에서 확정된 수치는 애플리케이션이 직접 표시하므로 확정 수치 문장은 원장 화면에서 확인해야 합니다. DEMO는 현금 가치가 없는 테스트 자산으로, 테스트 영수증만 수령으로 표시되며 이번 정산에 대한 테스트 자산 수령은 아직 최종 확정되지 않았습니다. 정정이나 추가 배분은 원장 정책에 따라 별도 절차로 반영됩니다.",
+        "sourceIds": [
+          "local-approved-fixture",
+          "local-csv-fixture"
+        ],
+        "uncertainties": [
+          "확정 수치는 애플리케이션 원장에서 직접 표시됨",
+          "DEMO 수령은 현재 최종 확정 상태가 아님"
+        ],
+        "model": "gpt-5-mini",
+        "mode": "SIMULATION",
+        "toolCalls": 1,
+        "dataVersion": "local-facts-0"
+      }
+    },
+    {
+      "summary": {
+        "obligationWon": "30000",
+        "confirmedDemoReceivedUnits": "30000",
+        "additionalDemoDueUnits": "0"
+      },
+      "answer": {
+        "explanation": "세전 정산 의무액은 30,000원이며, safe로 확인된 수령은 30,000 DEMO, 추가 분배 대상은 0 DEMO입니다. 총매출 31,000,000원에서 할인 600,000원과 환불 400,000원을 반영한 정산대상 매출은 30,000,000원, 전체 배분금은 3,000,000원입니다. 총 10,000단위 중 본인 보유 100단위를 기준으로 산정했습니다. 이번 정산은 총매출에서 할인과 환불을 반영해 이미 정해진 정산대상 매출을 기준으로, 계약상 전체 배분금을 정한 뒤 본인 보유 비율로 세전 의무액을 배분하는 방식으로 계산됐습니다. 세전·세금·수수료는 애플리케이션에서 미설정 상태로 표기되고, 확정 수치는 애플리케이션이 원장에서 직접 표시합니다. DEMO는 현금 가치가 없는 테스트 자산이며, 테스트 영수증은 수령으로만 표시되므로 이번에 수령 완료된 상태입니다.",
+        "sourceIds": [
+          "local-approved-fixture",
+          "local-csv-fixture"
+        ],
+        "uncertainties": [],
+        "model": "gpt-5-mini",
+        "mode": "SIMULATION",
+        "toolCalls": 1,
+        "dataVersion": "local-facts-30000"
+      }
+    }
+  ]
+}
