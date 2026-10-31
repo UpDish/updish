@@ -19,7 +19,7 @@ public class AgentGateway {
     }
     public synchronized Object explain(WalletPrincipal actor,UUID settlementId,String question,Map<String,Object> context){
         // A payout can change without a sales revision; cache the complete authorized evidence context.
-        var key=Hash.sha3String("presentation-v03.3:"+actor.address()+":"+work.encode(context)+":"+question);
+        var key=Hash.sha3String("presentation-v03.4:"+actor.address()+":"+work.encode(context)+":"+question);
         var cached=work.rows("SELECT result FROM agent_run WHERE address=? AND data_version=? AND status='SUCCESS' AND result IS NOT NULL ORDER BY created_at DESC LIMIT 1",actor.address(),key);
         if(!cached.isEmpty())return work.decode(cached.getFirst().get("result").toString());
         long count=db.queryForObject("SELECT count(*) FROM agent_run WHERE address=? AND created_at>now()-interval '1 day'",Long.class,actor.address());

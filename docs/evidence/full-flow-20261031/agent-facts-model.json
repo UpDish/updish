@@ -1,0 +1,47 @@
+{
+  "checkedAt": "2026-10-31T15:15:22.122740+00:00",
+  "scope": "REAL OPENAI MODEL / LOCAL APPROVED FIXTURE CONTEXTS ONLY / NO GIWA TRANSACTIONS",
+  "status": "PASS",
+  "cases": [
+    {
+      "summary": {
+        "obligationWon": "30000",
+        "confirmedDemoReceivedUnits": "0",
+        "additionalDemoDueUnits": "30000"
+      },
+      "answer": {
+        "explanation": "세전 정산 의무액은 30,000원이며, safe로 확인된 수령은 0 DEMO, 추가 분배 대상은 30,000 DEMO입니다. 이번 달 정산액은 승인 원장의 숫자를 근거로 총매출(31,000,000원)에서 할인(600,000원)과 환불(400,000원)을 이미 반영한 정산대상 매출 30,000,000원을 기준으로 산출되었고, 전체 배분금 중에서 본인에게 할당된 세전 의무액이 30,000원입니다. DEMO 수령은 시스템 상 SAFE 영수증으로만 확인되며, 현재 확인된 수령량은 0 DEMO이고 추가 분배 대상으로 30,000 DEMO가 남아 있습니다. 원금 별도 상환 의무는 '만기 원금 별도 상환 의무 없음'으로 되어 있고, 세금은 '세전·세금과 수수료 미설정'으로 표시되어 있습니다.",
+        "sourceIds": [
+          "local-approved-fixture"
+        ],
+        "uncertainties": [
+          "승인 원장 수치와 배분 요약은 제공된 자료를 그대로 인용했습니다; 실제 현금 지급이나 DEMO의 현금 환산은 자료 밖 정보가 없어 제공할 수 없습니다."
+        ],
+        "model": "gpt-5-mini",
+        "mode": "SIMULATION",
+        "toolCalls": 1,
+        "dataVersion": "local-facts-0"
+      }
+    },
+    {
+      "summary": {
+        "obligationWon": "30000",
+        "confirmedDemoReceivedUnits": "30000",
+        "additionalDemoDueUnits": "0"
+      },
+      "answer": {
+        "explanation": "세전 정산 의무액은 30,000원이며, safe로 확인된 수령은 30,000 DEMO, 추가 분배 대상은 0 DEMO입니다. 이번 10월 정산에서 총매출은 31,000,000원, 할인 600,000원, 환불 400,000원을 반영해 이미 할인과 환불이 차감된 정산대상 매출은 30,000,000원으로 계산되었습니다. 전체 배분금은 3,000,000원이며 본인 보유 단위는 100단위로 표시된 30,000 DEMO가 확인되어, 명시된 세전 의무액 30,000원과 DEMO 수령 내역이 근거로 일치합니다. 만기 원금 별도 상환 의무 없음이 명시되어 있고, 세금은 세전·수수료 미설정 상태이며, DEMO는 현금 가치가 없는 테스트 자산이고 SAFE 영수증 수령으로만 표시됩니다.",
+        "sourceIds": [
+          "local-approved-fixture"
+        ],
+        "uncertainties": [
+          "자료에 제시된 숫자만 인용했으며 추가 계산이나 외부 자료는 반영하지 않았습니다."
+        ],
+        "model": "gpt-5-mini",
+        "mode": "SIMULATION",
+        "toolCalls": 1,
+        "dataVersion": "local-facts-30000"
+      }
+    }
+  ]
+}

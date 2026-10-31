@@ -53,10 +53,26 @@ class AgentTests(unittest.TestCase):
     def test_private_correction_explanation_keeps_obligation_and_receipt_distinct(self):
         class CorrectResponses(FakeResponses):
             async def parse(self, **kwargs):
-                return SimpleNamespace(status="completed", output_parsed=Explanation(explanation="정정 후 세전 의무액은 29,000원입니다. 30,000 DEMO는 테스트 자산의 기존 수령이며 추가 분배는 0 DEMO입니다. 실제 현금 지급은 없으며 원금 별도 상환 의무도 없습니다.", sourceIds=["settlement1"], uncertainties=[]))
+                return SimpleNamespace(status="completed", output_parsed=Explanation(explanation="세전 정산 의무액은 29,000원이며, safe로 확인된 수령은 30,000 DEMO, 추가 분배 대상은 0 DEMO입니다. 하향 정정은 기존 수령을 회수하지 않습니다. 실제 현금 지급은 없으며 원금 별도 상환 의무도 없습니다.", sourceIds=["settlement1"], uncertainties=[]))
         body = ExplainRequest(question="수령량을 설명해줘", context={"sourceIds": ["settlement1"], "dataVersion": "v2", "distributionSummary": {"obligationWon": "29000", "confirmedDemoReceivedUnits": "30000", "additionalDemoDueUnits": "0"}})
         result = asyncio.run(explain_with_client(SimpleNamespace(responses=CorrectResponses()), body))
         self.assertIn("30,000 DEMO", result["explanation"])
+
+    def test_same_number_in_demo_cannot_replace_won_obligation(self):
+        class MissingWonResponses(FakeResponses):
+            async def parse(self, **kwargs):
+                return SimpleNamespace(status="completed", output_parsed=Explanation(explanation="수령은 0 DEMO이고 추가로 지급되어야 할 수량은 30,000 DEMO입니다.", sourceIds=["settlement1"], uncertainties=[]))
+        body = ExplainRequest(question="이번 달 정산액과 수령을 설명해줘", context={"sourceIds": ["settlement1"], "dataVersion": "v4", "distributionSummary": {"obligationWon": "30000", "confirmedDemoReceivedUnits": "0", "additionalDemoDueUnits": "30000"}})
+        with self.assertRaisesRegex(Exception, "정산 수치와 단위"):
+            asyncio.run(explain_with_client(SimpleNamespace(responses=MissingWonResponses()), body))
+
+    def test_zero_receipt_must_be_explicit_even_when_other_amounts_match(self):
+        class MissingZeroResponses(FakeResponses):
+            async def parse(self, **kwargs):
+                return SimpleNamespace(status="completed", output_parsed=Explanation(explanation="세전 정산 의무액은 30,000원이며 추가 분배 대상은 30,000 DEMO입니다.", sourceIds=["settlement1"], uncertainties=[]))
+        body = ExplainRequest(question="수령 완료 여부", context={"sourceIds": ["settlement1"], "dataVersion": "v4", "distributionSummary": {"obligationWon": "30000", "confirmedDemoReceivedUnits": "0", "additionalDemoDueUnits": "30000"}})
+        with self.assertRaisesRegex(Exception, "정산 수치와 단위"):
+            asyncio.run(explain_with_client(SimpleNamespace(responses=MissingZeroResponses()), body))
 
     def test_public_sample_cannot_be_described_as_approved_ledger(self):
         body = ExplainRequest(question="이 매출이 승인됐나요?", context={"sourceIds": ["settlement1"], "dataVersion": "v3", "approved": [], "samples": [{"id": "settlement1", "source": "SYNTHETIC_CSV"}]})

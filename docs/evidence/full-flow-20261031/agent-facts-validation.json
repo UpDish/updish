@@ -1,0 +1,15 @@
+{
+  "checkedAt": "2026-10-31T15:16:32.0487513Z",
+  "scope": "AGENT AMOUNTS AND UNITS REGRESSION / ISOLATED LOCAL DB AND REAL MODEL ON FIXTURE CONTEXTS",
+  "status": "PASS",
+  "pythonUnitTests": 11,
+  "coreAgentAndTransparencyTests": 4,
+  "coreBootJar": "PASS",
+  "realModelFixtureExplanations": 2,
+  "newRegressionCases": [
+    "Same DEMO number cannot stand in for missing KRW obligation",
+    "Zero SAFE receipts cannot be omitted"
+  ],
+  "schemaMigrations": "NONE",
+  "transactionsSent": 0
+}
