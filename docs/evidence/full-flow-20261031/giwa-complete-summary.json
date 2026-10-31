@@ -1,0 +1,47 @@
+{
+  "checkedAt": "2026-10-31T15:35:54.3514711Z",
+  "scope": "USER WHALE UI AND LIVE GIWA SAFE / SIMULATION BUSINESS LEDGER",
+  "status": "PASS",
+  "chainId": 91342,
+  "sourceCommit": "a2d24216f14e40f0eb92cb6a64e83cbb2e1029aa",
+  "recipient": "0x26473024a9118E8F39b1A0ce01AC726C36Dd0976",
+  "period": "2026-10",
+  "settlementVersion": 1,
+  "payoutHash": "0x13b2aeb2855f25cf7e8d6638f0b774d9c0f3d94f870d15623d52f2789c5e5da0",
+  "payoutBlock": 40115163,
+  "canonical": true,
+  "safe": true,
+  "beforeDistributionSafe": {
+    "block": "40114805",
+    "holding": "100",
+    "minted": "100",
+    "holderCash": "997000000",
+    "vaultCash": "3000000",
+    "supply": "1000000000",
+    "decimals": 0
+  },
+  "afterDistributionSafe": {
+    "block": "40115415",
+    "holding": "100",
+    "minted": "100",
+    "holderCash": "997030000",
+    "vaultCash": "2970000",
+    "supply": "1000000000",
+    "decimals": 0
+  },
+  "receivedDelta": 30000,
+  "uiReceipt": "30,000 DEMO / 수령 확인 / same Explorer hash",
+  "agentFacts": "30,000 KRW obligation; 30,000 DEMO SAFE receipt; 0 DEMO additional; 30,000,000 KRW net sales",
+  "syntheticBackground": {
+    "paid": 0,
+    "units": 9900,
+    "remainingVaultDemo": 2970000,
+    "minted": 0
+  },
+  "limits": [
+    "No actual KRW payment",
+    "DEMO has no cash value or fiat backing",
+    "Bojagi NOT_CONNECTED",
+    "No live downward correction or Dojang revocation performed"
+  ]
+}

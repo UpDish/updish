@@ -1,0 +1,16 @@
+{
+  "checkedAt": "2026-10-31T15:35:02.880Z",
+  "scope": "REAL DEPLOYED MODEL / AUTHORIZED OWN APPROVED STATEMENT / LIVE GIWA SAFE RECEIPT",
+  "sourceCommit": "a2d24216f14e40f0eb92cb6a64e83cbb2e1029aa",
+  "status": "PASS",
+  "expected": {
+    "obligationWon": 30000,
+    "netSalesWon": 30000000,
+    "poolWon": 3000000,
+    "heldUnits": 100,
+    "totalUnits": 10000,
+    "safeDemoReceived": 30000,
+    "additionalDemoDue": 0
+  },
+  "renderedAnswer": "UpDish\n\n세전 정산 의무액은 30,000원이며, safe로 확인된 수령은 30,000 DEMO, 추가 분배 대상은 0 DEMO입니다. 총매출 31,000,000원에서 할인 600,000원과 환불 400,000원을 반영한 정산대상 매출은 30,000,000원, 전체 배분금은 3,000,000원입니다. 총 10,000단위 중 본인 보유 100단위를 기준으로 산정했습니다. 이번 정산은 총매출에서 할인과 환불을 반영한 정산대상 매출을 기준으로, 계약에 따른 전체 배분금에서 본인 보유 비율을 적용해 세전 의무액을 배분하는 방식으로 계산됐습니다. 원장에 표시된 확정 수치는 애플리케이션에서 직접 확인할 수 있습니다. DEMO 수령은 테스트 토큰으로 실제 현금 가치는 없으며, 수령은 SAFE 영수증으로 확인되어 완료된 상태입니다.\n\n참고 자료 2건"
+}

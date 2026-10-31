@@ -1,0 +1,24 @@
+{
+  "checkedAt": "2026-10-31T15:32:49.378Z",
+  "scope": "LIVE GIWA / READ ONLY",
+  "chainId": 91342,
+  "tokenId": "296447619027118258757406117959103873876",
+  "safe": {
+    "block": "40115415",
+    "holding": "100",
+    "minted": "100",
+    "holderCash": "997030000",
+    "vaultCash": "2970000",
+    "supply": "1000000000",
+    "decimals": 0
+  },
+  "latest": {
+    "block": "40115652",
+    "holding": "100",
+    "minted": "100",
+    "holderCash": "997030000",
+    "vaultCash": "2970000",
+    "supply": "1000000000",
+    "decimals": 0
+  }
+}

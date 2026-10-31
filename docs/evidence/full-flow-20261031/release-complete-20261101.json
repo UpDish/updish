@@ -1,0 +1,52 @@
+{
+  "checkedAt": "2026-10-31T15:36:43.4247018Z",
+  "sourceCommit": "a2d24216f14e40f0eb92cb6a64e83cbb2e1029aa",
+  "web": {
+    "status": "READY",
+    "url": "https://updish-hackathon-20261025-betaplayers-projects.vercel.app/",
+    "deploymentId": "dpl_DLrs9zXS2WcJJgvYcRzjSdcHZ1z4",
+    "target": "production"
+  },
+  "server": {
+    "businessCountsAndActiveRun": "PRESERVED",
+    "envPermissions": "0600",
+    "jarSha256": "0dba773661aa8b8ff51bf3bf78f27ad28dfc7083f93a73e26ce951b77a3d7d74",
+    "status": "Success",
+    "health": "UP",
+    "rollbackTag": "before-ledger-20261101",
+    "backupSha256": "39ed4728276eeac6f6919598958ccd9458122ab0bee6a515df9c45df23fda4e6",
+    "ssmCommandId": "fbcc0855-5c16-4431-806f-7cb644fee666",
+    "schemaVersion": 9,
+    "agentSourceSha256": "80a0545c7d7fcba7690c6a8a7994ec8a2a4477d9b66871913264dcef1c8098b7",
+    "modelCalls": "CONFIGURED"
+  },
+  "giwa": {
+    "paidDemo": 30000,
+    "payoutHash": "0x13b2aeb2855f25cf7e8d6638f0b774d9c0f3d94f870d15623d52f2789c5e5da0",
+    "fundedDemo": 3000000,
+    "mintedUnits": 100,
+    "vaultBalance": 2970000,
+    "remainingAllowance": 0,
+    "safeCheckedBlock": 40115415,
+    "userSignedTransactions": 9,
+    "allCanonicalAndSafe": true
+  },
+  "browser": {
+    "ownReceipt": "PASS",
+    "monthlyReceiptChart": "PASS",
+    "deployedPrivateAgent": "PASS",
+    "pendingSignatures": 0,
+    "surface": "User Whale"
+  },
+  "validation": {
+    "realModelFixtureContexts": 2,
+    "agentUnitTests": 14,
+    "coreCacheTests": 1,
+    "bootJar": "PASS"
+  },
+  "limits": [
+    "DEMO is a test asset; no real KRW transfer",
+    "Bojagi remains NOT_CONNECTED",
+    "S3 permission roundtrip and live correction/revocation are separate follow-ups"
+  ]
+}

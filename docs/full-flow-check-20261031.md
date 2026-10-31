@@ -31,7 +31,7 @@
 
 공개 화면에서 운영/검토 두 실제 계정의 SIWE, 운영 지갑의 유효한 TESTNET FAUCET Dojang, 100단위 청약·배정, 별도 검토 지갑의 CSV 마감·정산 산정을 확인했다. 온체인 배포·발행·분배는 사용자가 지갑에서 서명한다.
 
-2026-11-01 00:19 KST 읽기 검사에서 사용자가 서명한 **GIWA 거래 8개 모두 canonical/safe**를 확인했다. [실제 거래·승인 금액·분배 계약 상태](evidence/full-flow-20261031/giwa-before-distribution.json)는 로컬 검사와 별도 증거다.
+2026-11-01 00:32 KST 읽기 검사에서 사용자가 서명한 **GIWA 거래 9개 모두 canonical/safe**를 확인했다. [실제 거래](evidence/full-flow-20261031/giwa-complete-transactions.json), [safe 잔고](evidence/full-flow-20261031/giwa-complete-balances.json), [화면·잔고 대조 요약](evidence/full-flow-20261031/giwa-complete-summary.json)은 로컬 검사와 별도 증거다. 예치까지 8개였던 [이전 체크포인트](evidence/full-flow-20261031/giwa-before-distribution.json)도 보관한다.
 
 | 단계 | 실제 GIWA 결과 |
 | --- | --- |
@@ -39,12 +39,12 @@
 | 보유 수량 | 사용자 100단위 발행 safe, DB·체인 모두 100. 가상 배경 9,900단위는 체인 발행·송금 제외 |
 | 승인 정산 기록 | 승인 digest와 온체인 기록 일치, registry 거래 safe |
 | DEMO 사용 승인 | 정확히 3,000,000 DEMO 승인. 예치 후 남은 allowance 0 |
-| 재원 예치 | 분배 계약 3,000,000 DEMO 보유, 예치 거래 safe, 현재 지급 0 |
-| 개인 분배·수령 | **사용자의 마지막 30,000 DEMO 분배 서명 대기.** 아직 거래 해시·safe 수령 영수증이 없어 완료로 표시하지 않음 |
+| 재원 예치 | 정확히 3,000,000 DEMO 예치 safe. 분배 후 계약 잔액 2,970,000 DEMO |
+| 개인 분배·수령 | **30,000 DEMO 분배 safe**, 내 투자 → 분배 내역에 수령 확인·같은 거래 영수증·월별 차트 표시. [실제 분배 거래](https://sepolia-explorer.giwa.io/tx/0x13b2aeb2855f25cf7e8d6638f0b774d9c0f3d94f870d15623d52f2789c5e5da0) |
 
-원화 의무액 30,000원과 테스트 자산 수령량은 별개다. 분배가 완료되면 예치 직후의 사용자 잔고에서 30,000 DEMO가 증가하고 분배 계약에는 가상 배경 몫 2,970,000 DEMO가 남아야 한다. 전체 3,000,000 DEMO를 모두 지급한 것으로 해석하지 않는다. 실제 GIWA 하향 정정은 이번에 실행하지 않았고, 위 로컬 정정 결과와 구분한다.
+원화 의무액 30,000원과 테스트 자산 수령량은 별개다. 사용자 safe 잔고는 예치 후 997,000,000에서 997,030,000 DEMO로 정확히 30,000 증가했다. 분배 계약에는 가상 배경 몫 2,970,000 DEMO가 남았다. 전체 3,000,000 DEMO를 모두 지급한 것으로 해석하지 않는다. 실제 GIWA 하향 정정은 이번에 실행하지 않았고, 위 로컬 정정 결과와 구분한다.
 
-수정본 `d758a72`는 Vercel production READY 및 기존 EC2 Core/Agent에 반영했다. 백업·기존 업무 행 수·active run·V9·빌드 해시·환경 파일 0600을 확인했다. [배포 근거](evidence/full-flow-20261031/release-20261101.json). 공개 상담의 실제 모델 응답도 [배포 후 검사](evidence/full-flow-20261031/agent-public-deployed.json)를 통과했다. 개인 수령 후 설명은 마지막 분배 safe 확인 이후 점검한다.
+최종 수정본 `a2d2421`은 Vercel production READY 및 기존 EC2 Core/Agent에 반영했다. 백업·기존 업무 행 수·active run·V9·빌드 해시·환경 파일 0600을 확인했다. [최종 배포 근거](evidence/full-flow-20261031/release-complete-20261101.json). 이전 `d758a72`의 [배포 기록](evidence/full-flow-20261031/release-20261101.json)·[공개 상담 검사](evidence/full-flow-20261031/agent-public-deployed.json)는 보관한다. 최종 공개 화면의 [본인 정산 Agent 답변](evidence/full-flow-20261031/agent-private-deployed.json)은 원화 의무 30,000원·safe 수령 30,000 DEMO·추가 분배 0 DEMO·정산대상 매출 30,000,000원·보유 100/10,000단위를 정확히 표시했다.
 
 점검 당시 GIWA 최신 블록과 safe 블록의 시간 차이가 약 330초였다. 대기는 네트워크 상황에 따라 달라진다. 블록 포함을 safe 수령으로 표시하거나 같은 거래를 다시 배포/전송하지 않는다. 발표 전 계약 등록·수량 발행·매출 기록·예치를 준비해 두고, 초기화한 새 run은 새 상품 설정에 맞는 계약이 필요함을 기억한다.
 
