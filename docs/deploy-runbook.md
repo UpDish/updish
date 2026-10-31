@@ -107,3 +107,10 @@ EC2 Core와 Agent 이미지 갱신 SSM `a0a837b3-9b9b-4eba-8d69-22a24a1a6ac5` Su
 사용자가 GitHub 연결을 승인했고 기존 Vercel 프로젝트를 `UpDish/updish`와 연결했습니다. 이제 main 푸시는 프론트 production 배포를 트리거합니다. 프로젝트를 새로 만들거나 도메인을 바꾸지 않았습니다. 기존 install `cd ../.. && pnpm install --frozen-lockfile`, root `apps/web`, 외부 소스 포함, build `pnpm build`, output `.next`를 유지합니다. EC2 Core/Agent 이미지는 별도 검증 후 배포하며 Git push만으로 서버 이미지가 바뀌지는 않습니다.
 
 DB는 EC2 PostgreSQL 18.6 그대로이며 Supabase 이전은 수행하지 않았습니다. 실측 DB 9,180,863바이트, PostgreSQL 71.7MiB, EC2 가용 메모리 2,904MiB입니다. 현재 규모에서는 DB 저장 공간 때문에 EC2를 증설할 필요가 없습니다. 외부 DB 이전만으로 고정 인스턴스 요금이 내려가지는 않으므로 이전과 인스턴스 축소는 별도 결정합니다.
+
+
+## 발표 v0.3 서버 갱신 — 2026-10-31
+
+앱 커밋 `346998a42ec137402ffd2c6a797c46307a6332d6`의 검증된 Core JAR와 Agent 소스 이미지를 기존 ARM64 EC2에 반영했습니다. SSM `5f89c81b-fedf-48eb-8fd3-f3566303053f` Success, health UP, Flyway V9, `presentation-v03|10000|10000|1000`, 이전 실행의 업무 행 수 보존을 확인했습니다. 배포 전 dump SHA-256은 `4449c600b483f85d6a12f3ded91fcda74030b3f283c2caefb48952dffc05ce65`이며 pg_restore 목록 검사를 통과했습니다. 이전 이미지는 `before-presentation-20261031` 태그로 보관합니다. 환경 파일 0600과 기존 백엔드 모델 키를 유지했습니다. 자원 추가·DB 이전·실제 GIWA 거래는 실행하지 않았습니다. [서버 증거](evidence/presentation-v03/server-release.json).
+
+V9는 새 active run과 추가 필드·분배 작업 테이블만 적용하고 과거 실행을 보존합니다. 이전 버전 UI/수치 기록은 현재 [발표 시연 순서](demo-runbook.md)로 대체합니다. Web은 main 자동 배포의 실제 READY 및 canonical 주소를 별도로 확인합니다.

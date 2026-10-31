@@ -1,0 +1,14 @@
+{
+  "checkedAt": "2026-10-31T13:28:28.568097+00:00",
+  "browser": "Whale, user-connected Chromium profile",
+  "scope": "User approved gas-free SIWE; rendered operator navigation, session reload and public Agent response. No contract transaction submitted.",
+  "login": "CONFIRMED_BY_USER_AND_BROWSER",
+  "checks": [
+    "Two investor tabs and eight stores displayed",
+    "Configured operator console menus visible",
+    "Login persisted after backend update and page reload",
+    "Real Agent reply states no approved ledger and keeps synthetic evidence separate"
+  ],
+  "blockchainTransactionsSent": 0,
+  "privateScreenshotsPublished": false
+}

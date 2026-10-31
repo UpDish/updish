@@ -1,0 +1,22 @@
+{
+  "checkedAt": "2026-10-31T13:08:40.421Z",
+  "scope": "Existing EC2 Core/Agent update; no user-wallet transaction or new cloud resource",
+  "appCommit": "346998a42ec137402ffd2c6a797c46307a6332d6",
+  "ssmCommandId": "5f89c81b-fedf-48eb-8fd3-f3566303053f",
+  "status": "Success",
+  "output": "4449c600b483f85d6a12f3ded91fcda74030b3f283c2caefb48952dffc05ce65  backups/updish-before-presentation-20261031T130813Z.dump\nreleases/presentation-20261031/core.tar.gz: OK\nreleases/presentation-20261031/agent.tar.gz: OK\nLoaded image: updish/core-api:presentation-20261031\nLoaded image: updish/agent-api:presentation-20261031\n{\"groups\":[\"liveness\",\"readiness\"],\"status\":\"UP\"}HISTORICAL_BUSINESS_COUNTS_PRESERVED\n[4, 4, 0, 2, 0, 0, 0]\n9\npresentation-v03|10000|10000|1000\nb85218a49df152d2992b6ef575c67d6a37bf0b3f4cc47e629f7edef5d3f5a77f  /app/app.jar\nAGENT_SOURCE_SHA256=c40ace876fee917482436ba2357c36cef3db6c377f6f92b2512bf0d9cbbab30c\n{'model_calls': 'CONFIGURED', 'settlement_explanation': 'READ_ONLY_TOOL_CALLING', 'transaction_signing': False}\nENV_PERMISSIONS=600\nAPP_COMMIT=346998a42ec137402ffd2c6a797c46307a6332d6\n",
+  "images": {
+    "core": {
+      "filename": "core-v03.tar.gz",
+      "sha256": "7c184a63ea721fac19f2adee6036f2167c39b271a75dd5c28c55ea0826d6f705",
+      "bytes": 275960195
+    },
+    "agent": {
+      "filename": "agent-v03.tar.gz",
+      "sha256": "042b36b1eab39be8e0be1e7375dd16d3df40676910504f161d4696c77863777f",
+      "bytes": 71521826
+    }
+  },
+  "jarSha256": "b85218a49df152d2992b6ef575c67d6a37bf0b3f4cc47e629f7edef5d3f5a77f",
+  "agentSourceSha256": "c40ace876fee917482436ba2357c36cef3db6c377f6f92b2512bf0d9cbbab30c"
+}

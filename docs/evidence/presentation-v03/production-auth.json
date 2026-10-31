@@ -1,0 +1,38 @@
+{
+  "checkedAt": "2026-10-31T13:27:21.377Z",
+  "scope": "Deployed Vercel BFF -> EC2 Core -> PostgreSQL -> live GIWA; ephemeral unfunded EOA. No user-wallet transaction.",
+  "origin": "https://updish-hackathon-20261025-betaplayers-projects.vercel.app",
+  "checks": [
+    "protected Dojang requires session",
+    "UX fixture accounts require an authenticated operator",
+    "CSRF required",
+    "BFF rejects foreign Origin",
+    "EIP-4361 canonical domain, URI, chain, address",
+    "wrong signer rejected",
+    "viem signature accepted by Java; session ID rotated; HttpOnly SameSite cookie; server role",
+    "login persists across HTTP requests",
+    "nonce replay rejected",
+    "authenticated wallet -> Spring -> live GIWA safe block -> Dojang negative result",
+    "authenticated dashboard returns own wallet scope without operator statements",
+    "regular signed account cannot read fixture personas or select operator preview",
+    "ordinary signed wallet reads eight store listings without fixture account data",
+    "new wallet has its own empty cross-store investment history",
+    "new wallet sees no other investor test-asset receipts",
+    "ordinary wallet cannot register, fund or send test-asset distributions",
+    "presentation scenario: 100M goal, 10,000 units, 10% approved-sales pool",
+    "ordinary user sees aggregate transparency and missing bank remains unknown",
+    "retired benefits endpoint cannot issue coupons",
+    "authenticated Agent status is reachable",
+    "public offering is backed by live Core business data",
+    "logout invalidates session",
+    "market, investments and benefits require login after logout"
+  ],
+  "dojang": {
+    "address": "0x9d253c2a907a8bbebc92e75d7b45bcc9d23759ab",
+    "verified": false,
+    "blockNumber": "40107933",
+    "blockTag": "safe"
+  },
+  "userWalletIssueRevoke": "PENDING_USER_SIGNATURE",
+  "transactionsSent": 0
+}
