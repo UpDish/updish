@@ -23,7 +23,7 @@ export function ChainPanel({offering:o,jobs,contracts,onRefresh,onNotice}:Props)
   function saveAddresses(units:string,registry:string) {localStorage.setItem(storageKey,JSON.stringify({units,registry}));}
   async function deploy(kind:'units'|'registry') {
     if(!client||!wallet.address||wallet.chainId!==91342||!publicClient) return;
-    setBusy(kind);onNotice('지갑에서 배포 내용을 확인하고 승인해 주세요. 테스트 ETH 가스비가 발생합니다.');
+    setBusy(kind);onNotice(kind==='units'?'지갑에서 보유 수량 계약 배포를 확인해 주세요. 전송 ETH는 0이며 테스트 ETH 가스비가 발생합니다.':'지갑에서 정산 기록 계약 배포를 확인해 주세요. 전송 ETH는 0이며 테스트 ETH 가스비가 발생합니다.');
     try {
       const build=kind==='units'?builds.UpDishDemoUnits:builds.SettlementRegistry;
       const args=kind==='units'?[wallet.address,dojang.scroll,dojang.faucetAttester,BigInt(o.token_id),BigInt(o.target_units)]:[wallet.address];
@@ -51,6 +51,7 @@ export function ChainPanel({offering:o,jobs,contracts,onRefresh,onNotice}:Props)
         const prepared=await command<Job>(`jobs/${job.id}/prepare`);
         if(prepared.tx_hash) hash=prepared.tx_hash;
         else {if(prepared.status!=='AWAITING_SIGNATURE'||!prepared.target||!prepared.calldata) throw new Error('계약 주소를 먼저 등록해 주세요.');
+          onNotice(job.kind==='MINT'?'지갑에서 배정된 보유 수량 발행을 확인해 주세요. 전송 ETH는 0이며 테스트 ETH 가스비가 발생합니다.':'지갑에서 승인 매출 기록을 확인해 주세요. 전송 ETH는 0이며 테스트 ETH 가스비가 발생합니다.');
           hash=await client.sendTransaction({to:prepared.target as Address,data:prepared.calldata,account:wallet.address,chain:giwaSepolia,value:0n});
           saved[job.id]=hash;localStorage.setItem(`updish.jobs.v1.${o.run_id}`,JSON.stringify(saved));setPending(saved);
         }
@@ -67,7 +68,7 @@ export function ChainPanel({offering:o,jobs,contracts,onRefresh,onNotice}:Props)
     <p className="hint">배포 응답이 지연되면 복구 버튼을 사용하세요. 거래 해시와 배포 주소만 이 브라우저에 보관합니다. 새 시연은 새 상품 ID이므로 토큰 계약도 새 상품에 맞아야 합니다.</p>
 </Modal>:null}
     <DistributionSettings offering={o} contracts={contracts} onRefresh={onRefresh} onNotice={onNotice}/>
-    <div className="table-wrap"><table><thead><tr><th>작업</th><th>상태</th><th>거래</th><th>실행</th></tr></thead><tbody>{jobs.map(job=><tr key={job.id}><td>{labels[job.kind]??job.kind} · {short(job.reference_id)}</td><td><span className="badge">{labels[job.status]??job.status}</span>{job.error_code?<small className="error"> {job.error_code}</small>:null}</td><td>{job.tx_hash||pending[job.id]?<a href={`https://sepolia-explorer.giwa.io/tx/${job.tx_hash??pending[job.id]}`} target="_blank" rel="noreferrer">Explorer ↗</a>:'제출 전'}</td><td><div className="actions">{!job.tx_hash?<button className="small" disabled={!!busy||distributionTx.busy||job.status==='FAILED'} onClick={()=>void send(job)}>{pending[job.id]?'제출 해시 복구':'지갑으로 거래 제출'}</button>:<button className="small secondary" disabled={!!busy||distributionTx.busy} onClick={()=>void check(job)}>영수증 · safe 대조</button>}{job.status==='FAILED'?<button className="small secondary" disabled={!!busy||distributionTx.busy} onClick={()=>void check(job,true)}>실패 거래 재시도 준비</button>:null}</div></td></tr>)}</tbody></table></div>
-    {!jobs.length?<p className="empty-text">배정 확정 또는 정산 승인 후 거래 작업이 생성됩니다.</p>:null}<p className="hint">SUBMITTED → 블록 포함 → safe 확인을 구분합니다. RPC 오류나 대기 상태에서는 같은 거래를 자동으로 다시 보내지 않습니다.</p>
+    <div className="table-wrap"><table><thead><tr><th>작업</th><th>상태</th><th>거래</th><th>실행</th></tr></thead><tbody>{jobs.map(job=><tr key={job.id}><td>{labels[job.kind]??job.kind} · {short(job.reference_id)}</td><td><span className="badge">{job.status==='NEEDS_CONFIG'&&contracts.length?'거래 준비 가능':labels[job.status]??job.status}</span>{job.error_code?<small className="error" title={job.error_code}> {job.error_code==='RPC_EMPTY_RESULT_ETH_GETBLOCKBYNUMBER'?'노드의 블록 조회 대기 · 영수증 다시 확인':job.error_code}</small>:null}</td><td>{job.tx_hash||pending[job.id]?<a href={`https://sepolia-explorer.giwa.io/tx/${job.tx_hash??pending[job.id]}`} target="_blank" rel="noreferrer">Explorer ↗</a>:'제출 전'}</td><td><div className="actions">{!job.tx_hash?<button className="small" disabled={!!busy||distributionTx.busy||job.status==='FAILED'} onClick={()=>void send(job)}>{pending[job.id]?'제출 해시 복구':'지갑으로 거래 제출'}</button>:<button className="small secondary" disabled={!!busy||distributionTx.busy} onClick={()=>void check(job)}>영수증 · safe 대조</button>}{job.status==='FAILED'?<button className="small secondary" disabled={!!busy||distributionTx.busy} onClick={()=>void check(job,true)}>실패 거래 재시도 준비</button>:null}</div></td></tr>)}</tbody></table></div>
+    {!jobs.length?<p className="empty-text">배정 확정 또는 정산 승인 후 거래 작업이 생성됩니다.</p>:null}<p className="hint">제출된 거래의 safe 상태를 자동 확인합니다. 블록 포함과 safe 확인을 구분하며, 확인 중에는 같은 거래를 다시 보내지 않습니다.</p>
   </section>;
 }

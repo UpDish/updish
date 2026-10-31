@@ -1,5 +1,5 @@
 'use client';
-import {useState} from 'react';
+import {useCallback,useState} from 'react';
 import {useMutation,useQuery,useQueryClient} from '@tanstack/react-query';
 import {useConnection} from 'wagmi';
 import {api,type Session} from '../lib/auth';
@@ -8,6 +8,7 @@ import {ChainPanel} from './chain-panel';
 import {DemoSamples} from './demo-samples';
 import {Modal} from './modal';
 import {DistributionActions} from './distribution-actions';
+import {useChainConfirmations} from '../lib/use-chain-confirmations';
 function Badge({status}:{status:string}) {return <span className={`badge ${['SAFE','CLOSED','APPROVED','FUNDED'].includes(status)?'good':['BLOCKED','FAILED'].includes(status)?'bad':''}`}>{labels[status]??status}</span>;}
 export default function OperatingPanels({section,purpose='merchant',initialView='subscriptions'}:{section:'evidence'|'operator';purpose?:'merchant'|'review';initialView?:string}) {
   const tab=section;const [view,setView]=useState(initialView);const [dialog,setDialog]=useState<string|null>(null);const [selected,setSelected]=useState('');const [confirmation,setConfirmation]=useState<{path:string;title:string;description:string}|null>(null);
@@ -19,7 +20,8 @@ export default function OperatingPanels({section,purpose='merchant',initialView=
   const dashboard=useQuery({queryKey:['dashboard',session.data?.authenticated?session.data.user.address:''],queryFn:()=>api<Dashboard>('/api/workbench/dashboard'),enabled:signed,retry:false});
   const data=signed?dashboard.data:undefined;const o=data?.offering;const operator=data?.user.role==='OPERATOR';const reviewer=operator||data?.user.role==='REVIEWER';
   const attachments=useQuery({queryKey:['attachments',o?.id],queryFn:()=>api<Attachment[]>('/api/workbench/attachments'),enabled:signed&&!!data?.evidence,retry:false});
-  async function refresh(){await Promise.all(['dashboard','market','investments','distributions','attachments','statement','performance'].map(k=>cache.invalidateQueries({queryKey:[k]})));}
+  const refresh=useCallback(async()=>{await Promise.all(['dashboard','market','investments','distributions','attachments','statement','performance'].map(k=>cache.invalidateQueries({queryKey:[k]})));},[cache]);
+  useChainConfirmations(signed&&operator,data?.all_jobs,refresh);
   const action=useMutation({mutationFn:async({path,body}:{path:string;body?:object})=>{if(!signed)throw new Error('현재 지갑으로 로그인해 주세요.');return command(path,body);},onSuccess:async()=>{setDialog(null);setConfirmation(null);setNotice('서버에 반영했습니다. 모의 업무와 온체인 반영 상태를 구분해 확인해 주세요.');await refresh();},onError:e=>setNotice(e.message)});
   function run(path:string,body?:object){setNotice('');action.mutate({path,body});}
   async function sample(name:string,p:string) {try {const response=await fetch(`/samples/${o?.scenario_code==='presentation-v03'?'presentation-v03/':''}${name}.csv`);if(!response.ok) throw new Error('샘플을 불러오지 못했습니다.');setCsv(await response.text());setFilename(`${name}.csv`);setPeriod(p);setNotice('가상 시연 CSV를 선택했습니다. 제출하면 서버가 실제로 대조합니다.');}catch(e){setNotice(e instanceof Error?e.message:'샘플 오류');}}

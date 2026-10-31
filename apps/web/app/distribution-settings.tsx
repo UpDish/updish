@@ -26,6 +26,7 @@ export function DistributionSettings({offering:o,contracts,onRefresh,onNotice}:P
         if(recoverOnly)throw new Error('복구할 배포 해시가 없습니다.');
         const build=kind==='cash'?builds.UpDishDemoCash:builds.UpDishDistribution;
         const args=kind==='cash'?[connection.address]:[connection.address,cash as Address,contracts[0].units_address as Address,contracts[0].registry_address as Address,`0x${o.run_id.replaceAll('-','').padStart(64,'0')}` as Hex,BigInt(o.token_id),BigInt(o.target_units)];
+        onNotice(kind==='cash'?'지갑에서 DEMO 토큰 계약 배포를 확인해 주세요. 전송 ETH는 0이며 테스트 ETH 가스비가 발생합니다.':'지갑에서 분배 계약 배포를 확인해 주세요. 전송 ETH는 0이며 테스트 ETH 가스비가 발생합니다.');
         hash=await wallet.deployContract({abi:build.abi as Abi,bytecode:build.bytecode as Hex,args,account:connection.address,chain:giwaSepolia});
         localStorage.setItem(`${storage}.${kind}.tx`,hash);
       }
