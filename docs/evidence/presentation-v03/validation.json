@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-31T13:02:25.688Z",
+  "checkedAt": "2026-10-31T13:29:08.287733+00:00",
   "scope": "LOCAL_ONLY; live GIWA reads separately recorded",
   "corePostgresTests": {
     "passed": 62,
@@ -10,7 +10,7 @@
     "failed": 0
   },
   "agentTests": {
-    "passed": 6,
+    "passed": 9,
     "failed": 0
   },
   "chainCodecTests": {
@@ -25,5 +25,8 @@
   "apiPaths": 42,
   "testnetWrites": 0,
   "oldRuns": "PRESERVED",
-  "privateDeckOrOfficialImageCopiesPublished": false
+  "privateDeckOrOfficialImageCopiesPublished": false,
+  "productionAuthChecks": 23,
+  "productionModel": "PASS",
+  "userWhaleSiwe": "CONFIRMED"
 }

@@ -1,0 +1,32 @@
+{
+  "checkedAt": "2026-10-31T13:29:08.287733+00:00",
+  "canonicalUrl": "https://updish-hackathon-20261025-betaplayers-projects.vercel.app/",
+  "uiSourceCommit": "346998a42ec137402ffd2c6a797c46307a6332d6",
+  "backendSourceCommit": "144977fb0d62efc790e90c7df549ca205c06dd5e",
+  "webUiProof": {
+    "deploymentId": "dpl_B45C3EnRjd2XbNmYBRyZ4ikVwodu",
+    "uiSourceCommit": "346998a42ec137402ffd2c6a797c46307a6332d6",
+    "state": "READY",
+    "target": "production",
+    "source": "git",
+    "aliases": [
+      "updish-hackathon-20261025.vercel.app",
+      "updish-hackathon-20261025-betaplayers-projects.vercel.app",
+      "updish-hackathon-20261025-git-main-betaplayers-projects.vercel.app"
+    ],
+    "uniqueUrl": "https://updish-hackathon-20261025-3ymxtd9t2-betaplayers-projects.vercel.app",
+    "canonicalUrl": "https://updish-hackathon-20261025-betaplayers-projects.vercel.app",
+    "note": "Verified UI deployment. Later commits in this release update backend policy, tests and evidence; apps/web sources are unchanged."
+  },
+  "backendSsmCommandId": "16a8d803-fc0c-4f1d-a1dc-d40b99f7328e",
+  "backend": "HEALTHY_V9_WITH_HISTORY_PRESERVED",
+  "productionAuthChecks": 23,
+  "productionModel": "PASS",
+  "userWhaleSiwe": "CONFIRMED",
+  "userBlockchainTransactions": 0,
+  "remaining": [
+    "User-signed GIWA contract and distribution rehearsal: issue #2",
+    "Bojagi NOT_CONNECTED",
+    "Reown QR project ID not configured"
+  ]
+}

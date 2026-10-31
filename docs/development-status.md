@@ -4,7 +4,7 @@
 
 [발표 반영 기준](presentation-v03.md)과 [시연 순서](demo-runbook.md)를 우선합니다. 스택은 v0.2 고정을 유지하고 새 active run에 1억원·10,000단위·10% 조건을 적용했습니다. 기존 실행과 CSV는 보존했습니다. 가게 탐색·내 투자, 별도 콘솔, 금액→조건 확인 청약, 2호점 승인 매출, 실제 테스트 ERC-20 예치·분배·수령과 근거 채팅을 연결했습니다.
 
-로컬 Core/PostgreSQL 62, 계약 15, Agent 6, codec 1 검사와 24개 실제 production-browser 검사가 통과했습니다. 직접 HTTP/계약 검사는 하향 정정·중복 차단·개인 수령 접근을 확인했습니다. 실제 모델은 원화 의무와 DEMO 수령을 구분하며 근거 없는 수치 누락 답변을 거부합니다. GIWA Dojang은 safe 읽기만 확인했고 실제 사용자 지갑 배포·분배 서명은 별도 최종 리허설 항목입니다. [검증 자료](evidence/presentation-v03/validation.json).
+로컬 Core/PostgreSQL 62, 계약 15, Agent 9, codec 1 검사와 24개 실제 production-browser 검사가 통과했습니다. 직접 HTTP/계약 검사는 하향 정정·중복 차단·개인 수령 접근을 확인했습니다. 실제 모델은 원화 의무와 DEMO 수령을 구분하며 근거 없는 수치 누락 답변을 거부합니다. GIWA Dojang은 safe 읽기만 확인했고 실제 사용자 지갑 배포·분배 서명은 별도 최종 리허설 항목입니다. [검증 자료](evidence/presentation-v03/validation.json).
 
 아래는 이전 버전의 기록입니다. 현재 공개 배포의 커밋·배포 ID·서버 결과는 `evidence/presentation-v03/release.json`에 별도 기록합니다.
 
@@ -97,3 +97,6 @@ V7으로 추가 모집 상품 두 개와 지갑별 시연 쿠폰 저장 구조�
 사용자 재승인 후 30일 키를 안전하게 발급·저장했고 로컬 공개 CSV, 로컬 개인 정산, 공개 배포의 실제 모델 응답을 확인했습니다. Java 58, Python fake SDK 4, 업무 E2E 12, persona HTTP 11, 브라우저 18, 공개 인증/권한 20 검사가 통과했습니다. [이번 릴리스 근거](evidence/transparency-agent/release.json)를 현재 상태로 사용합니다. 위의 키 미구성/고객 혜택 설명은 이전 이력입니다.
 
 GitHub main과 기존 Vercel 프로젝트를 연결했습니다. main 푸시는 Web production 자동 배포이며 EC2 업무/Agent 이미지 배포는 별도입니다. DB는 EC2 PostgreSQL이며 Supabase는 사용하지 않습니다. Bojagi/Reown QR/사용자 지갑 GIWA 거래의 별도 검증 한계는 유지됩니다.
+
+
+Final public check (2026-10-31): Core/Agent source `144977f`, Flyway V9 and historical business counts are verified. Public SIWE/BFF/Core/GIWA 23 checks and the real model passed. User-approved Whale SIWE, role menus, reload and actual chat were inspected. Unapproved public-chat evidence excludes sample amounts; own approved-statement figures remain server-derived. See `docs/evidence/presentation-v03/release.json` (relative to the repository root). No user blockchain transaction was submitted.
