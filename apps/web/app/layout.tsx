@@ -1,9 +1,16 @@
 import type { Metadata } from 'next';
+import '@fontsource/roboto/latin-400.css';
+import '@fontsource/roboto/latin-500.css';
+import '@fontsource/roboto/latin-700.css';
+import '@fontsource/noto-sans-kr/400.css';
+import '@fontsource/noto-sans-kr/500.css';
+import '@fontsource/noto-sans-kr/700.css';
 import './globals.css';
 import './exchange.css';
 import './journey.css';
 import './tasks.css';
 import './presentation.css';
+import './upbit-ui.css';
 import { Providers } from './providers';
 
 export const metadata: Metadata = {

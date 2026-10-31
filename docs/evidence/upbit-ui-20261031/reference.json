@@ -1,0 +1,11 @@
+{
+  "date": "2026-10-31",
+  "sourceUrl": "https://www.upbit.com/exchange?code=CRIX.UPBIT.KRW-BTC",
+  "captureBrowser": "User-requested Whale, connected extension",
+  "observedHeaderHeightPx": 60,
+  "observedHeaderBackground": "rgb(0, 53, 151)",
+  "observedFontFamily": "Roboto, Noto Sans KR",
+  "nativeLayoutViewport": {"width": 1398, "height": 696, "devicePixelRatio": 2},
+  "comparison": "Actual source and rendered local screenshots were inspected together. Release is also inspected in the same authenticated Whale profile at its native viewport.",
+  "limits": "Native screenshot bytes may crop the emulated viewport; no full-height equal-image claim is made. Authenticated user screenshots and source captures stay private. Public app captures use a local-only Anvil wallet. Structural/style adaptation, not an exact clone. No market prices are used as UpDish data."
+}

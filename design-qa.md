@@ -1,6 +1,14 @@
 # Upbit-informed UI/UX and service-flow verification
 
-final result: passed — presentation v0.3 local build; public release identity is recorded separately
+final result: passed — Upbit visual revision, local production build; public release identity is recorded separately
+
+## Latest visual acceptance — 2026-10-31
+
+The user's visual mismatch report supersedes the previous v0.3 visual acceptance. The former checks established functional flow, not sufficient Upbit fidelity. The actual Upbit exchange was recaptured in the user's Whale browser for this revision. Its 60px / #003597 header, Roboto / Noto Sans KR fonts, flat surfaces and adjacent market/chart layout ground the changes.
+
+The current revision makes discovery compact, keeps a searchable market list alongside the detail chart and order action, and provides a fixed mobile investment action. The source switch, exact amounts and original CSV remain accessible without crowding the chart. Native order dialogs and the IDE chat remain functional. Combined inspection of actual source and rendered captures was followed by desktop/mobile review. These are structural and visual adaptations; this is not a pixel-identical copy or Upbit account integration.
+
+39 production-browser checks passed against isolated local Core/PostgreSQL at 1440, 768, 390 and 360px, including sorting/filtering/search, list selection persistence, reference/approved sales distinction, order risk gating/focus return, mobile fixed action, investment navigation, separate role consoles and desktop/mobile chat. Next build passed. See [the focused report and screenshots](docs/upbit-ui-revision.md) and [machine-readable results](docs/evidence/upbit-ui-20261031/browser-checks.json). No new user GIWA transaction or live order submission was part of this visual check.
 
 ## Current acceptance — 2026-10-31 presentation v0.3
 

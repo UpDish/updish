@@ -1,0 +1,288 @@
+/* Based on the actual Upbit desktop capture, 2026-10-31.
+   Keep funding and sales semantics: these numbers are not exchange prices. */
+:root {
+  --dark-blue:#003597;
+  --ink:#333;
+  --muted:#667080;
+  --border:#e2e5ea;
+  --background:#e9ecf1;
+}
+body {font-family:Roboto,"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Malgun Gothic",sans-serif;}
+h1,h2,h3 {letter-spacing:-.4px;}
+button,input,select,textarea {border-radius:2px;}
+button {font-weight:500;}
+.app-header {
+  height:60px;min-height:60px;flex-wrap:nowrap;
+  padding:0 max(20px,calc((100vw - 1400px)/2));
+  background:var(--dark-blue);
+}
+.app-header .logo {font-family:Roboto,"Noto Sans KR",sans-serif;font-size:27px;font-weight:700;letter-spacing:-1.2px;}
+.presentation-header .header-left {gap:44px;}
+.presentation-header .main-nav {height:60px;gap:30px;}
+.main-nav a {font-size:16px;font-weight:500;color:#b9c8e3;border:0;padding:0 2px;}
+.main-nav a.active {font-weight:700;border:0;color:#fff;}
+.header-right {gap:12px;}
+.app-header .agent-toggle,.account-menu>summary {min-height:34px;border-radius:2px;padding:7px 13px;font-size:12px;}
+.module-status {height:32px;max-width:1400px;margin:10px auto 0;padding:0 16px;border:0;background:#fff;font-size:11px;}
+.module-status>span:first-child {color:#40536d;}
+.app-main {max-width:1440px;margin:10px auto 0;padding:0 20px 28px;}
+.app-main.agent-open {max-width:none;margin-left:0;margin-right:420px;}
+.exchange-panel {border:0;border-radius:0;box-shadow:none;}
+.page-heading {margin:0 0 10px;padding:18px 20px;background:#fff;}
+.page-heading h1 {font-size:20px;font-weight:700;}
+.page-heading p {font-size:12px;color:var(--muted);}
+.badge {border-radius:2px;font-weight:500;}
+.market-heading {height:56px;padding:0 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);gap:16px;}
+.market-heading>div {display:flex;align-items:center;gap:16px;}
+.market-heading h1 {font-size:20px;font-weight:700;line-height:1.5;margin:0;}
+.market-heading>div>span {border-left:1px solid #d9dde3;padding-left:16px;color:#596780;font-size:12px;}
+.market-dataset {font-size:11px;color:#667080;}
+.directory-toolbar {height:54px;gap:12px;padding:0 18px;border-bottom:1px solid var(--border);}
+.directory-toolbar .directory-filters {height:100%;gap:8px;}
+.directory-toolbar .directory-filters button {height:100%;min-height:0;padding:0 16px;border-radius:0;font-size:13px;font-weight:500;}
+.directory-tools {display:flex;align-items:center;gap:8px;}
+.directory-tools select {width:120px;min-height:34px;margin:0;padding:6px 9px;font-size:12px;background:#fff;border:1px solid #d5dbe3;}
+.store-search {min-width:200px;width:220px;}
+.store-search input {height:34px;min-height:34px;padding:7px 12px;font-size:12px;border:1px solid #d5dbe3;box-shadow:none;}
+.project-table {table-layout:fixed;}
+.project-table th,.project-table td {padding:9px 18px;}
+.project-table th {height:40px;font-size:11px;font-weight:400;color:#667080;background:#f7f8fa;white-space:nowrap;}
+.project-table th small {display:block;font-size:10px;font-weight:400;margin-top:1px;}
+.project-table td {height:64px;padding-top:6px;padding-bottom:6px;font-size:13px;border-bottom:1px solid #eef0f3;}
+.project-table tbody tr:hover {background:#f4f7fc;}
+.project-table td:first-child,.project-table th:first-child {width:30%;}
+.project-table th:nth-child(2) {width:23%;}
+.project-table th:last-child {width:14%;}
+.project-table .store-name {min-height:38px;width:100%;font-weight:400;line-height:1.5;}
+.project-table .store-name b {font-size:14px;font-weight:700;}
+.project-table .store-name span {font-size:11px;line-height:1.4;margin-top:3px;color:#6b7280;}
+.project-table td.numeric b {font-size:14px;font-weight:500;}
+.project-table td.contract-rate {color:#174e9e;}
+.project-table .cell-subtitle {font-size:10px;line-height:1.4;color:#6b7280;margin-top:2px;}
+.table-funding {display:flex;justify-content:flex-end;align-items:center;gap:7px;margin-top:4px;}
+.project-table .table-funding progress {width:65px;height:3px;margin:0;}
+.table-funding>span {font-size:10px;line-height:1;color:#6b7280;min-width:25px;}
+.market-state {display:inline-block;font-size:11px;font-weight:500;white-space:nowrap;color:#68758a;}
+.mobile-row-state {display:none;}
+.state-open {color:#1755aa;}
+.state-refunded {color:#ad4334;}
+.project-table .state-open {padding:3px 7px;background:#edf3fc;border:1px solid #dce6f6;border-radius:2px;}
+.list-foot {min-height:40px;align-items:center;padding:10px 20px;background:#fff;font-size:11px;}
+.market-back {height:30px;display:flex;align-items:center;justify-content:space-between;margin:0 0 8px;gap:12px;}
+.market-back .back-button {padding:0;font-size:12px;margin:0;color:#3e587b;}
+.market-back>span {font-size:10px;color:#6a7586;}
+.exchange-workspace {grid-template-columns:minmax(0,1fr) 380px;gap:10px;}
+.project-heading {padding:0;margin-bottom:10px;}
+.project-titlebar {min-height:55px;display:flex;justify-content:space-between;align-items:center;padding:12px 20px;border-bottom:1px solid var(--border);gap:16px;}
+.project-titlebar>div {display:flex;align-items:baseline;flex-wrap:wrap;gap:5px 10px;}
+.project-titlebar h1 {font-size:20px;font-weight:700;line-height:1.5;margin:0;}
+.project-titlebar>div>span {color:#6b7280;font-size:11px;}
+.project-titlebar>.market-state {font-size:12px;}
+.project-quote {display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,.85fr);align-items:center;gap:24px;padding:17px 20px 18px;}
+.quote-primary>span {font-size:11px;color:#667080;}
+.quote-primary strong {display:block;margin:3px 0;font-size:32px;font-weight:500;line-height:1.3;letter-spacing:-.7px;font-variant-numeric:tabular-nums;color:#1756a9;}
+.quote-primary>small {font-size:11px;color:#6a7586;}
+.project-quote dl {margin:0;font-size:12px;}
+.project-quote dl>div {display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #eef0f3;gap:16px;}
+.project-quote dt {color:#667080;}
+.project-quote dd {margin:0;font-variant-numeric:tabular-nums;font-weight:500;}
+.project-heading>progress {margin:0;height:3px;border-radius:0;}
+.project-information .detail-tabs {height:48px;padding:0;overflow-y:hidden;}
+.project-information .detail-tabs button {flex:1;padding:12px 10px;font-size:14px;font-weight:500;min-height:0;height:100%;}
+.project-information .detail-body {padding:22px 24px;}
+.project-information .detail-body h2 {font-size:17px;font-weight:500;}
+.project-information .market-chart-body {padding:0;}
+.market-chart-body>section>.panel-heading {padding:17px 20px 8px;margin:0;flex-wrap:wrap;}
+.market-chart-body>section>.panel-heading h2 {font-size:14px;margin:0;}
+.market-chart-body .chart-source {padding:0 12px;margin:0;border-bottom:1px solid var(--border);}
+.market-chart-body .chart-source button {min-height:40px;padding:8px 12px;font-size:12px;}
+.market-chart-body .sample-chart-notice {margin:0;padding:8px 20px;background:#f8f9fb;border-left:0;border-bottom:1px solid #eef0f3;font-size:11px;line-height:1.7;}
+.market-chart-body .chart-metrics {padding:6px 16px;margin:0;background:#fafbfc;border-bottom:1px solid var(--border);}
+.market-chart-body .chart-metrics button {font-size:11px;}
+.market-chart-body .chart-toolbar {display:flex;justify-content:space-between;align-items:center;min-height:42px;border-bottom:1px solid var(--border);background:#fafbfc;}
+.market-chart-body .chart-toolbar .chart-source {align-self:stretch;flex-shrink:0;border:0;background:transparent;}
+.market-chart-body .chart-toolbar .chart-source button {background:transparent;}
+.market-chart-body .chart-toolbar .chart-metrics {display:flex;align-items:center;gap:5px;border:0;background:transparent;padding:0 12px;}
+.chart-current-metric {font-size:11px;color:#667080;margin-right:12px;}
+.market-chart-body .performance-plot {height:290px;margin:0;padding:6px 10px 0 2px;}
+.market-chart-body .chart-empty {min-height:270px;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:30px 20px;text-align:center;}
+.market-chart-body .chart-data {margin:0 20px;padding:10px 0;border-top:1px solid #eef0f3;}
+.market-chart-body .chart-data summary {font-size:11px;}
+.market-chart-body .chart-footnote {padding:0 20px;margin:8px 0 12px;font-size:10px;line-height:1.8;color:#6b7280;}
+.market-chart-body .demo-downloads {margin:0;padding:10px 20px;border-top:1px solid #eef0f3;}
+.market-chart-body .demo-downloads summary {font-size:11px;font-weight:400;}
+.project-evidence-links {justify-content:space-between;gap:12px;margin:0;padding:12px 20px;border-top:1px solid var(--border);}
+.project-evidence-links button {font-size:11px;}
+.market-side {min-width:0;display:grid;gap:10px;}
+.watchlist-search {padding:10px 12px;border-bottom:1px solid var(--border);}
+.watchlist-search input {height:34px;min-height:34px;font-size:12px;margin:0!important;padding:6px 10px;border:1px solid #d5dbe3;}
+.watchlist-tabs {display:flex;height:40px;border-bottom:1px solid var(--border);}
+.watchlist-tabs button {flex:1;background:#fff;color:#667080;border:0;border-bottom:2px solid transparent;border-radius:0;padding:8px;font-size:12px;}
+.watchlist-tabs button[aria-pressed=true] {border-bottom-color:var(--blue);color:var(--blue);font-weight:700;}
+.watchlist-columns {display:flex;justify-content:space-between;padding:7px 14px;background:#f7f8fa;color:#6b7280;font-size:10px;border-bottom:1px solid #eef0f3;}
+.watchlist-rows {display:block;max-height:250px;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;}
+.watchlist-row {width:100%;min-height:50px;display:flex;align-items:center;justify-content:space-between;text-align:left;gap:12px;border:0;border-bottom:1px solid #eef0f3;border-radius:0;padding:9px 14px;background:#fff;color:#333;}
+.watchlist-row[aria-pressed=true] {background:#f0f4fb;box-shadow:inset 2px 0 var(--blue);}
+.watchlist-row:hover {background:#f4f7fc;filter:none!important;}
+.watchlist-row>span:last-child {text-align:right;flex-shrink:0;}
+.watchlist-row b {display:block;font-size:12px;font-weight:500;}
+.watchlist-row>span:last-child b {color:#1756a9;font-size:13px;}
+.watchlist-row small {display:block;font-size:10px;margin-top:2px;color:#6b7280;}
+.watchlist-row small.state-open {color:#1755aa;}
+.watchlist-row small.state-refunded {color:#ad4334;}
+.watchlist-foot {padding:8px 12px;font-size:9px;color:#6b7280;border-top:1px solid var(--border);}
+.watchlist-empty {padding:24px 12px;text-align:center;font-size:12px;}
+.market-side .project-order {position:static;padding:0 18px 12px;}
+.project-order h2 {height:44px;margin:0 -18px;padding:12px 18px;border-bottom:1px solid var(--border);font-size:14px;font-weight:500;color:var(--blue);}
+.project-order .order-brief {gap:10px;margin:16px 0;}
+.project-order .order-brief>div {font-size:12px;}
+.project-order .full {min-height:42px;border-radius:2px;font-size:14px;}
+.project-order .hint {font-size:10px;margin:9px 0 0;}
+.project-order .workspace-link {font-size:11px;min-height:0;padding:9px 0 0;margin:0;}
+.mobile-invest-bar {display:none;}
+.portfolio-summary {margin-bottom:10px;padding:23px 0;border:0;}
+.portfolio-summary strong {font-family:Roboto,"Noto Sans KR",sans-serif;font-size:26px;font-weight:500;}
+.portfolio-tabs {background:white;}
+.detail-tabs button {font-size:14px;}
+.task-modal {border-radius:2px;}
+.modal-heading {padding:19px 24px;}
+.modal-heading h2 {font-weight:500;}
+.modal-content {padding:24px;}
+.quantity-presets button,.modal-content input,.modal-content select {border-radius:2px;}
+.app-main footer {padding:18px 0 0;font-size:10px;line-height:1.8;color:#6b7280;}
+.service-entry {max-width:1040px;margin-top:34px;}
+.service-entry .page-heading {padding:0;background:transparent;}
+.service-product {margin-top:20px;}
+.app-main.agent-open .exchange-workspace {grid-template-columns:minmax(0,1fr);}
+.app-main.agent-open .market-side {grid-template-columns:minmax(0,1fr) minmax(240px,.85fr);align-items:start;}
+.app-main.agent-open .project-table {min-width:740px;}
+.app-main.agent-open .store-table-wrap {overflow-x:auto;}
+
+@media(min-width:1441px) {.market-chart-body .performance-plot {height:330px;}}
+@media(max-width:1100px) {
+  .exchange-workspace {grid-template-columns:minmax(0,1fr) 300px;}
+  .directory-toolbar .directory-filters {gap:0;}
+  .directory-toolbar .directory-filters button {padding:0 12px;}
+  .project-table th,.project-table td {padding-left:12px;padding-right:12px;}
+  .project-quote {grid-template-columns:minmax(0,1fr);gap:10px;}
+  .project-quote dl {display:grid;grid-template-columns:1fr 1fr;gap:0 20px;}
+  .project-quote dl>div:last-child {grid-column:1/-1;}
+  .app-main.agent-open .directory-toolbar {height:auto;min-height:100px;}
+  .app-main.agent-open .directory-tools {justify-content:space-between;width:100%;padding-top:10px;}
+}
+@media(max-width:850px) {
+  .app-header {height:60px;min-height:60px;padding:0 16px;gap:14px;}
+  .presentation-header .header-left {display:flex;gap:24px;}
+  .presentation-header .main-nav {height:60px;width:auto;order:initial;gap:24px;}
+  .main-nav a {font-size:14px;}
+  .app-header .logo {font-size:25px;}
+  .header-right {margin-left:auto;}
+  .module-status {margin:8px 12px 0;}
+  .app-main,.app-main.agent-open {margin:8px auto 0;padding:0 12px 24px;}
+  .directory-toolbar {height:auto;min-height:96px;flex-direction:column-reverse;align-items:stretch;gap:0;padding:0 14px;}
+  .directory-tools {padding-top:10px;justify-content:space-between;}
+  .directory-toolbar .directory-filters {height:44px;align-self:stretch;}
+  .directory-toolbar .directory-filters button {flex:1;padding:0 8px;}
+  .store-search {width:240px;}
+  .project-table {min-width:700px;}
+  .exchange-workspace {display:block;}
+  .project-quote {grid-template-columns:minmax(0,1fr) minmax(210px,.8fr);}
+  .project-quote dl {display:block;}
+  .market-side {display:none!important;}
+  .app-main:has(.mobile-invest-bar) {padding-bottom:100px;}
+  .mobile-invest-bar {position:fixed;inset:auto 0 0;z-index:45;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:12px 20px calc(12px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid #d5dbe3;box-shadow:0 -3px 12px #17365b08;}
+  .mobile-invest-bar span {font-size:11px;color:#667080;}
+  .mobile-invest-bar b {display:block;font-size:16px;color:#333;font-weight:500;}
+  .mobile-invest-bar button {min-height:44px;min-width:150px;font-size:14px;}
+  .market-chart-body .performance-plot {height:280px;}
+}
+@media(max-width:600px) {
+  .app-header {height:102px;min-height:102px;display:flex;align-content:space-between;flex-wrap:wrap;gap:0;padding:0 16px;}
+  .presentation-header .header-left {display:contents;}
+  .app-header .logo {align-self:center;font-size:25px;height:56px;display:flex;align-items:center;}
+  .header-right {height:56px;display:flex;align-items:center;gap:8px;}
+  .app-header .agent-toggle {padding:6px 10px;font-size:11px;}
+  .account-menu>summary {padding:6px 9px;font-size:10px;}
+  .presentation-header .main-nav {width:100%;height:46px;order:3;gap:0;}
+  .main-nav a {flex:1;justify-content:center;font-size:15px;border-bottom:3px solid transparent;padding:10px 0;}
+  .main-nav a.active {border-bottom:3px solid #fff;}
+  .app-header:not(.presentation-header) {height:60px;min-height:60px;}
+  .app-header:has(.console-label) {height:60px;min-height:60px;}
+  .console-label {margin-left:10px;font-size:10px;}
+  .integration-label {font-size:9px;}
+  .module-status {font-size:10px;padding:0 12px;margin:8px 8px 0;height:30px;}
+  .module-status>span:last-child {font-size:9px;}
+  .app-main,.app-main.agent-open {padding-left:8px;padding-right:8px;}
+  .market-heading {height:52px;padding:0 14px;}
+  .market-heading h1 {font-size:18px;}
+  .market-heading>div>span {display:none;}
+  .market-dataset {font-size:9px;}
+  .directory-toolbar {padding:0 12px;}
+  .directory-toolbar .directory-filters button {font-size:12px;}
+  .directory-tools select {width:105px;font-size:11px;}
+  .store-search {min-width:0;width:190px;}
+  .store-search input {font-size:11px;}
+  .store-table-wrap {overflow:visible;}
+  .project-table,.app-main.agent-open .project-table {display:table;min-width:0;table-layout:fixed;}
+  .project-table thead {position:static;display:table-header-group;width:auto;height:auto;clip:auto;overflow:visible;white-space:normal;}
+  .project-table tbody {display:table-row-group;}
+  .project-table tr {display:table-row;padding:0;border:0;}
+  .project-table th {height:33px;padding:7px 12px;font-size:9px;}
+  .project-table td {display:table-cell!important;height:66px!important;padding:9px 12px;vertical-align:middle;border-bottom:1px solid #eef0f3;font-size:11px;white-space:normal;}
+  .project-table th:first-child,.project-table td:first-child {width:50%;}
+  .project-table th:nth-child(2) {width:30%;}
+  .project-table th:nth-child(4) {width:20%;}
+  .project-table th:nth-child(3),.project-table td:nth-child(3),.project-table th:nth-child(5),.project-table td:nth-child(5),.project-table th:nth-child(6),.project-table td:nth-child(6) {display:none!important;}
+  .project-table th small {font-size:8px;}
+  .project-table td[data-label]::before {display:none;}
+  .project-table td.numeric {text-align:right;}
+  .project-table td:first-child {margin:0;}
+  .project-table .store-name b {font-size:12px;}
+  .project-table .store-name span {font-size:9px;line-height:1.5;}
+  .project-table .store-name {min-height:44px;}
+  .project-table .store-name span {display:none;}
+  .project-table .mobile-row-state {display:block;margin-top:5px;font-size:9px;padding:0;background:none;border:0;}
+  .project-table td.numeric b {font-size:11px;}
+  .project-table .cell-subtitle {font-size:9px;}
+  .project-table .table-funding progress {width:38px;}
+  .table-funding {gap:4px;}
+  .table-funding>span {font-size:9px;min-width:21px;}
+  .list-foot {display:block;padding:12px;font-size:9px;line-height:1.8;}
+  .list-foot>span {display:block;}
+  .market-back {height:28px;padding:0 4px;}
+  .market-back>span {font-size:9px;}
+  .project-titlebar {padding:12px 16px;min-height:64px;}
+  .project-titlebar>div {display:block;}
+  .project-titlebar h1 {font-size:18px;}
+  .project-titlebar>div>span {display:block;margin-top:3px;font-size:10px;}
+  .project-titlebar>.market-state {font-size:11px;}
+  .project-quote {display:block;padding:14px 16px;}
+  .quote-primary strong {font-size:30px;}
+  .project-quote dl {display:grid;grid-template-columns:1fr 1fr;gap:0 18px;margin-top:12px;}
+  .project-quote dl>div {font-size:10px;}
+  .project-information .detail-tabs {height:44px;}
+  .project-information .detail-tabs button {min-height:0;font-size:12px;padding:10px 5px;}
+  .project-information .detail-body {padding:18px 16px;}
+  .project-information .market-chart-body {padding:0;}
+  .market-chart-body>section>.panel-heading {padding:16px 14px 7px;}
+  .market-chart-body .sample-chart-notice {padding:8px 14px;font-size:10px;}
+  .market-chart-body .chart-source {padding:0 6px;}
+  .market-chart-body .chart-metrics {padding:6px 8px;}
+  .market-chart-body .chart-toolbar {flex-wrap:wrap;}
+  .market-chart-body .chart-toolbar .chart-metrics {margin-left:auto;padding:0 6px;}
+  .chart-current-metric {font-size:10px;margin-right:3px;}
+  .market-chart-body .performance-plot {height:250px;padding:4px 0 0;}
+  .market-chart-body .chart-footnote {padding:0 14px;font-size:9px;}
+  .market-chart-body .chart-data {margin:0 14px;}
+  .market-chart-body .demo-downloads {padding:10px 14px;}
+  .project-evidence-links {padding:12px 14px;gap:10px;}
+  .project-evidence-links button {font-size:10px;}
+  .mobile-invest-bar {padding-left:16px;padding-right:16px;}
+  .mobile-invest-bar button {min-width:140px;}
+  .portfolio-summary {padding:18px 0;gap:18px 0;grid-template-columns:1fr 1fr;}
+  .portfolio-summary>div {padding:0 16px;}
+  .portfolio-summary>div:nth-child(2) {border:0;}
+  .portfolio-summary strong {font-size:21px;}
+  .service-entry {margin-top:24px;padding-left:16px;padding-right:16px;}
+  .service-entry .page-heading h1 {font-size:23px;}
+}

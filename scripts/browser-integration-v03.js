@@ -31,7 +31,7 @@ async(page)=>{
   check((await nav.getByRole('link').allTextContents()).join('|')==='가게 탐색|내 투자','Investor navigation has exactly two tabs');
   check(await page.getByRole('link',{name:'가게 콘솔',exact:true}).count()===0,'Investor has no merchant/operator navigation');
   await capture('output/playwright/integration-v03/market-desktop.png');
-  await page.getByRole('button',{name:/성수 모퉁이/}).first().click();await page.getByRole('heading',{name:'성수 모퉁이 2호점 확장',exact:true}).waitFor();
+  await page.getByRole('button',{name:/성수 모퉁이/}).first().click();await page.getByRole('heading',{name:'성수 모퉁이 식당',exact:true}).waitFor();
   check(await page.getByText('1억', {exact:false}).count()>0||await page.getByText('100,000,000원',{exact:true}).count()>0,'Presentation fundraising goal is visible');
   await capture('output/playwright/integration-v03/project-desktop.png');
   await page.getByRole('button',{name:'매출·대조',exact:true}).click();await page.getByRole('button',{name:'본점 참고',exact:true}).click();await page.getByRole('heading',{name:'본점의 참고 매출',exact:true}).waitFor();
