@@ -39,9 +39,9 @@ class WorkbenchTests {
         funded();settlement("normal","2026-10");
         var e=work.submitEvidence(operator,offering,"2026-10","correction.csv",CsvReconciliationTests.fixture("correction"));
         work.closeEvidence(reviewer,uuid(e,"id"),"정정 검토");var draft=work.calculate(reviewer,uuid(e,"id"),"정정 산정");
-        assertEquals(List.of(Map.of("period","2026-10","version",1,"netSalesWon","30000000","poolWon","900000")),work.performance().get("points"));
+        assertEquals(List.of(Map.of("period","2026-10","version",1,"netSalesWon","30000000","poolWon","3000000")),work.performance().get("points"));
         work.approve(operator,uuid(draft,"id"),"정정 승인");
-        assertEquals(Map.of("offeringId",offering.toString(),"mode","SIMULATION","points",List.of(Map.of("period","2026-10","version",2,"netSalesWon","29000000","poolWon","870000"))),work.performance());
+        assertEquals(Map.of("offeringId",offering.toString(),"mode","SIMULATION","points",List.of(Map.of("period","2026-10","version",2,"netSalesWon","29000000","poolWon","2900000"))),work.performance());
         settlement("cash-shortage","2026-11");
         @SuppressWarnings("unchecked") var points=(List<Map<String,Object>>)work.performance().get("points");
         assertEquals(List.of("2026-10","2026-11"),points.stream().map(p->p.get("period")).toList());
@@ -49,11 +49,11 @@ class WorkbenchTests {
     }
     @Test void fullFlowSeparatesSubscriptionHoldingChainAndPayment() throws Exception {
         funded();var s=settlement("normal","2026-10");
-        var mine=work.settlement(investor,uuid(s,"id"));@SuppressWarnings("unchecked") var lines=(List<Map<String,Object>>)mine.get("lines");var line=lines.getFirst();assertEquals("25000",line.get("amount_won"));assertEquals("900000",s.get("pool_won"));
+        var mine=work.settlement(investor,uuid(s,"id"));@SuppressWarnings("unchecked") var lines=(List<Map<String,Object>>)mine.get("lines");var line=lines.getFirst();assertEquals("30000",line.get("amount_won"));assertEquals("3000000",s.get("pool_won"));
         assertEquals(2,db.queryForObject("SELECT count(*) FROM chain_job WHERE run_id=?",Integer.class,work.runId()));
         assertEquals(0,db.queryForObject("SELECT sum(chain_units) FROM holding WHERE offering_id=?",Integer.class,offering));
-        var key=UUID.randomUUID();var pay=work.pay(operator,uuid(line,"id"),25000,"SUCCESS",key);assertEquals(pay.get("id"),work.pay(operator,uuid(line,"id"),25000,"SUCCESS",key).get("id"));
-        assertEquals(25000,db.queryForObject("SELECT paid_won FROM settlement_line WHERE id=?",Long.class,uuid(line,"id")));
+        var key=UUID.randomUUID();var pay=work.pay(operator,uuid(line,"id"),30000,"SUCCESS",key);assertEquals(pay.get("id"),work.pay(operator,uuid(line,"id"),30000,"SUCCESS",key).get("id"));
+        assertEquals(30000,db.queryForObject("SELECT paid_won FROM settlement_line WHERE id=?",Long.class,uuid(line,"id")));
         assertThrows(BusinessFailure.class,()->work.pay(operator,uuid(line,"id"),1,"SUCCESS",UUID.randomUUID()));
     }
     @Test void roleIsolationAndFourEyesAreEnforced() throws Exception {
@@ -64,13 +64,13 @@ class WorkbenchTests {
     @Test void ownStatementWorksWithoutModelAndKeepsPaymentAndCorrectionEvidence() throws Exception {
         funded();var s=settlement("normal","2026-10");var id=uuid(s,"id");
         var line=work.one("SELECT * FROM settlement_line WHERE settlement_id=? AND address=?",id,investor.address());
-        var first=work.statement(investor,id);assertEquals("30000000",first.get("netSalesWon"));assertEquals("900000",first.get("poolWon"));assertEquals("25000",first.get("unpaidWon"));
+        var first=work.statement(investor,id);assertEquals("30000000",first.get("netSalesWon"));assertEquals("3000000",first.get("poolWon"));assertEquals("30000",first.get("unpaidWon"));
         assertThrows(BusinessFailure.class,()->work.statement(other,id));assertThrows(BusinessFailure.class,()->work.statement(operator,id));
-        work.pay(operator,uuid(line,"id"),25000,"FAIL",UUID.randomUUID());assertEquals("25000",work.statement(investor,id).get("unpaidWon"));
-        work.pay(operator,uuid(line,"id"),25000,"PARTIAL",UUID.randomUUID());assertEquals("12500",work.statement(investor,id).get("unpaidWon"));
-        work.pay(operator,uuid(line,"id"),12500,"SUCCESS",UUID.randomUUID());var paid=work.statement(investor,id);assertEquals("0",paid.get("unpaidWon"));assertEquals(3,((List<?>)paid.get("payments")).size());
+        work.pay(operator,uuid(line,"id"),30000,"FAIL",UUID.randomUUID());assertEquals("30000",work.statement(investor,id).get("unpaidWon"));
+        work.pay(operator,uuid(line,"id"),30000,"PARTIAL",UUID.randomUUID());assertEquals("15000",work.statement(investor,id).get("unpaidWon"));
+        work.pay(operator,uuid(line,"id"),15000,"SUCCESS",UUID.randomUUID());var paid=work.statement(investor,id);assertEquals("0",paid.get("unpaidWon"));assertEquals(3,((List<?>)paid.get("payments")).size());
         var correction=settlement("correction","2026-10");var revised=work.statement(investor,uuid(correction,"id"));
-        assertEquals("25000",revised.get("priorPaidWon"));assertEquals("833",revised.get("overpaidWon"));assertEquals("0",revised.get("unpaidWon"));assertEquals(false,work.statement(investor,id).get("latest"));
+        assertEquals("30000",revised.get("priorPaidWon"));assertEquals("1000",revised.get("overpaidWon"));assertEquals("0",revised.get("unpaidWon"));assertEquals(false,work.statement(investor,id).get("latest"));
         assertEquals(s.get("digest"),first.get("dataVersion"));assertEquals("CLOSED",first.get("evidenceStatus"));
     }
     @Test void unverifiedAndRpcFailuresCannotSubscribe() {
@@ -85,7 +85,7 @@ class WorkbenchTests {
         assertEquals(0,db.queryForObject("SELECT count(*) FROM holding WHERE offering_id=?",Integer.class,offering));
     }
     @Test void cashShortageKeepsObligationAndRejectsOverspend() throws Exception {
-        funded();var s=settlement("cash-shortage","2026-11");assertEquals("720000",s.get("pool_won"));assertEquals("300000",s.get("cash_available"));
+        funded();var s=settlement("cash-shortage","2026-11");assertEquals("2400000",s.get("pool_won"));assertEquals("300000",s.get("cash_available"));
         var bg=work.one("SELECT * FROM settlement_line WHERE settlement_id=? AND address=?",uuid(s,"id"),BACKGROUND);
         assertThrows(BusinessFailure.class,()->work.pay(operator,uuid(bg,"id"),number(bg,"amount_won"),"SUCCESS",UUID.randomUUID()));
     }
@@ -99,14 +99,14 @@ class WorkbenchTests {
         var result=work.one("SELECT * FROM subscription WHERE id=?",uuid(sub,"id"));
         assertEquals(120,number(result,"units"));assertEquals(20,number(result,"refunded_units"));
         assertEquals(100,db.queryForObject("SELECT units FROM holding WHERE offering_id=? AND address=?",Integer.class,offering,investor.address()));
-        assertEquals(3600,db.queryForObject("SELECT sum(a.units) FROM allocation a JOIN subscription s ON s.id=a.subscription_id WHERE s.offering_id=?",Integer.class,offering));
+        assertEquals(10000,db.queryForObject("SELECT sum(a.units) FROM allocation a JOIN subscription s ON s.id=a.subscription_id WHERE s.offering_id=?",Integer.class,offering));
         assertEquals(sub.get("id"),work.subscribe(investor,offering,120,key,true).get("id"));
-        assertEquals(3600,number(work.offering(),"accepted_units"));
+        assertEquals(10000,number(work.offering(),"accepted_units"));
     }
     @Test void correctionKeepsPaymentsAndMaturityKeepsClaims() throws Exception {
-        funded();var first=settlement("normal","2026-10");var line=work.one("SELECT * FROM settlement_line WHERE settlement_id=? AND address=?",uuid(first,"id"),investor.address());work.pay(operator,uuid(line,"id"),25000,"SUCCESS",UUID.randomUUID());
+        funded();var first=settlement("normal","2026-10");var line=work.one("SELECT * FROM settlement_line WHERE settlement_id=? AND address=?",uuid(first,"id"),investor.address());work.pay(operator,uuid(line,"id"),30000,"SUCCESS",UUID.randomUUID());
         var correction=settlement("correction","2026-10");var revised=work.one("SELECT * FROM settlement_line WHERE settlement_id=? AND address=?",uuid(correction,"id"),investor.address());
-        assertEquals("25000",revised.get("prior_paid_won"));assertEquals("-833",revised.get("delta_won"));assertEquals("24167",revised.get("amount_won"));
+        assertEquals("30000",revised.get("prior_paid_won"));assertEquals("-1000",revised.get("delta_won"));assertEquals("29000",revised.get("amount_won"));
         assertThrows(BusinessFailure.class,()->work.settlement(other,uuid(correction,"id")));work.mature(operator,offering);assertEquals(2,db.queryForObject("SELECT count(*) FROM settlement WHERE offering_id=?",Integer.class,offering));
         assertThrows(BusinessFailure.class,()->work.pay(operator,uuid(line,"id"),1,"SUCCESS",UUID.randomUUID()));
     }

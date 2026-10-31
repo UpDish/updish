@@ -18,7 +18,8 @@ public class AgentGateway {
         this.work=work;this.db=db;this.token=token;var factory=new JdkClientHttpRequestFactory(java.net.http.HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(3)).build());factory.setReadTimeout(Duration.ofSeconds(50));client=RestClient.builder().baseUrl(url).requestFactory(factory).build();
     }
     public synchronized Object explain(WalletPrincipal actor,UUID settlementId,String question,Map<String,Object> context){
-        var key=Hash.sha3String(actor.address()+":"+context.get("dataVersion")+":"+question);
+        // A payout can change without a sales revision; cache the complete authorized evidence context.
+        var key=Hash.sha3String("presentation-v03.1:"+actor.address()+":"+work.encode(context)+":"+question);
         var cached=work.rows("SELECT result FROM agent_run WHERE address=? AND data_version=? AND status='SUCCESS' AND result IS NOT NULL ORDER BY created_at DESC LIMIT 1",actor.address(),key);
         if(!cached.isEmpty())return work.decode(cached.getFirst().get("result").toString());
         long count=db.queryForObject("SELECT count(*) FROM agent_run WHERE address=? AND created_at>now()-interval '1 day'",Long.class,actor.address());

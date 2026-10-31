@@ -8,6 +8,9 @@ const ref=name=>({$ref:`#/components/schemas/${name}`});
 const array=name=>({type:'array',items:typeof name==='string'?ref(name):name});
 const object=(properties,optional=[])=>({type:'object',properties,required:Object.keys(properties).filter(k=>!optional.includes(k))});
 const schemas={
+  DistributionConfig:object({offering_id:uuid,cash_address:address,vault_address:address,units_address:address,registry_address:address,checked_block:integer}),
+  DistributionReceipt:object({id:uuid,kind:str,status:str,tx_hash:nullable,error_code:nullable,offering_id:uuid,store_name:str,period:str,version:integer,amount_units:money,address:nullable,line_id:nullable,cash_address:address,vault_address:address}),
+  Distributions:object({payments:array('DistributionReceipt'),configs:array('DistributionConfig'),asset:{const:'DEMO',type:'string'},mode:{const:'SIMULATION',type:'string'}}),
   PublicReconciliation:object({grossWon:money,discountWon:money,refundWon:money,netWon:money,pgWon:nullable,bankWon:nullable,pgGapWon:nullable,bankGapWon:nullable,rowCount:integer,acceptedCount:integer,ready:bool,duplicateIgnored:integer,blockingCount:integer,issueCounts:array(object({code:str,count:integer,blocking:bool})),sources:array(object({name:str,available:bool}))}),
   TransparencyCase:object({id:str,period:str,label:str,basis:{type:'string',enum:['SYNTHETIC_CSV','APPROVED_LEDGER']},status:str,reconciliation:ref('PublicReconciliation'),version:{type:['integer','null']},settlementId:nullable,digest:nullable,chainStatus:str,chainTxHash:nullable,sourceHash:str}),
   Transparency:object({store:object({id:str,name:str,district:str,category:str}),approved:array('TransparencyCase'),submissions:array(object({period:str,status:str,blockingCount:integer,issueCounts:array(object({code:str,count:integer,blocking:bool}))})),samples:array('TransparencyCase'),mode:str,asOf:str}),
@@ -37,7 +40,7 @@ const schemas={
   PerformancePoint:object({period:str,version:integer,netSalesWon:money,poolWon:money}),
   Performance:object({offeringId:uuid,points:array('PerformancePoint'),mode:{const:'SIMULATION',type:'string'}}),
   Error:object({code:str,message:str},['message']),
-  Offering:object({id:uuid,run_id:uuid,store_name:str,title:str,owner_address:address,contract_version:integer,target_units:integer,unit_price:money,rate_bps:integer,months:integer,starts_on:{type:'string',format:'date'},status:str,token_id:money,accepted_units:integer,risk:str,principal_redemption:str,mode:{const:'SIMULATION',type:'string'}}),
+  Offering:object({id:uuid,run_id:uuid,store_name:str,title:str,owner_address:address,contract_version:integer,target_units:integer,unit_price:money,rate_bps:integer,months:integer,starts_on:{type:'string',format:'date'},status:str,token_id:money,accepted_units:integer,risk:str,principal_redemption:str,scenario_code:str,capital_purpose:str,revenue_scope:str,funding_use:str,mode:{const:'SIMULATION',type:'string'}}),
   Subscription:object({id:uuid,address,units:integer,refunded_units:integer,status:str,synthetic:bool}),
   Holding:object({id:uuid,address,units:integer,chain_units:integer,synthetic:bool}),
   Issue:object({code:str,eventId:str,message:str,blocking:bool}),
@@ -73,6 +76,10 @@ function route(path,method,name,response={type:'object',additionalProperties:tru
 route('/api/v1/offerings/current','get','currentOffering','Offering',undefined,true);
 route('/api/v1/offerings/current/performance','get','offeringPerformance','Performance',undefined,true);
 const p='/api/v1/workbench';
+route(p+'/distributions','get','distributionReceipts','Distributions');
+route(p+'/distribution/contracts','post','registerDistributionContracts',undefined,object({cashAddress:address,vaultAddress:address}));
+route(p+'/settlements/{id}/fund-distribution','post','fundDistribution','Job');
+route(p+'/lines/{id}/distribute','post','payDistribution','Job');
 route(p+'/agent/status','get','agentConnectionStatus','AgentStatus');
 route(p+'/market','get','marketCatalog','MarketCatalog');
 route(p+'/investments','get','ownInvestments','Investments');

@@ -131,9 +131,10 @@ public class WorkbenchService implements ApplicationRunner {
         if(!o.get("status").equals("OPEN")) throw BusinessFailure.conflict("모집 중에만 배경 시연 자료를 적재할 수 있습니다.");
         if(db.queryForObject("SELECT count(*) FROM subscription WHERE offering_id=? AND synthetic",Long.class,id)>0) return o;
         long used=db.queryForObject("SELECT coalesce(sum(units),0) FROM subscription WHERE offering_id=? AND status='ACCEPTED'",Long.class,id);
-        if(used>100) throw BusinessFailure.conflict("3500단위 배경 자료를 더할 공간이 없습니다.");
-        db.update("INSERT INTO subscription(id,offering_id,address,units,status,request_key,synthetic) VALUES (?,?,?,3500,'ACCEPTED',?,true)",UUID.randomUUID(),id,BACKGROUND,UUID.randomUUID());
-        audit(actor,"LOAD_BACKGROUND",id,"명시적인 가상 배경 투자자 3500단위. Dojang/체인 발급을 주장하지 않음");return offering();
+        long backgroundUnits=number(o,"target_units")-100;
+        if(used>100||backgroundUnits<=0) throw BusinessFailure.conflict("100단위의 참여 공간을 남기는 배경 자료만 준비할 수 있습니다.");
+        db.update("INSERT INTO subscription(id,offering_id,address,units,status,request_key,synthetic) VALUES (?,?,?,?,'ACCEPTED',?,true)",UUID.randomUUID(),id,BACKGROUND,backgroundUnits,UUID.randomUUID());
+        audit(actor,"LOAD_BACKGROUND",id,"명시적인 가상 배경 투자자 "+backgroundUnits+"단위. Dojang/체인 발급·토큰 수령을 주장하지 않음");return offering();
     }
     @Transactional public void cancel(WalletPrincipal actor,UUID id) {
         var sub=one("SELECT * FROM subscription WHERE id=?",id);lockedOffering(uuid(sub,"offering_id"));
@@ -251,13 +252,20 @@ public class WorkbenchService implements ApplicationRunner {
         requireOperator(actor);db.queryForObject("SELECT singleton FROM demo_state WHERE singleton=true FOR UPDATE",Boolean.class);
         var id=UUID.randomUUID();db.update("INSERT INTO demo_run(id,label) VALUES (?,?)",id,"해커톤 시연 "+Instant.now());db.update("UPDATE demo_state SET run_id=? WHERE singleton=true",id);createOffering(id);audit(actor,"NEW_DEMO_RUN",id,"이전 DB·온체인 이력 보존");return offering();
     }
-    private void createOffering(UUID run) {var id=UUID.randomUUID();db.update("INSERT INTO offering(id,run_id,store_name,owner_address,title,target_units,unit_price,rate_bps,months,status,token_id) VALUES (?,?,?,?,?,3600,10000,300,60,'OPEN',?)",id,run,"성수 모퉁이 식당",operator,"성수 모퉁이 · 매출배분 1호",new java.math.BigDecimal(new BigInteger(id.toString().replace("-",""),16)));}
+    private void createOffering(UUID run) {
+        var id=UUID.randomUUID();
+        db.update("INSERT INTO offering(id,run_id,store_name,owner_address,title,target_units,unit_price,rate_bps,months,status,token_id,scenario_code,capital_purpose,revenue_scope,funding_use) VALUES (?,?,?,?,?,10000,10000,1000,60,'OPEN',?,'presentation-v03',?,?,?)",
+            id,run,"성수 모퉁이",operator,"성수 모퉁이 2호점 확장",new java.math.BigDecimal(new BigInteger(id.toString().replace("-",""),16)),
+            "검증 가능한 본점 영업을 바탕으로 2호점 개설 자금을 모집합니다.",
+            "2호점의 계약기간 중 검토·확정된 월 정산대상 매출. 본점 과거 매출은 참고 자료입니다.",
+            "시설·인테리어 5,000만원 / 주방 설비 3,000만원 / 초기 운영자금 2,000만원 · 모두 가상 시연 계획");
+    }
     public void createJob(String kind,UUID reference) {db.update("INSERT INTO chain_job(id,run_id,kind,reference_id,status) VALUES (?,?,?,?,'AWAITING_DEPLOYMENT') ON CONFLICT(kind,reference_id) DO NOTHING",UUID.randomUUID(),runId(),kind,reference);}
     public List<Map<String,Object>> rows(String sql,Object... args) {
         return db.queryForList(sql,args).stream().map(row->{var mapped=new LinkedHashMap<String,Object>();row.forEach((k,v)->{
             Object value=v;if(v instanceof UUID) value=v.toString();else if(v instanceof Timestamp t) value=t.toInstant().toString();else if(v instanceof java.sql.Date d) value=d.toLocalDate().toString();
             else if(v instanceof java.math.BigDecimal n) value=n.toPlainString();
-            else if(v instanceof Number && (k.endsWith("_won")||Set.of("unit_price","net_sales","cash_available","token_id").contains(k))) value=v.toString();
+            else if(v instanceof Number && (k.endsWith("_won")||Set.of("unit_price","net_sales","cash_available","token_id","amount_units").contains(k))) value=v.toString();
             else if(k.equals("report")&&v!=null) value=decode(v.toString());mapped.put(k,value);
         });return (Map<String,Object>)mapped;}).toList();
     }

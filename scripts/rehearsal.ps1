@@ -3,6 +3,14 @@ $ErrorActionPreference='Stop'
 $project=Split-Path -Parent $PSScriptRoot
 Set-Location -LiteralPath $project
 $stateFile=Join-Path $project '.runtime/rehearsal.json'
+function CoreSnapshot {
+    $source=Join-Path $project 'services/core-api/build/libs/core-api-0.0.1-SNAPSHOT.jar'
+    $hash=(Get-FileHash -LiteralPath $source -Algorithm SHA256).Hash.Substring(0,16).ToLowerInvariant()
+    $snapshot=Join-Path $project ".runtime/rehearsal-core-$hash.jar"
+    if(-not (Test-Path -LiteralPath $snapshot)){Copy-Item -LiteralPath $source -Destination $snapshot}
+    return $snapshot
+}
+
 if($Action -eq 'Stop') {
     if(Test-Path -LiteralPath $stateFile) {
         $state=Get-Content -Raw -LiteralPath $stateFile|ConvertFrom-Json
@@ -23,7 +31,7 @@ if($Action -eq 'RestartCore') {
     foreach($path in '.env','.env.local'){if(Test-Path -LiteralPath $path){foreach($line in [IO.File]::ReadAllLines((Join-Path $project $path))){if($line -match '^(POSTGRES_USER|POSTGRES_PASSWORD|AGENT_SHARED_TOKEN)=(.*)$'){[Environment]::SetEnvironmentVariable($Matches[1],$Matches[2].Trim(),'Process')}}}}
     $env:DATABASE_URL="jdbc:postgresql://127.0.0.1:55432/$($state.database)";$env:GIWA_RPC_URL='http://127.0.0.1:8545';$env:UPDISH_ALLOWED_ORIGINS='http://127.0.0.1:3001';$env:SESSION_COOKIE_SECURE='false'
     $env:DEMO_OPERATOR_WALLET=(Invoke-RestMethod -Uri 'http://127.0.0.1:8545' -Method Post -ContentType 'application/json' -Body '{"jsonrpc":"2.0","id":1,"method":"eth_accounts","params":[]}').result[0]
-    $p=Start-Process -FilePath (Get-Command java.exe).Source -ArgumentList @('-Xmx384m','-jar',('"'+$project+'/services/core-api/build/libs/core-api-0.0.1-SNAPSHOT.jar"'),'--server.port=8081') -WorkingDirectory "$project/services/core-api" -WindowStyle Hidden -PassThru -RedirectStandardOutput "$project/.runtime/rehearsal-core.stdout.log" -RedirectStandardError "$project/.runtime/rehearsal-core.stderr.log"
+    $p=Start-Process -FilePath (Get-Command java.exe).Source -ArgumentList @('-Xmx384m','-jar',('"'+(CoreSnapshot)+'"'),'--server.port=8081') -WorkingDirectory "$project/services/core-api" -WindowStyle Hidden -PassThru -RedirectStandardOutput "$project/.runtime/rehearsal-core.stdout.log" -RedirectStandardError "$project/.runtime/rehearsal-core.stderr.log"
     $state.processes=@($state.processes|Where-Object name -ne core)+@(@{name='core';pid=$p.Id;startedAt=$p.StartTime.ToUniversalTime().ToString('o')})
     $state|ConvertTo-Json -Depth 4|Set-Content -LiteralPath $stateFile
     Write-Output '별도 리허설 Core만 다시 시작했습니다.';exit
@@ -61,7 +69,7 @@ try {
     $env:UPDISH_ALLOWED_ORIGINS='http://127.0.0.1:3001'
     $env:SESSION_COOKIE_SECURE='false'
     if(Test-Path -LiteralPath '.env.local') {foreach($line in [IO.File]::ReadAllLines((Join-Path $project '.env.local'))){if($line -match '^AGENT_SHARED_TOKEN=(.*)$'){$env:AGENT_SHARED_TOKEN=$Matches[1].Trim()}}}
-    Launch 'core' (Get-Command java.exe).Source @('-Xmx384m','-jar',('"'+$project+'/services/core-api/build/libs/core-api-0.0.1-SNAPSHOT.jar"'),'--server.port=8081') "$project/services/core-api" 8081
+    Launch 'core' (Get-Command java.exe).Source @('-Xmx384m','-jar',('"'+(CoreSnapshot)+'"'),'--server.port=8081') "$project/services/core-api" 8081
     $env:CORE_API_URL='http://127.0.0.1:8081'
     $next=(Resolve-Path -LiteralPath 'apps/web/node_modules/next/dist/bin/next').Path
     Launch 'web' (Get-Command node.exe).Source @(('"'+$next+'"'),'start','--hostname','127.0.0.1','--port','3001') "$project/apps/web" 3001

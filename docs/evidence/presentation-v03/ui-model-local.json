@@ -1,0 +1,17 @@
+{
+  "checkedAt": "2026-10-31T13:06:04.055Z",
+  "scope": "Local final CSS/contract receipt read and real public Agent sidebar response. Local test wallet SIWE only, no chain transaction.",
+  "modelResponse": {
+    "explanation": "POS 결제·PG 정산·은행 입금 대조는 가게 매출이 빠짐없이, 중복 없이, 올바르게 정산됐는지 확인하기 위해 합니다. 제공 근거로는 2026-10 승인 정산 자료와 같은 내부 대조 결과를 사용하며, 이 경우 POS·PG·은행의 합계와 불일치가 없고 은행 입금 및 PG 정산이 각각 30000000원으로 일치한다고 보고됩니다. 대조를 통해 누락·중복·미승인 거래를 찾아 승인을 막고, 정산 산정자와 승인자가 분리되어 운영 투명성을 확보합니다.",
+    "sourceIds": [
+      "1adc5ff0-d4a5-435a-ae6c-42539c7db1ea",
+      "revenue-seongsu-2026-10"
+    ],
+    "uncertainties": [],
+    "model": "gpt-5-mini",
+    "mode": "SIMULATION",
+    "toolCalls": 1,
+    "dataVersion": "0x00035bc5ef645cd2c1b40b9b41f084b5f9a0bb2129c3557407b1d0beccdf5bd9"
+  },
+  "errors": []
+}

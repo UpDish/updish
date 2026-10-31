@@ -1,0 +1,64 @@
+{
+  "checkedAt": "2026-10-31T12:48:06.551Z",
+  "scope": "LOCAL_ANVIL_ONLY: dedicated PostgreSQL, real HTTP Core, mock Dojang, compiled contracts. No GIWA transactions or user-wallet signatures.",
+  "scenario": "presentation-v03",
+  "offeringId": "6bc0643f-a499-444f-a46a-c7fa6355ad1d",
+  "contracts": {
+    "units": "0x2e2ed0cfd3ad2f1d34481277b3204d807ca2f8c2",
+    "registry": "0xd8a5a9b31c3c0232e196d518e89fd8bf83acad43",
+    "cash": "0xdc11f7e700a4c898ae5caddb1082cffa76512add",
+    "vault": "0x51a1ceb83b83f1985a81c295d1ff28afef186e02"
+  },
+  "checks": [
+    "100M goal / 10,000 units; idempotent 1M subscription -> 100 real local-wallet units = 1%; no holdings before allocation",
+    "CSV reconciliation 30M approved sales x 10% = 3M pool; 1% holder owes 30,000; separate review/approval and private statement",
+    "Four compiled contracts deployed; Core verifies runtime, owner, chain, run, asset, units, registry and cap",
+    "Dojang-gated units mint and settlement registry: receipt + safe state match Core ledger",
+    "Exact 3M DEMO approval/funding -> actual ERC20 transfers; investor balance +30,000 DEMO; idempotency and own-receipt privacy; pool fully distributed",
+    "Downward sales correction 30M -> 29M; zero additional deposit; prior 30,000 receipt preserved, no duplicate payment/clawback",
+    "Approved digest matches; altered candidate fails verification"
+  ],
+  "receipts": [
+    {
+      "kind": "MINT",
+      "hash": "0x6ed49912f48f4d70b266bd3cc5814c93605bfe3a24eb0691a62f731eb71f9e6d",
+      "status": "SAFE"
+    },
+    {
+      "kind": "MINT",
+      "hash": "0x2f0abdcba45ea82c8a7c7cfc38c05bfcc1221ae6f3de60e43498b70a5420dc43",
+      "status": "SAFE"
+    },
+    {
+      "kind": "SETTLEMENT",
+      "hash": "0x97d489ee482283b60197f3a30d124ec06b4c699e30a56635b3e783fcd6481ed9",
+      "status": "SAFE"
+    },
+    {
+      "kind": "FUND_DISTRIBUTION",
+      "hash": "0x3032fd78e7a4c843c0214c82f671fa494409cb95f59561d1abf763e2fc765a39",
+      "status": "SAFE"
+    },
+    {
+      "kind": "PAY_DISTRIBUTION",
+      "hash": "0x62182bf66944d27744260144cfc50c58012bfddba8f4fe5614d72e11ef5acfc3",
+      "status": "SAFE"
+    },
+    {
+      "kind": "PAY_DISTRIBUTION",
+      "hash": "0x75e0e71a811a6566b558eda30ff0e0d771292558e1a2404557a5d9cfe8d6baf8",
+      "status": "SAFE"
+    },
+    {
+      "kind": "SETTLEMENT",
+      "hash": "0x4f48c2922d19660a59e7e654b66380d91ab4d5e86c7ec1f0de8f550c24e6cfac",
+      "status": "SAFE"
+    },
+    {
+      "kind": "FUND_DISTRIBUTION",
+      "hash": "0x80144ab429d151220cd6edb517cb655d4073cda64e3bba3f6b0a56a4599861e8",
+      "status": "SAFE"
+    }
+  ],
+  "liveGiwaTransactions": 0
+}

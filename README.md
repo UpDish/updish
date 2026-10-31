@@ -4,6 +4,8 @@
 
 [시연 웹](https://updish-hackathon-20261025-betaplayers-projects.vercel.app/) · [GitHub Organization](https://github.com/UpDish) · [공개 저장소](https://github.com/UpDish/updish) · [팀원은 이슈 #1부터](https://github.com/UpDish/updish/issues/1)
 
+**2026-10-31 발표 시연 개편:** 가게 탐색·내 투자 두 탭, 별도 업무 콘솔, 금액 입력→조건 확인 팝업, 2호점 매출 승인→DEMO 지갑 수령을 구현했습니다. [변경 기준](docs/presentation-v03.md)과 [현재 시연 순서](docs/demo-runbook.md)를 먼저 읽어 주세요. 과거 실행·읽기 전용 예시는 삭제하지 않습니다.
+
 음식점 매출 증빙 → 모의 청약·배정 → 보유 → 정산·모의 지급을 연결하는 해커톤 데모입니다. Spring이 업무 원장을 계산하고 지갑은 SIWE 로그인과 GIWA 테스트 거래를 서명합니다. 실제 금전 수취·지급은 수행하지 않습니다.
 
 지갑 선택은 Web3-Onboard 공통 팝업, 로그인 검증은 Spring의 SIWE를 사용합니다. 월 매출·전체 배분금·내 정산액 차트의 승인 기록은 최신 승인 버전만 표시합니다. 승인 내역이 없으면 별도 표시한 6개월 샘플 CSV 차트로 시연할 수 있습니다. 운영자는 상단 모드에서 가게·투자자 화면을 시연할 수 있으며 실제 지갑과 권한은 유지됩니다.
@@ -22,7 +24,7 @@
 | Agent | FastAPI 0.162.0 · Python 3.13 · openai 3.37.0 · uv.lock |
 | Web | Next.js 16.4.3 · React 19.3.1 · TypeScript 5.9.3 · Tailwind 4.3.3 |
 | Node | Node 24 · pnpm 10.23.0 · pnpm-lock.yaml |
-| DB | PostgreSQL 18.6 · Flyway V1–V8 |
+| DB | PostgreSQL 18.6 · Flyway V1–V9 |
 | Chain | GIWA Sepolia 91342 · Solidity 0.8.38 · Cancun · OpenZeppelin 5.6.1 |
 | Wallet | wagmi 3.7.9 · viem 2.57.11 |
 | Cloud | Vercel + 서울 EC2 t4g.medium ARM64 · Ubuntu 24.04 · private S3 |
@@ -50,16 +52,16 @@ DB 데이터는 보존합니다. 직접 실행한 프로세스는 해당 터미�
 ## 구현
 
 - DB 역할·자료 소유권·개인 명세 접근을 검사합니다. 설정된 운영 지갑만 OPERATOR이며 일반 로그인은 INVESTOR입니다. 제출자/마감자와 산정자/승인자는 다른 지갑이어야 합니다.
-- 청약과 보유를 분리합니다. 접수 시각·고정 ID 순서로 최대 3,600단위를 배정하고 마지막 초과 청약은 부분 배정·모의 환불합니다. 가상 배경 3,500단위는 체인에 발행하지 않습니다.
+- 청약과 보유를 분리합니다. 접수 시각·고정 ID 순서로 최대 10,000단위를 배정하고 마지막 초과 청약은 부분 배정·모의 환불합니다. 가상 배경 9,900단위는 체인에 발행하지 않습니다.
 - 고정 CSV의 외부 ID로 중복·할인·부분 환불·누락을 대조합니다. PDF·PNG·XLSX는 비공개 첨부만 지원합니다.
-- 매출 3,000만원의 3%는 90만원, 100/3,600단위는 세전 25,000원입니다. 원 단위 잔여액 배분·현금 부족·부분 지급·실패·정정·만기 후 청구를 보존합니다.
+- 발표 시연은 1억원 모집, 매출 3,000만원의 10% = 300만원, 100/10,000단위(1%)는 세전 30,000원입니다. 원 단위 잔여액 배분·현금 부족·부분 지급·실패·정정·만기 후 청구를 보존합니다.
 - 사용자 지갑이 계약 배포·mint·정산 기록을 서명합니다. 서버는 runtime·소유자·설정·거래·receipt·safe 블록·잔고/기록을 대조합니다. 서버에는 지갑 키를 저장하지 않습니다.
 - Dojang 철회는 신규 참여를 막지만 기존 보유·명세를 지우지 않습니다. TESTNET FAUCET을 UPBIT KOREA 인증으로 표시하지 않습니다. RPC 실패는 503/확인 대기입니다.
 - Agent는 승인된 정산과 요청자 개인 명세만 읽습니다. 기본 모델 gpt-5-mini, 키 미설정/모델 실패 시 설명만 사용할 수 없습니다. Bojagi는 **NOT_CONNECTED**입니다.
 
 ## 구조와 검증
 
-apps/web은 화면/BFF, services/core-api는 인증/업무/체인/S3, services/agent-api는 설명, contracts는 ERC-1155/registry, fixtures는 CSV, infra는 Compose/CloudFormation입니다.
+apps/web은 화면/BFF, services/core-api는 인증/업무/체인/S3, services/agent-api는 설명, contracts는 ERC-1155/registry/테스트 ERC-20/분배 계약, fixtures는 CSV, infra는 Compose/CloudFormation입니다.
 
 업무 [OpenAPI](docs/openapi.json) 원본은 scripts/api-contract.mjs이며 Web은 생성 타입을 사용합니다. Core /api/v1 기준이고 브라우저는 /api/workbench/*로 중계합니다. 쓰기에는 세션·CSRF·정확한 Origin이 필요합니다. 생성기는 [공식 openapi-typescript API](https://openapi-ts.dev/node)를 사용합니다.
 
@@ -67,6 +69,7 @@ apps/web은 화면/BFF, services/core-api는 인증/업무/체인/S3, services/a
 pnpm generate:api
 pnpm generate:demo
 pnpm check:demo
+pnpm check:presentation
 pnpm check:web
 pnpm check:chain
 pnpm test:chain

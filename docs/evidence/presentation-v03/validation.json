@@ -1,0 +1,29 @@
+{
+  "checkedAt": "2026-10-31T13:02:25.688Z",
+  "scope": "LOCAL_ONLY; live GIWA reads separately recorded",
+  "corePostgresTests": {
+    "passed": 62,
+    "failed": 0
+  },
+  "solidityTests": {
+    "passed": 15,
+    "failed": 0
+  },
+  "agentTests": {
+    "passed": 6,
+    "failed": 0
+  },
+  "chainCodecTests": {
+    "passed": 1,
+    "failed": 0
+  },
+  "browserChecks": 24,
+  "nextProductionBuild": "PASS",
+  "typeChecks": "PASS",
+  "legacyFixtureChecks": "PASS",
+  "presentationFixtureChecks": "PASS",
+  "apiPaths": 42,
+  "testnetWrites": 0,
+  "oldRuns": "PRESERVED",
+  "privateDeckOrOfficialImageCopiesPublished": false
+}

@@ -14,7 +14,7 @@ function message(error: unknown) {
   return error instanceof Error ? error.message.split('\n')[0] : '지갑 요청을 완료하지 못했습니다.';
 }
 
-export function WalletPanel({onLogin,loginOnly=false}:{onLogin?:()=>void;loginOnly?:boolean}={}) {
+export function WalletPanel({onLogin,loginOnly=false,onWalletSelectionChange}:{onLogin?:()=>void;loginOnly?:boolean;onWalletSelectionChange?:(open:boolean)=>void}={}) {
   const config = useConfig();
   const wallet = useConnection();
   const connectors = useConnectors();
@@ -27,10 +27,10 @@ export function WalletPanel({onLogin,loginOnly=false}:{onLogin?:()=>void;loginOn
   const [notice, setNotice] = useState('');
   const [selecting,setSelecting]=useState(false);
   async function chooseWallet(connector:typeof connectors[number]) {
-    setNotice('');setSelecting(true);
+    setNotice('');setSelecting(true);onWalletSelectionChange?.(true);
     try {await selectWallet();await connect.mutateAsync({connector});}
     catch(error){setNotice(message(error));}
-    finally{setSelecting(false);}
+    finally{setSelecting(false);onWalletSelectionChange?.(false);}
   }
   const session = useQuery({ queryKey: ['session'], queryFn: () => api<Session>('/api/auth/session'), retry: false });
   const serverAddress = session.data?.authenticated ? session.data.user.address : undefined;

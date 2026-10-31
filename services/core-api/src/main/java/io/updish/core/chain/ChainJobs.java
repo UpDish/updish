@@ -12,8 +12,8 @@ import org.web3j.crypto.Hash;
 
 @Service
 public class ChainJobs {
-    private final RpcClient rpc;private final GiwaService giwa;private final WorkbenchService work;private final JdbcTemplate db;
-    public ChainJobs(RpcClient rpc,GiwaService giwa,WorkbenchService work,JdbcTemplate db) {this.rpc=rpc;this.giwa=giwa;this.work=work;this.db=db;}
+    private final RpcClient rpc;private final GiwaService giwa;private final WorkbenchService work;private final JdbcTemplate db;private final DistributionService distribution;
+    public ChainJobs(RpcClient rpc,GiwaService giwa,WorkbenchService work,JdbcTemplate db,DistributionService distribution) {this.rpc=rpc;this.giwa=giwa;this.work=work;this.db=db;this.distribution=distribution;}
     private String block() {
         if(!DojangCodec.quantity(rpc.call("eth_chainId",List.of())).equals("91342")) throw new ChainFailure("WRONG_CHAIN");
         var b=asMap(rpc.call("eth_getBlockByNumber",List.of("latest",false)));return (String)b.get("number");
@@ -36,8 +36,17 @@ public class ChainJobs {
             var existing=work.rows("SELECT * FROM chain_config WHERE offering_id=?",uuid(o,"id"));
             if(existing.isEmpty()||!existing.getFirst().get("units_address").equals(units)||!existing.getFirst().get("registry_address").equals(registry)) throw BusinessFailure.conflict("거래 제출 후에는 해당 시연의 계약을 바꿀 수 없습니다.");
         }
+        var distributions=work.rows("SELECT * FROM distribution_config WHERE offering_id=?",uuid(o,"id"));
+        if(!distributions.isEmpty()&&(!units.equals(distributions.getFirst().get("units_address"))||!registry.equals(distributions.getFirst().get("registry_address"))))throw BusinessFailure.conflict("분배 계약과 연결된 수량·기록 계약은 새 시연에서 변경해 주세요.");
         db.update("INSERT INTO chain_config(singleton,offering_id,units_address,registry_address,operator_address,checked_block,units_code_hash,registry_code_hash) VALUES (true,?,?,?,?,?,?,?) ON CONFLICT(singleton) DO UPDATE SET offering_id=excluded.offering_id,units_address=excluded.units_address,registry_address=excluded.registry_address,operator_address=excluded.operator_address,checked_block=excluded.checked_block,units_code_hash=excluded.units_code_hash,registry_code_hash=excluded.registry_code_hash",uuid(o,"id"),units,registry,actor.address(),Long.parseLong(DojangCodec.quantity(block)),Hash.sha3(code),Hash.sha3(registryCode));
         work.audit(actor,"REGISTER_CONTRACTS",uuid(o,"id"),"빌드 runtime·소유자·설정 온체인 대조");return Map.of("unitsAddress",units,"registryAddress",registry,"chainId",91342);
+    }
+    @Transactional public Map<String,Object> registerDistribution(WalletPrincipal actor,String cash,String vault){
+        work.requireOperator(actor);cash=DojangCodec.address(cash);vault=DojangCodec.address(vault);var tag=block();
+        verifiedCode(cash,"UpDishDemoCash",tag);verifiedCode(vault,"UpDishDistribution",tag);
+        var c=work.one("SELECT * FROM chain_config WHERE offering_id=?",uuid(work.offering(),"id"));
+        distribution.validateConfiguration(actor,cash,vault,c,tag);
+        return Map.of("cashAddress",cash,"vaultAddress",vault,"asset","DEMO","mode","SIMULATION");
     }
     private String verifiedCode(String address,String name,String block) {
         var value=rpc.call("eth_getCode",List.of(address,block));if(!(value instanceof String code)||code.length()<4) throw new ChainFailure("CONTRACT_NOT_DEPLOYED");
@@ -53,6 +62,7 @@ public class ChainJobs {
     @Transactional public Map<String,Object> prepare(WalletPrincipal actor,UUID id) {
         work.requireOperator(actor);var job=work.one("SELECT * FROM chain_job WHERE id=? AND run_id=? FOR UPDATE",id,work.runId());
         if(!Set.of("AWAITING_DEPLOYMENT","AWAITING_SIGNATURE").contains(job.get("status"))) return job;
+        if(DistributionService.handles(job.get("kind").toString()))return distribution.prepare(job);
         var config=work.rows("SELECT * FROM chain_config WHERE offering_id=?",uuid(work.offering(),"id"));
         if(config.isEmpty()) return job;var c=config.getFirst();String target,data;
         if(job.get("kind").equals("MINT")) {
@@ -92,9 +102,11 @@ public class ChainJobs {
                     if(!DojangCodec.bool(read(job.get("target").toString(),"allocations(bytes32)",word(uuid(job,"reference_id")),tag))) return pending(id,"ALLOCATION_NOT_CONFIRMED");
                     var balance=new BigInteger(DojangCodec.word(read(job.get("target").toString(),"balanceOf(address,uint256)","0".repeat(24)+a.get("address").toString().substring(2)+word(new BigInteger(a.get("token_id").toString())),tag)).substring(2),16).longValueExact();
                     if(balance>number(a,"holding_units")) return pending(id,"BALANCE_MISMATCH");db.update("UPDATE holding SET chain_units=? WHERE id=?",balance,uuid(a,"holding_id"));
-                } else {
+                } else if(job.get("kind").equals("SETTLEMENT")) {
                     var s=work.one("SELECT digest FROM settlement WHERE id=?",uuid(job,"reference_id"));var result=read(job.get("target").toString(),"records(bytes32)",word(uuid(job,"reference_id")),tag);
                     if(result.length()!=194||!result.substring(2,66).equals(word(work.runId()))||!result.substring(66,130).equals(s.get("digest").toString().substring(2))) return pending(id,"DIGEST_MISMATCH");
+                } else if(!distribution.verify(job,tag)) {
+                    return pending(id,"DISTRIBUTION_NOT_CONFIRMED");
                 }
             }
             db.update("UPDATE chain_job SET status=?,block_number=?,block_hash=?,error_code=null WHERE id=?",safeEnough?"SAFE":"INCLUDED",included,receipt.get("blockHash"),id);

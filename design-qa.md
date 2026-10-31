@@ -1,6 +1,19 @@
 # Upbit-informed UI/UX and service-flow verification
 
-final result: passed — local presentation revision; public release remains a91b6e2
+final result: passed — presentation v0.3 local build; public release identity is recorded separately
+
+## Current acceptance — 2026-10-31 presentation v0.3
+
+Actual official Upbit mobile staking list → amount → confirmation → history screens were compared with the rendered UpDish project list, staged order and receipt history. The private 69-image research atlas was inspected; neither it nor the team deck is republished here. See [design decisions](docs/presentation-v03.md).
+
+The current build uses two investor tabs, expansion-purpose detail, separately labelled first-store reference and second-store approved sales, task dialogs, a separate operations console and a right chat sidebar. Receipt history leads the distribution tab; detailed mock KRW calculations are collapsed. Same-store historical runs do not inflate the store count. The standard wallet picker temporarily owns the top layer, and returning sessions show a loading state while restoring their wallet.
+
+24 local production-browser checks passed across 1440×900 and 390×844. This includes real isolated-wallet SIWE, 1M/100-unit order and risk consent, separate review/approval, four contract deployments, exact allowance/funding, test-token receipt and desktop/mobile chat. Private model responses correctly distinguish corrected 29,000 KRW obligation, prior 30,000 DEMO receipt and zero additional distribution. Meta-answers lacking supplied figures are rejected. Core/PostgreSQL 62, Solidity 15, Python 6 and codec 1 tests passed; Next production build and fixture/type checks passed.
+
+Opened and inspected current list, project, staged amount/confirmation, operator distribution, investor receipts and mobile captures in `docs/evidence/presentation-v03/`. Source-pattern comparison and actual screenshots support this scope. Local accumulated test-wallet receipts include preserved prior rehearsal runs; they are not fabricated live GIWA receipts. Read-only GIWA evidence separately confirms TESTNET FAUCET Dojang at safe block 40106309. No user-wallet GIWA transaction was signed. Native dialog focus, basic keyboard use and responsive fit were tested; this is not an exhaustive browser/accessibility certification.
+
+The following sections retain older release history; their retired customer flow, old math and disconnected-model notes are superseded by this acceptance and current release records.
+
 
 **Latest acceptance scope (2026-10-26):** Implemented login-first → eight-store discovery/detail/investment → investment-history second tab → merchant/customer/reviewer/operator sections. Real wallet data and read-only operator persona examples remain distinct. Current local production browser evidence: 25 journey checks + 9 real-role/error-recovery checks; Java/PostgreSQL 54 tests; business E2E 12 and persona HTTP 11. See `docs/ux-flow.md` and `docs/evidence/ux-journey/`. Earlier component checks below remain historical. Public deployment is recorded separately after release.
 

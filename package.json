@@ -8,6 +8,9 @@
     "node": ">=24 <25"
   },
   "scripts": {
+    "generate:presentation": "node scripts/presentation-fixtures.mjs",
+    "check:presentation": "node scripts/presentation-fixtures.mjs --check",
+    "smoke:presentation": "tsx scripts/smoke-presentation.ts",
     "generate:ux-demo": "node scripts/ux-demo-data.mjs",
     "check:ux-demo": "node scripts/ux-demo-data.mjs --check",
     "smoke:ux-demo": "tsx scripts/smoke-ux-demo.ts",

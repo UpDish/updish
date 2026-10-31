@@ -1,12 +1,12 @@
 {
-  "checkedAt": "2026-10-26T07:02:19.347Z",
+  "checkedAt": "2026-10-31T12:45:06.637Z",
   "scope": "LOCAL_ANVIL_ONLY: direct Core HTTP, dedicated database, test wallets, mock Dojang, real UpDish contracts and database. No GIWA transactions.",
   "checks": [
-    "8 simultaneous subscriptions: 4 accepted, cap 3,600, 20 units refunded after partial allocation",
+    "8 simultaneous subscriptions: 4 accepted, cap 10,000, 20 units refunded after partial allocation",
     "CSV duplicate and partial-refund reconciliation -> net 30,000,000",
     "separate submitter/reviewer and evidence privacy",
     "idempotent subscription; no holding before allocation; 120 requested -> 100 allocated + 20 simulated refund",
-    "900,000 pool / 25,000 per 100 units; approval separation; private statement",
+    "3,000,000 pool / 30,000 per 100 units; approval separation; private statement",
     "model-independent personal calculation evidence and statement privacy",
     "compiled contract deployment and Java runtime/immutable/owner/attester validation",
     "wallet transaction -> receipt -> safe state -> DB/onchain balance 100; settlement record",
@@ -18,12 +18,12 @@
   "receipts": [
     {
       "kind": "MINT",
-      "hash": "0x67f23ebd6c26d8559ea8519f24edc421d4a823f349dfe1a1e58db81d80596bcc",
+      "hash": "0x32613ce7626e6771122da1cd884910c103e695ecfcfb1b3c796bba2d99992985",
       "status": "SAFE"
     },
     {
       "kind": "SETTLEMENT",
-      "hash": "0x808f352f6ab3e8f8d40b8733c7a5ebb41f43da2f351777e42698a1faed3f8b44",
+      "hash": "0x6218fbdc32c2b33ccf107d701220f47c08c07e6c3ebacaed4f5866cf7588b7d9",
       "status": "SAFE"
     }
   ],

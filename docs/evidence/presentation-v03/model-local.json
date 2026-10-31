@@ -1,0 +1,19 @@
+{
+  "checkedAt": "2026-10-31T13:02:08.236Z",
+  "origin": "http://127.0.0.1:3001",
+  "scope": "Real model, own approved statement in isolated Anvil/PostgreSQL rehearsal; no GIWA transaction.",
+  "status": "PASS",
+  "transactionsSent": 0,
+  "answer": {
+    "explanation": "원화 의무액은 29000원입니다. 확인된 DEMO 수령량은 30000개이고, 추가로 분배할 DEMO 수량은 0개입니다. 계약서상 원금 별도 상환 의무는 '만기 원금 별도 상환 의무 없음'으로 표시되어 있습니다. 근거 소스는 응답의 sourceIds를 확인하세요.",
+    "sourceIds": [
+      "f007d10b-0c68-48cf-8d14-b4fcc23f5c85",
+      "198791d3-cc6a-45f2-b0e1-5bc659ad5554"
+    ],
+    "uncertainties": [],
+    "model": "gpt-5-mini",
+    "mode": "SIMULATION",
+    "toolCalls": 1,
+    "dataVersion": "0xb7c35e7a8b7ebd5255a7de5a4242401b93ff8746261961fd32b12fe5f47d990f"
+  }
+}

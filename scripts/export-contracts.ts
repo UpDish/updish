@@ -1,5 +1,5 @@
 import { readFile,writeFile,mkdir } from 'node:fs/promises';
-const names=['UpDishDemoUnits','SettlementRegistry'] as const;
+const names=['UpDishDemoUnits','SettlementRegistry','UpDishDemoCash','UpDishDistribution'] as const;
 const runtime:Record<string,unknown>={};const browser:Record<string,unknown>={};
 for(const name of names) {
   const artifact=JSON.parse(await readFile(`contracts/out/${name}.sol/${name}.json`,'utf8'));

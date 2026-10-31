@@ -1,0 +1,19 @@
+{
+  "checkedAt": "2026-10-31T12:52:45.666Z",
+  "scope": "LOCAL ANVIL ONLY. Real Next BFF/Core/PostgreSQL/contracts; isolated wallet and local RPC routes, no real GIWA/user-wallet transactions.",
+  "checks": [
+    "Local Anvil only",
+    "Operator starts a new run without deleting history and prepares explicitly synthetic background",
+    "Risk agreements gate submission",
+    "Native order dialog traps keyboard focus",
+    "Amount -> conditions -> submission -> pending subscription history",
+    "Merchant CSV dialog submits canonical second-store simulation to real reconciliation",
+    "Separate reviewer closes evidence and calculates settlement through its own console",
+    "UI deploys and server-verifies all four actual local contracts",
+    "Mint/registry wallet transaction is safe-confirmed",
+    "Mint/registry wallet transaction is safe-confirmed",
+    "Operator UI approves exact allowance, funds pool, sends DEMO and confirms safe receipt",
+    "Full UI journey has no runtime errors"
+  ],
+  "errors": []
+}

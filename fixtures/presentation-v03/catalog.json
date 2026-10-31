@@ -1,0 +1,38 @@
+{
+  "scenarioCode": "presentation-v03",
+  "mode": "SIMULATION",
+  "title": "성수 모퉁이 2호점 확장",
+  "targetWon": "100000000",
+  "unitPriceWon": "10000",
+  "totalUnits": 10000,
+  "ownUnits": 100,
+  "rateBps": 1000,
+  "period": "2026-10",
+  "confirmedNetSalesWon": "30000000",
+  "poolWon": "3000000",
+  "ownDistributionWon": "30000",
+  "months": 60,
+  "description": "계약기간 60개월은 시연 가정. 본점 참고 매출과 2호점 가상 영업 매출을 구분. DEMO 토큰에는 현금 가치와 원화 담보가 없음.",
+  "sources": [
+    {
+      "id": "normal",
+      "filename": "normal.csv",
+      "sha256": "22609fdbdff24dda4163d5f8303ac71008256086f5e512738340d24cb350b5f8"
+    },
+    {
+      "id": "missing-bank",
+      "filename": "missing-bank.csv",
+      "sha256": "be8bc6e2cb24cb28584a84e84f1d7813e9f90c937d1ca2c21ce78d148a2e47a9"
+    },
+    {
+      "id": "cash-shortage",
+      "filename": "cash-shortage.csv",
+      "sha256": "5acb4fbb49a3de2c47cbf23962ba919486a6e5033e020c44b72305e6f7ce4fa0"
+    },
+    {
+      "id": "correction",
+      "filename": "correction.csv",
+      "sha256": "db71ecf472073e45f6ad81f93639bc92e561b4ca5d5d2e8038978bc64cbc5f6e"
+    }
+  ]
+}

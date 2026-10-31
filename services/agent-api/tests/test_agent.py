@@ -41,6 +41,22 @@ class AgentTests(unittest.TestCase):
         with self.assertRaises(Exception):
             asyncio.run(explain_with_client(client, ExplainRequest(question="설명", context={"sourceIds": ["other"], "dataVersion": "v1"})))
 
+    def test_private_meta_answer_without_authoritative_amounts_is_rejected(self):
+        class MetaResponses(FakeResponses):
+            async def parse(self, **kwargs):
+                return SimpleNamespace(status="completed", output_parsed=Explanation(explanation="원화 의무액과 테스트 수령량을 설명합니다.", sourceIds=["settlement1"], uncertainties=[]))
+        body = ExplainRequest(question="수령량을 설명해줘", context={"sourceIds": ["settlement1"], "dataVersion": "v2", "distributionSummary": {"obligationWon": "29000", "confirmedDemoReceivedUnits": "30000", "additionalDemoDueUnits": "0"}})
+        with self.assertRaisesRegex(Exception, "정산 수치"):
+            asyncio.run(explain_with_client(SimpleNamespace(responses=MetaResponses()), body))
+
+    def test_private_correction_explanation_keeps_obligation_and_receipt_distinct(self):
+        class CorrectResponses(FakeResponses):
+            async def parse(self, **kwargs):
+                return SimpleNamespace(status="completed", output_parsed=Explanation(explanation="정정 후 세전 의무액은 29,000원입니다. 30,000 DEMO는 테스트 자산의 기존 수령이며 추가 분배는 0 DEMO입니다. 실제 현금 지급은 없으며 원금 별도 상환 의무도 없습니다.", sourceIds=["settlement1"], uncertainties=[]))
+        body = ExplainRequest(question="수령량을 설명해줘", context={"sourceIds": ["settlement1"], "dataVersion": "v2", "distributionSummary": {"obligationWon": "29000", "confirmedDemoReceivedUnits": "30000", "additionalDemoDueUnits": "0"}})
+        result = asyncio.run(explain_with_client(SimpleNamespace(responses=CorrectResponses()), body))
+        self.assertIn("30,000 DEMO", result["explanation"])
+
 
 if __name__ == "__main__":
     unittest.main()
